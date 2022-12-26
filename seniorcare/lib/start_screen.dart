@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:seniorcare/login_screen.dart';
-import 'package:seniorcare/register_screen.dart';
+import 'package:seniorcare/authentication/login_screen.dart';
+import 'package:seniorcare/authentication/register_screen.dart';
 import 'package:seniorcare/widgets/appbar.dart';
 
 class StartScreen extends StatefulWidget {

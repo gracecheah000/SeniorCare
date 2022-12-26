@@ -1,10 +1,10 @@
 class Appointment {
-  final String eventTitle;
-  final DateTime eventDate;
-  final String eventLocation;
-  final String? eventRequireFasting;
-  final String eventTime;
-  final String? eventDescription;
+  String eventTitle;
+  DateTime eventDate;
+  String eventLocation;
+  String? eventRequireFasting;
+  String eventTime;
+  String? eventDescription;
 
   Appointment(
       {required this.eventTitle,

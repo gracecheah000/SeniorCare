@@ -1,9 +1,10 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:seniorcare/caregiver/appointment/caregiver_appointment.dart';
+import 'package:seniorcare/caregiver/caregiver_appointment.dart';
 import 'package:seniorcare/caregiver/location/location_tracking.dart';
 import 'package:seniorcare/caregiver/medication/view_medications.dart';
+import 'package:seniorcare/caregiver/notes/notepad.dart';
 import 'package:seniorcare/widgets/appbar.dart';
 import 'edit_elderly_details.dart';
 
@@ -228,10 +229,8 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(20)),
                               onTap: () {
-                                // Navigator.of(context).push(
-                                //     MaterialPageRoute(
-                                //         builder: (context) =>
-                                //             const ElderlyProfile()));
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const Notepad()));
                               },
                               child: Ink(
                                   padding:

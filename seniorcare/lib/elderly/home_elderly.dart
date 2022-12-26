@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:seniorcare/elderly/elderly_appointment.dart';
 import 'package:seniorcare/elderly/medication/view_medication_elderly.dart';
 
 import '../widgets/appbar.dart';
@@ -153,10 +154,9 @@ class _HomeElderlyState extends State<HomeElderly> {
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(20)),
                               onTap: () {
-                                // Navigator.of(context).push(
-                                //     MaterialPageRoute(
-                                //         builder: (context) =>
-                                //             const ElderlyProfile()));
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ElderlyAppointment()));
                               },
                               child: Ink(
                                   padding:

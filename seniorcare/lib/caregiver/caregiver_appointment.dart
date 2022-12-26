@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:seniorcare/caregiver/appointment/appointment_events.dart';
+import 'package:seniorcare/models/appointment.dart';
 import 'package:seniorcare/widgets/appbar.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
@@ -151,16 +151,6 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold))),
                       ),
-                      Padding(
-                          padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
-                          child: FloatingActionButton.small(
-                              onPressed: () {
-                                _showAddAppointmentDialog();
-                              },
-                              backgroundColor:
-                                  Color.fromARGB(255, 160, 171, 221),
-                              heroTag: "AddAppointment",
-                              child: Image.asset('assets/images/add.png')))
                     ])),
             ..._listOfDayEvents(_selectedDay).map((Appointment) => ListTile(
                 leading: Padding(
@@ -198,7 +188,14 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                   ],
                 ))),
           ],
-        )));
+        )),
+        floatingActionButton: FloatingActionButton.small(
+            onPressed: () {
+              _showAddAppointmentDialog();
+            },
+            backgroundColor: Color.fromARGB(255, 160, 171, 221),
+            heroTag: "AddAppointment",
+            child: Image.asset('assets/images/add.png')));
   }
 
   _showAddAppointmentDialog() async {

@@ -1,12 +1,12 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:seniorcare/forget_password.dart';
+import 'package:seniorcare/authentication/forget_password.dart';
 
 import 'change_password.dart';
-import 'caregiver/home_caregiver.dart';
-import 'elderly/home_elderly.dart';
-import 'widgets/appbar.dart';
+import '../caregiver/home_caregiver.dart';
+import '../elderly/home_elderly.dart';
+import '../widgets/appbar.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
