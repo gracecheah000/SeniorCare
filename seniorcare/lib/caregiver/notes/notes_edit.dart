@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:seniorcare/caregiver/notes/note_content.dart';
 
 import '../../widgets/appbar.dart';
+import 'note_title.dart';
 
 class NoteEdit extends StatefulWidget {
   const NoteEdit({super.key});
@@ -46,45 +48,38 @@ class _NoteEditState extends State<NoteEdit> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: SeniorCareAppBar(start: false),
-      body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-                padding: const EdgeInsets.fromLTRB(20, 10, 0, 0),
-                height: 50,
-                width: 130,
-                color: Colors.transparent,
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      border: Border.all(
-                          color: const Color.fromRGBO(108, 99, 255, 1),
-                          width: 2),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(25))),
-                  child: const Center(
-                      child: Text(
-                    "edit",
-                    style: TextStyle(
-                        color: Color.fromRGBO(108, 99, 255, 1),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20),
-                    textAlign: TextAlign.center,
-                  )),
-                )),
-            Padding(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-                child: Container(
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(color: Color.fromRGBO(108, 99, 255, 1))),
-                    child: SingleChildScrollView(
-                        child: Column(
-                      children: <Widget>[],
-                    )))),
-          ]),
+      appBar: const SeniorCareAppBar(start: false),
+      body: SingleChildScrollView(
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              NoteTitle(
+                textFieldController: _titleTextController,
+              ),
+              Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+                  child: SingleChildScrollView(
+                      child: Container(
+                          height: 540,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: const Color.fromRGBO(108, 99, 255, 1)),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: NoteContent(
+                              textFieldController: _contentTextController))))
+            ]),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          // TODO: to save notes in backend
+          Navigator.pop(context);
+          return;
+        },
+        label: Text('Add'),
+        backgroundColor: Color.fromRGBO(108, 99, 255, 1),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
