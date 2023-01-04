@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "797954724060",
+    "project_id": "seniorcare-372108",
+    "storage_bucket": "seniorcare-372108.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:797954724060:android:2d80394e37bbbfd342e419",
+        "android_client_info": {
+          "package_name": "com.example.seniorcare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "797954724060-bqu0vepbdbe5hi14sb4vie964qfvej55.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.seniorcare",
+            "certificate_hash": "68d417e4fbc69abcbce894ac7728babd119275a7"
+          }
+        },
+        {
+          "client_id": "797954724060-qj7osr4k1op9k7bvnhih9a1cphe3dr7o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvc5AxVJcE8ukofH9BV-fs4KYKY5O_s1E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "797954724060-qj7osr4k1op9k7bvnhih9a1cphe3dr7o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

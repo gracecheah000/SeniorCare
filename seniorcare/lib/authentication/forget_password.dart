@@ -40,7 +40,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
               color: Color.fromRGBO(108, 99, 255, 1),
             )
           ]),
-          Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
+          const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
           Column(
             children: <Widget>[
               Padding(
@@ -121,7 +121,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
               const Padding(padding: EdgeInsets.fromLTRB(0, 5, 0, 0)),
             ],
           ),
-          Padding(padding: EdgeInsets.fromLTRB(0, 100, 0, 0)),
+          const Padding(padding: EdgeInsets.fromLTRB(0, 100, 0, 0)),
           FloatingActionButton.extended(
             heroTag: "ResetPassword",
             onPressed: () {},

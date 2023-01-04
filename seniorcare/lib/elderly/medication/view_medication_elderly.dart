@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:seniorcare/widgets/appbar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-import 'medication_card_elderly.dart';
+import '../../widgets/medication_card_elderly.dart';
 
 class ViewMedicationElderly extends StatefulWidget {
   const ViewMedicationElderly({super.key});

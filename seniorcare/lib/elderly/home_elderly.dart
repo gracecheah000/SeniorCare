@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorcare/elderly/elderly_appointment.dart';
 import 'package:seniorcare/elderly/medication/view_medication_elderly.dart';
@@ -19,7 +20,7 @@ class _HomeElderlyState extends State<HomeElderly> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: const SeniorCareAppBar(start: false),
+        appBar: const SeniorCareAppBar(start: true),
         body: SingleChildScrollView(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:seniorcare/caregiver/medication/medication_card.dart';
+import 'package:seniorcare/widgets/medication_card.dart';
 import 'package:seniorcare/caregiver/medication/add_medication.dart';
 import 'package:seniorcare/caregiver/medication/medication_settings.dart';
 import 'package:seniorcare/widgets/appbar.dart';

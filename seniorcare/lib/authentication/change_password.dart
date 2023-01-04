@@ -42,7 +42,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               color: Color.fromRGBO(108, 99, 255, 1),
             )
           ]),
-          Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
+          const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
           Column(
             children: <Widget>[
               Padding(
@@ -131,7 +131,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 )
             ],
           ),
-          Padding(padding: EdgeInsets.fromLTRB(0, 100, 0, 0)),
+          const Padding(padding: EdgeInsets.fromLTRB(0, 100, 0, 0)),
           FloatingActionButton.extended(
             heroTag: "ChangePassword",
             onPressed: () {},

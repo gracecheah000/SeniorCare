@@ -1,9 +1,10 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:seniorcare/services/authentication.dart';
 import 'package:seniorcare/authentication/forget_password.dart';
+import 'package:seniorcare/widgets/google_sign_in_button.dart';
 
-import 'change_password.dart';
 import '../caregiver/home_caregiver.dart';
 import '../elderly/home_elderly.dart';
 import '../widgets/appbar.dart';
@@ -150,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: Color.fromRGBO(108, 99, 255, 1))))
             ],
           ),
-          Padding(padding: EdgeInsets.fromLTRB(0, 100, 0, 0)),
+          Padding(padding: EdgeInsets.fromLTRB(0, 50, 0, 0)),
           FloatingActionButton.extended(
             heroTag: "Login",
             onPressed: () {
@@ -162,8 +163,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     builder: (context) => const HomeElderly()));
               } else if (role == 'Caregiver') {
                 // todo: authenticate user and check for first login
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const HomeCaregiver()));
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => HomeCaregiver()));
               }
             },
             label: const Text(
@@ -174,7 +175,23 @@ class _LoginScreenState extends State<LoginScreen> {
                   fontFamily: 'Montserrat'),
             ),
             backgroundColor: const Color.fromRGBO(108, 99, 255, 1),
-          )
+          ),
+          const Padding(
+            padding: EdgeInsets.only(top: 50),
+          ),
+          const Text('Or login using social media',
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          FutureBuilder(
+              future: Authentication.initializeFirebase(context: context),
+              builder: ((context, snapshot) {
+                if (snapshot.hasError) {
+                  return const Text('Error initializing Firebase');
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  return GoogleSignInButton();
+                }
+                return const CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white));
+              }))
         ],
       ))),
     );

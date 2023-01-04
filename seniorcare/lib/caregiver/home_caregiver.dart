@@ -1,15 +1,20 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:seniorcare/services/authentication.dart';
 import 'package:seniorcare/caregiver/caregiver_appointment.dart';
 import 'package:seniorcare/caregiver/location/location_tracking.dart';
 import 'package:seniorcare/caregiver/medication/view_medications.dart';
 import 'package:seniorcare/caregiver/notes/notepad.dart';
+import 'package:seniorcare/start_screen.dart';
 import 'package:seniorcare/widgets/appbar.dart';
 import 'edit_elderly_details.dart';
 
 class HomeCaregiver extends StatefulWidget {
-  const HomeCaregiver({super.key});
+  HomeCaregiver({super.key, this.googleUser});
+
+  User? googleUser;
 
   @override
   State<HomeCaregiver> createState() => _HomeCaregiverState();
@@ -20,35 +25,74 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: const SeniorCareAppBar(start: false),
+        appBar: const SeniorCareAppBar(start: true),
         body: SingleChildScrollView(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
-                padding: const EdgeInsets.fromLTRB(35, 30, 0, 0),
-                height: 70,
-                width: 130,
-                color: Colors.transparent,
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      border: Border.all(
-                          color: const Color.fromRGBO(108, 99, 255, 1),
-                          width: 2),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(25))),
-                  child: const Center(
-                      child: Text(
-                    "Home",
-                    style: TextStyle(
-                        color: Color.fromRGBO(108, 99, 255, 1),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20),
-                    textAlign: TextAlign.center,
-                  )),
-                )),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                    padding: const EdgeInsets.fromLTRB(35, 10, 0, 0),
+                    height: 50,
+                    width: 130,
+                    color: Colors.transparent,
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(
+                              color: const Color.fromRGBO(108, 99, 255, 1),
+                              width: 2),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(25))),
+                      child: const Center(
+                          child: Text(
+                        "Home",
+                        style: TextStyle(
+                            color: Color.fromRGBO(108, 99, 255, 1),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
+                        textAlign: TextAlign.center,
+                      )),
+                    )),
+                Container(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 35, 0),
+                    height: 50,
+                    width: 120,
+                    color: Colors.transparent,
+                    alignment: Alignment.centerLeft,
+                    child: InkWell(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(25)),
+                        onTap: () {
+                          Authentication.signOut(context: context);
+                          Navigator.pushAndRemoveUntil(context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                            return StartScreen(title: 'SeniorCare');
+                          }), (r) {
+                            return false;
+                          });
+                        },
+                        child: Ink(
+                          decoration: const BoxDecoration(
+                              color: Color.fromARGB(255, 240, 96, 96),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(25))),
+                          child: const Center(
+                              child: Text(
+                            "Logout",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                            textAlign: TextAlign.center,
+                          )),
+                        )))
+              ],
+            ),
             Padding(
                 padding: const EdgeInsets.fromLTRB(50, 40, 50, 0),
                 child: Row(
