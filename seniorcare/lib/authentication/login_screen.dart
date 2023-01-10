@@ -159,12 +159,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 // todo: add error message
               } else if (role == 'Elderly') {
                 // todo: authenticate user
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const HomeElderly()));
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => HomeElderly()));
               } else if (role == 'Caregiver') {
                 // todo: authenticate user and check for first login
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => HomeCaregiver()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => HomeCaregiver(userEmail: '')));
               }
             },
             label: const Text(

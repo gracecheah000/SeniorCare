@@ -4,12 +4,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorcare/elderly/elderly_appointment.dart';
 import 'package:seniorcare/elderly/medication/view_medication_elderly.dart';
+import 'package:seniorcare/services/authentication.dart';
 
 import '../widgets/appbar.dart';
 import 'elderly_profile.dart';
 
 class HomeElderly extends StatefulWidget {
-  const HomeElderly({super.key});
+  HomeElderly({super.key, this.googleUser});
+
+  User? googleUser;
 
   @override
   State<HomeElderly> createState() => _HomeElderlyState();
@@ -64,6 +67,7 @@ class _HomeElderlyState extends State<HomeElderly> {
                         onTap: () {
                           // TODO: send out message to alert caregiver
                           print("SOS");
+                          Authentication.signOut(context: context);
                         },
                         child: Ink(
                           decoration: BoxDecoration(

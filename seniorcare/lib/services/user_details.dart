@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:seniorcare/models/user.dart';
@@ -23,6 +25,124 @@ class UserDetails {
       'health risks': user.healthRisks,
       'additional details': user.additionalDetails,
       'role': 'elderly',
+      'caregiver': [],
+      'medication': [],
+      'appointment': [],
+      'pin': Random().nextInt(999999),
+      'meal timings': ['7:00AM', '12:00PM', '7:00PM']
+    });
+  }
+
+  static void editElderlyDetails(Elderly user) async {
+    DocumentReference ref;
+    String userId;
+
+    userId = await getUserId(user.email);
+
+    ref = FirebaseFirestore.instance.collection('user').doc(userId);
+
+    await ref.update({
+      'age': user.age,
+      'sex': user.sex,
+      'address': user.address,
+      'health risks': user.healthRisks,
+      'additional details': user.additionalDetails,
+      'pin': Random().nextInt(999999)
+    });
+  }
+
+  static addElderlyMedication(String elderlyId, String medicationId) async {
+    DocumentReference ref;
+
+    ref = FirebaseFirestore.instance.collection('user').doc(elderlyId);
+
+    await ref.update({
+      'medication': FieldValue.arrayUnion([medicationId])
+    }).then((success) {
+      return true;
+    }).catchError((e, stackTrace) {
+      return e;
+    });
+  }
+
+  static deleteElderlyMedication(String elderlyId, String medicationId) async {
+    DocumentReference ref;
+
+    ref = FirebaseFirestore.instance.collection('user').doc(elderlyId);
+
+    await ref.update({
+      'medication': FieldValue.arrayRemove([medicationId])
+    }).then((success) {
+      return true;
+    }).catchError((e, stackTrace) {
+      return e;
+    });
+  }
+
+  static Future<dynamic> addNewElderly(
+      String caregiverId, String elderlyEmail, String elderlyPIN) async {
+    QuerySnapshot query = await FirebaseFirestore.instance
+        .collection('user')
+        .where('email', isEqualTo: elderlyEmail.toLowerCase())
+        .where('pin', isEqualTo: int.parse(elderlyPIN))
+        .get();
+
+    if (query.docs.isEmpty) {
+      return false;
+    }
+
+    DocumentReference ref;
+    ref = FirebaseFirestore.instance.collection('user').doc(caregiverId);
+
+    await ref.update({
+      'elderly': FieldValue.arrayUnion([query.docs.first.id])
+    }).catchError((e, stackTrace) {
+      return e;
+    });
+
+    ref =
+        FirebaseFirestore.instance.collection('user').doc(query.docs.first.id);
+    await ref.update({
+      'caregiver': FieldValue.arrayUnion([caregiverId])
+    }).catchError((e, stackTrace) {
+      return e;
+    });
+
+    return true;
+  }
+
+  static deleteElderlyFromCaregiver(
+      String elderlyEmail, String caregiverEmail) async {
+    String caregiverId = await UserDetails.getUserId(caregiverEmail);
+
+    QuerySnapshot query = await FirebaseFirestore.instance
+        .collection('user')
+        .where('email', isEqualTo: elderlyEmail.toLowerCase())
+        .get();
+
+    if (query.docs.isEmpty) {
+      return false;
+    }
+    DocumentReference ref;
+    ref = FirebaseFirestore.instance.collection('user').doc(caregiverId);
+
+    await ref.update({
+      'elderly': FieldValue.arrayRemove([query.docs.first.id.toString()])
+    }).then((result) {
+      return true;
+    }).catchError((e, stackTrace) {
+      return e;
+    });
+
+    ref =
+        FirebaseFirestore.instance.collection('user').doc(query.docs.first.id);
+
+    await ref.update({
+      'caregiver': FieldValue.arrayRemove([caregiverId])
+    }).then((result) {
+      return true;
+    }).catchError((e, stackTrace) {
+      return e;
     });
   }
 
@@ -31,9 +151,9 @@ class UserDetails {
     String userId;
 
     if (googleUser != null) {
-      userId = await getUserId(googleUser.email);
+      userId = await getUserId(googleUser.email!.toLowerCase());
     } else {
-      userId = await getUserId(user.email);
+      userId = await getUserId(user.email!.toLowerCase());
     }
 
     ref = FirebaseFirestore.instance.collection('user').doc(userId);
@@ -41,7 +161,8 @@ class UserDetails {
     await ref.update({
       'name': user.name,
       'emergency contact': user.emergencyContact,
-      'role': 'caregiver'
+      'role': 'caregiver',
+      'elderly': [],
     });
   }
 
@@ -50,9 +171,16 @@ class UserDetails {
 
     query = await FirebaseFirestore.instance
         .collection('user')
-        .where('email', isEqualTo: email)
+        .where('email', isEqualTo: email!.toLowerCase())
         .get();
 
     return query.docs.first.id;
+  }
+
+  static getUserDetails(String userId) async {
+    DocumentSnapshot details =
+        await FirebaseFirestore.instance.collection('user').doc(userId).get();
+
+    return details.data();
   }
 }

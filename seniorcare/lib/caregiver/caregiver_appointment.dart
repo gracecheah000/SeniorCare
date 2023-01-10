@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:seniorcare/models/appointment.dart';
 import 'package:seniorcare/widgets/appbar.dart';
+import 'package:seniorcare/widgets/custom_text_field.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -219,7 +220,6 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold)),
                         IconButton(
-                          padding: EdgeInsets.all(0),
                           onPressed: () {
                             titleController.clear();
                             timeController.clear();
@@ -360,23 +360,4 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
               ],
             ));
   }
-}
-
-Widget customTextField(
-    {String? hint, required TextEditingController controller}) {
-  return TextField(
-    controller: controller,
-    textCapitalization: TextCapitalization.words,
-    decoration: InputDecoration(
-        labelText: hint ?? '',
-        labelStyle: TextStyle(color: Color.fromRGBO(108, 99, 255, 1)),
-        focusedBorder: OutlineInputBorder(
-            borderSide:
-                const BorderSide(color: Color.fromRGBO(108, 99, 255, 1)),
-            borderRadius: BorderRadius.circular(20)),
-        enabledBorder: OutlineInputBorder(
-            borderSide:
-                const BorderSide(color: Color.fromRGBO(108, 99, 255, 1)),
-            borderRadius: BorderRadius.circular(20))),
-  );
 }

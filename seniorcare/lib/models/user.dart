@@ -9,6 +9,7 @@ class Caregiver {
 }
 
 class Elderly {
+  String? id;
   String? email;
   String? password;
   String? name;
@@ -20,7 +21,8 @@ class Elderly {
   String? additionalDetails;
 
   Elderly(
-      {this.email,
+      {this.id,
+      this.email,
       this.password,
       this.name,
       this.age,
@@ -29,4 +31,16 @@ class Elderly {
       this.caregivers,
       this.healthRisks,
       this.additionalDetails});
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is Elderly &&
+        other.email == email &&
+        other.id == id &&
+        other.name == other.name;
+  }
+
+  @override
+  int get hashCode => email.hashCode ^ id.hashCode ^ name.hashCode;
 }

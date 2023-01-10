@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:seniorcare/elderly/home_elderly.dart';
 import 'package:seniorcare/services/authentication.dart';
 import 'package:seniorcare/caregiver/home_caregiver.dart';
-import 'package:seniorcare/authentication/user_info.dart';
+import 'package:seniorcare/authentication/userinfo/user_info.dart';
 
 class GoogleSignInButton extends StatefulWidget {
   const GoogleSignInButton({super.key});
@@ -45,18 +46,25 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                         ),
                       ));
                     } else {
-                      bool firstTimeLogin =
+                      String firstTimeLogin =
                           await Authentication.checkFirstTimeLogIn(user);
-                      if (firstTimeLogin == true) {
+                      if (firstTimeLogin == '') {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => FirstTimeUserInfo(
                             googleUser: user,
                           ),
                         ));
-                      } else {
+                      } else if (firstTimeLogin == 'elderly') {
                         Navigator.pushAndRemoveUntil(context,
-                            MaterialPageRoute(builder: (context) {
-                          return HomeCaregiver(googleUser: user);
+                            MaterialPageRoute(builder: (BuildContext context) {
+                          return HomeElderly(googleUser: user);
+                        }), (r) {
+                          return false;
+                        });
+                      } else if (firstTimeLogin == 'caregiver') {
+                        Navigator.pushAndRemoveUntil(context,
+                            MaterialPageRoute(builder: (BuildContext context) {
+                          return HomeCaregiver(userEmail: user.email);
                         }), (r) {
                           return false;
                         });

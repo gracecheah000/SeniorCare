@@ -1,10 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:seniorcare/caregiver/home_caregiver.dart';
-import 'package:seniorcare/authentication/user_info.dart';
+import 'package:seniorcare/authentication/userinfo/user_info.dart';
+import 'package:seniorcare/elderly/home_elderly.dart';
 
 class Authentication {
   static Future<FirebaseApp> initializeFirebase(
@@ -23,17 +26,24 @@ class Authentication {
           ),
         ));
       } else {
-        bool firstTimeLogin = await checkFirstTimeLogIn(user);
-        if (firstTimeLogin == true) {
+        String firstTimeLogin = await checkFirstTimeLogIn(user);
+        if (firstTimeLogin == '') {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => FirstTimeUserInfo(
               googleUser: user,
             ),
           ));
-        } else {
+        } else if (firstTimeLogin == 'elderly') {
           Navigator.pushAndRemoveUntil(context,
               MaterialPageRoute(builder: (BuildContext context) {
-            return HomeCaregiver(googleUser: user);
+            return HomeElderly(googleUser: user);
+          }), (r) {
+            return false;
+          });
+        } else if (firstTimeLogin == 'caregiver') {
+          Navigator.pushAndRemoveUntil(context,
+              MaterialPageRoute(builder: (BuildContext context) {
+            return HomeCaregiver(userEmail: user.email);
           }), (r) {
             return false;
           });
@@ -109,7 +119,7 @@ class Authentication {
     return true;
   }
 
-  static Future<bool> checkFirstTimeLogIn(User user) async {
+  static Future<String> checkFirstTimeLogIn(User user) async {
     QuerySnapshot query = await FirebaseFirestore.instance
         .collection('user')
         .where('email', isEqualTo: user.email)
@@ -117,16 +127,16 @@ class Authentication {
 
     var data = query.docs.first.data() as Map;
     if (data['role'] == null) {
-      return true;
+      return '';
     }
-    return false;
+    return data['role'];
   }
 
   // if account does not exist, register the email user in database
   static void registerUserDate(User user) async {
     await FirebaseFirestore.instance
         .collection("user")
-        .add({'email': user.email, 'type': 'google'})
+        .add({'email': user.email!.toLowerCase(), 'type': 'google'})
         .then((value) => print("User added"))
         .catchError((error) => print("Failed to add user: $error"));
   }

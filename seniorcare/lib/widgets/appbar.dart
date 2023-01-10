@@ -58,12 +58,12 @@ class SeniorCareAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(50);
+  Size get preferredSize => const Size.fromHeight(60);
   determineColour(bool? profile) {
     if (profile == null) {
       return Colors.white;
     } else {
-      return const Color.fromRGBO(251, 228, 201, 1);
+      return const Color.fromARGB(255, 176, 200, 233);
     }
   }
 }

@@ -7,9 +7,9 @@ import 'package:seniorcare/authentication/userinfo/elderly.dart';
 import 'package:seniorcare/models/user.dart';
 import 'package:seniorcare/services/user_details.dart';
 
-import '../caregiver/home_caregiver.dart';
-import '../elderly/home_elderly.dart';
-import '../widgets/appbar.dart';
+import '../../caregiver/home_caregiver.dart';
+import '../../elderly/home_elderly.dart';
+import '../../widgets/appbar.dart';
 
 class FirstTimeUserInfo extends StatefulWidget {
   const FirstTimeUserInfo({super.key, this.googleUser});
@@ -99,7 +99,7 @@ class _FirstTimeUserInfoState extends State<FirstTimeUserInfo> {
                           underline: Container(),
                           icon: const Icon(Icons.arrow_drop_down,
                               color: Color.fromRGBO(108, 99, 255, 1)))),
-                  getOtherDetails(role),
+                  saveOtherDetails(role),
                   const Padding(padding: EdgeInsets.fromLTRB(0, 50, 0, 0)),
                   FloatingActionButton.extended(
                     heroTag: "Save",
@@ -115,7 +115,8 @@ class _FirstTimeUserInfoState extends State<FirstTimeUserInfo> {
                         UserDetails.saveElderlyDetails(
                             elderly, widget.googleUser);
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const HomeElderly()));
+                            builder: (context) =>
+                                HomeElderly(googleUser: widget.googleUser)));
                       } else if (role == 'Caregiver') {
                         Caregiver caregiver = Caregiver(
                             name: name.text,
@@ -124,7 +125,7 @@ class _FirstTimeUserInfoState extends State<FirstTimeUserInfo> {
                             caregiver, widget.googleUser);
                         Navigator.pushAndRemoveUntil(context,
                             MaterialPageRoute(builder: (context) {
-                          return HomeCaregiver(googleUser: widget.googleUser);
+                          return HomeCaregiver(userEmail: caregiver.email);
                         }), (r) {
                           return false;
                         });
@@ -147,7 +148,7 @@ class _FirstTimeUserInfoState extends State<FirstTimeUserInfo> {
     );
   }
 
-  getOtherDetails(String? role) {
+  saveOtherDetails(String? role) {
     if (role == 'Elderly') {
       return ElderlyUserInfo(
         name: name,

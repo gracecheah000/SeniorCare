@@ -19,8 +19,8 @@ class ElderlyUserInfo extends StatefulWidget {
   final TextEditingController age;
   final TextEditingController address;
   final TextEditingController additionalDetails;
-  final notifyParentSex;
-  final notifyParentHealthRisks;
+  final Function notifyParentSex;
+  final Function notifyParentHealthRisks;
   String? sex;
 
   @override
@@ -157,7 +157,11 @@ class _ElderlyUserInfoState extends State<ElderlyUserInfo> {
               style: const TextStyle(color: Color.fromRGBO(105, 100, 173, 1))),
         ),
         const Padding(padding: EdgeInsets.only(top: 10)),
-        MultiSelect(items: items, updateHealthRisks: updateParentHealthRisks),
+        MultiSelect(
+          items: items,
+          updateHealthRisks: updateParentHealthRisks,
+          healthRisks: [],
+        ),
         const Padding(padding: EdgeInsets.only(top: 10)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),

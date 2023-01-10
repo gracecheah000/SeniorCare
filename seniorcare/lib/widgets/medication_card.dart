@@ -1,162 +1,168 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:seniorcare/models/medication.dart';
+import 'package:seniorcare/services/medication.dart';
 
-class MedicationCard extends StatelessWidget {
-  String medicationName;
-  String medicationImage;
-  String medicationFrequency;
-  String medicationQuantity;
-  String medicationTime;
-  String medicationPrescription;
-  String otherDescription;
+class MedicationCard extends StatefulWidget {
+  final Medication medication;
+  final String medicationId;
+  final String elderlyId;
 
-  MedicationCard(
-      this.medicationName,
-      this.medicationImage,
-      this.medicationFrequency,
-      this.medicationQuantity,
-      this.medicationTime,
-      this.medicationPrescription,
-      this.otherDescription,
-      {super.key});
+  const MedicationCard(
+      {super.key,
+      required this.medication,
+      required this.medicationId,
+      required this.elderlyId});
 
   @override
+  State<MedicationCard> createState() => _MedicationCardState();
+}
+
+class _MedicationCardState extends State<MedicationCard> {
+  @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Card(
-        color: Color.fromARGB(255, 255, 248, 242),
+        color: Color.fromARGB(255, 217, 226, 240),
         shape: RoundedRectangleBorder(
-            side: BorderSide(color: Color.fromARGB(255, 240, 208, 182)),
+            side: BorderSide(color: const Color.fromARGB(255, 176, 200, 233)),
             borderRadius: BorderRadius.circular(20)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Padding(
-                padding: EdgeInsets.fromLTRB(0, 10, 20, 20),
-
-                // TODO: CRUD function
+                padding: EdgeInsets.fromLTRB(0, size.height * 0.01,
+                    size.width * 0.04, size.height * 0.01),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     IconButton(
                       padding: EdgeInsets.all(0),
-                      onPressed: () {},
-                      icon: Image.asset('assets/images/edit.png'),
-                      iconSize: 60,
-                    ),
-                    IconButton(
-                      padding: EdgeInsets.all(0),
-                      onPressed: () {},
-                      icon: Image.asset('assets/images/bin.png'),
-                      iconSize: 40,
+                      onPressed: () async {
+                        var result = await MedicationServices.deleteMedication(
+                            widget.elderlyId, widget.medicationId);
+                        if (result != true) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(result),
+                              duration: Duration(seconds: 2)));
+                        }
+                      },
+                      icon: Image.asset('assets/images/bin_blue.png'),
+                      iconSize: 55,
+                      splashRadius: 20,
                     ),
                   ],
                 )),
-            Text(medicationName,
+            Text(widget.medication.medicationName,
                 style: TextStyle(
-                    color: Color.fromARGB(255, 182, 115, 60),
+                    color: Color.fromARGB(255, 29, 77, 145),
                     fontWeight: FontWeight.bold,
                     fontSize: 18)),
-            const Divider(
-              height: 30,
+            Divider(
+              height: size.height * 0.03,
               thickness: 1,
-              indent: 30,
-              endIndent: 30,
-              color: Color.fromARGB(255, 182, 115, 60),
+              indent: size.width * 0.1,
+              endIndent: size.width * 0.1,
+              color: Color.fromARGB(255, 29, 77, 145),
             ),
             Container(
-                height: 100,
-                width: 100,
+                height: size.height * 0.2,
+                width: size.width * 0.4,
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                child: Image.asset(medicationImage)),
+                child: Image.memory(
+                    base64Decode(widget.medication.medicationImage))),
             Container(
-                padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-                height: 55,
-                width: 200,
+                padding: EdgeInsets.fromLTRB(0, size.height * 0.02, 0, 0),
+                height: size.height * 0.05,
+                width: size.width * 0.55,
                 color: Colors.transparent,
                 alignment: Alignment.centerLeft,
                 child: Container(
                     decoration: BoxDecoration(
                         color: Colors.transparent,
                         border: Border.all(
-                            color: const Color.fromARGB(255, 182, 115, 60)),
+                            color: const Color.fromARGB(255, 29, 77, 145)),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(25))),
                     child: Center(
-                        child: Text(medicationQuantity,
+                        child: Text(widget.medication.medicationQuantity,
                             style: TextStyle(
-                                color: Color.fromARGB(255, 182, 115, 60)))))),
+                                color: Color.fromARGB(255, 29, 77, 145)))))),
             Container(
-                padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                height: 45,
-                width: 200,
+                padding: EdgeInsets.fromLTRB(0, size.height * 0.02, 0, 0),
+                height: size.height * 0.05,
+                width: size.width * 0.55,
                 color: Colors.transparent,
                 alignment: Alignment.centerLeft,
                 child: Container(
                     decoration: BoxDecoration(
                         color: Colors.transparent,
                         border: Border.all(
-                            color: const Color.fromARGB(255, 182, 115, 60)),
+                            color: const Color.fromARGB(255, 29, 77, 145)),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(25))),
                     child: Center(
-                        child: Text(medicationFrequency,
+                        child: Text(widget.medication.medicationFrequency,
                             style: TextStyle(
-                                color: Color.fromARGB(255, 182, 115, 60)))))),
+                                color: Color.fromARGB(255, 29, 77, 145)))))),
             Container(
-                padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                height: 45,
-                width: 200,
+                padding: EdgeInsets.fromLTRB(0, size.height * 0.02, 0, 0),
+                height: size.height * 0.05,
+                width: size.width * 0.55,
                 color: Colors.transparent,
                 alignment: Alignment.centerLeft,
                 child: Container(
                     decoration: BoxDecoration(
                         color: Colors.transparent,
                         border: Border.all(
-                            color: const Color.fromARGB(255, 182, 115, 60)),
+                            color: const Color.fromARGB(255, 29, 77, 145)),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(25))),
                     child: Center(
-                        child: Text(medicationTime,
+                        child: Text(widget.medication.medicationTime,
                             style: TextStyle(
-                                color: Color.fromARGB(255, 182, 115, 60)))))),
+                                color: Color.fromARGB(255, 29, 77, 145)))))),
             Container(
-                padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                height: 45,
-                width: 200,
+                padding: EdgeInsets.fromLTRB(0, size.height * 0.02, 0, 0),
+                height: size.height * 0.05,
+                width: size.width * 0.55,
                 color: Colors.transparent,
                 alignment: Alignment.centerLeft,
                 child: Container(
                     decoration: BoxDecoration(
                         color: Colors.transparent,
                         border: Border.all(
-                            color: const Color.fromARGB(255, 182, 115, 60)),
+                            color: const Color.fromARGB(255, 29, 77, 145)),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(25))),
                     child: Center(
-                        child: Text(medicationPrescription,
+                        child: Text(widget.medication.medicationPrescription,
                             style: TextStyle(
-                                color: Color.fromARGB(255, 182, 115, 60)))))),
+                                color: Color.fromARGB(255, 29, 77, 145)))))),
             Padding(
               padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
             ),
             Container(
-                width: 200,
-                height: 50,
+                width: size.width * 0.55,
+                height: size.height * 0.1,
                 decoration: BoxDecoration(
                     color: Colors.transparent,
                     border: Border.all(
-                        color: const Color.fromARGB(255, 182, 115, 60)),
+                        color: const Color.fromARGB(255, 29, 77, 145)),
                     borderRadius: const BorderRadius.all(Radius.circular(25))),
                 child: SingleChildScrollView(
                     child: Padding(
                         padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                         child: Center(
-                            child: Text(otherDescription,
+                            child: Text(
+                                widget.medication.otherDescription as String,
                                 style: TextStyle(
                                     color:
-                                        Color.fromARGB(255, 182, 115, 60))))))),
+                                        Color.fromARGB(255, 29, 77, 145))))))),
           ],
         ));
   }

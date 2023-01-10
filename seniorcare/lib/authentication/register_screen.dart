@@ -14,6 +14,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  // TODO: email & password verifications
   final _formKey = GlobalKey<FormState>(); // can be used to validate the form
   final email = TextEditingController();
   final password = TextEditingController();
