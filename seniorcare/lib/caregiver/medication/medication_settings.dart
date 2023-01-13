@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:seniorcare/services/user_details.dart';
 import 'package:seniorcare/widgets/appbar.dart';
 
 class MedicationSettings extends StatefulWidget {
@@ -16,24 +17,24 @@ class _MedicationSettingsState extends State<MedicationSettings> {
   final breakfast = TextEditingController();
   final lunch = TextEditingController();
   final dinner = TextEditingController();
-
-  Future<dynamic>? mealTimings;
+  List<String> updatedMealTimings = [];
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    Future<dynamic> mealTimings = getMealTimings();
 
     return FutureBuilder(
       future: mealTimings,
       builder: ((context, snapshot) {
         if (!snapshot.hasData) {
-          return SizedBox(
-              height: size.height * 0.7,
-              child: const CircularProgressIndicator(
-                color: Color.fromARGB(255, 29, 77, 145),
-              ));
+          return const Center(child: CircularProgressIndicator());
         } else {
-          mealTimings = snapshot.data;
+          if (breakfast.text == '' && lunch.text == '' && dinner.text == '') {
+            breakfast.text = snapshot.data[0];
+            lunch.text = snapshot.data[1];
+            dinner.text = snapshot.data[2];
+          }
 
           return Scaffold(
               backgroundColor: Colors.white,
@@ -254,7 +255,7 @@ class _MedicationSettingsState extends State<MedicationSettings> {
                                                   .format(parsedTime);
 
                                           setState(() {
-                                            breakfast.text = formattedTime;
+                                            dinner.text = formattedTime;
                                           });
                                         }
                                       })),
@@ -267,7 +268,22 @@ class _MedicationSettingsState extends State<MedicationSettings> {
                           size.height * 0.02, 0, size.height * 0.02),
                       child: FloatingActionButton.extended(
                         heroTag: "Save",
-                        onPressed: () async {},
+                        onPressed: () async {
+                          updatedMealTimings = [
+                            breakfast.text,
+                            lunch.text,
+                            dinner.text
+                          ];
+
+                          var result = await UserDetails.editElderlyMealTimings(
+                              widget.elderlyId, updatedMealTimings);
+
+                          if (result != true) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text('Please try again'),
+                                duration: Duration(seconds: 2)));
+                          }
+                        },
                         label: const Text(
                           '    SAVE    ',
                           style: TextStyle(
@@ -284,5 +300,8 @@ class _MedicationSettingsState extends State<MedicationSettings> {
     );
   }
 
-  getMealTimings(String elderlyId) {}
+  getMealTimings() async {
+    Map elderlyDetails = await UserDetails.getUserDetails(widget.elderlyId);
+    return elderlyDetails['meal timings'];
+  }
 }

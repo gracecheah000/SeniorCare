@@ -16,7 +16,7 @@ class ElderlyAppointment extends StatefulWidget {
 class _ElderlyAppointmentState extends State<ElderlyAppointment> {
   DateTime _focusedCalendarDate = DateTime.now();
   DateTime _selectedDay = DateTime.now();
-  CalendarFormat _calendarFormat = CalendarFormat.month;
+  final CalendarFormat _calendarFormat = CalendarFormat.month;
 
   late Map<DateTime, List<Appointment>> mySelectedEvents;
 

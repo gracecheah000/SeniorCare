@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:seniorcare/elderly/elderly_appointment.dart';
 import 'package:seniorcare/elderly/medication/view_medication_elderly.dart';
 import 'package:seniorcare/services/authentication.dart';
+import 'package:seniorcare/start_screen.dart';
 
 import '../widgets/appbar.dart';
 import 'elderly_profile.dart';
@@ -21,6 +22,7 @@ class HomeElderly extends StatefulWidget {
 class _HomeElderlyState extends State<HomeElderly> {
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: const SeniorCareAppBar(start: true),
@@ -65,20 +67,25 @@ class _HomeElderlyState extends State<HomeElderly> {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(25)),
                         onTap: () {
-                          // TODO: send out message to alert caregiver
-                          print("SOS");
                           Authentication.signOut(context: context);
+                          Navigator.pushAndRemoveUntil(context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                            return const StartScreen(title: 'SeniorCare');
+                          }), (r) {
+                            return false;
+                          });
                         },
                         child: Ink(
                           decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 240, 96, 96),
+                              color: Color.fromARGB(255, 150, 129, 224),
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(25))),
                           child: const Center(
                               child: Text(
-                            "SOS",
+                            "Logout",
                             style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20),
                             textAlign: TextAlign.center,
@@ -88,7 +95,7 @@ class _HomeElderlyState extends State<HomeElderly> {
             ),
             Padding(
                 // TODO: change colour and content based on actual health status
-                padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
+                padding: EdgeInsets.fromLTRB(15, size.height * 0.01, 15, 5),
                 child: Padding(
                     padding: EdgeInsets.all(15),
                     child: Container(
@@ -115,7 +122,7 @@ class _HomeElderlyState extends State<HomeElderly> {
                       ),
                     ))),
             Padding(
-                padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+                padding: EdgeInsets.fromLTRB(50, size.height * 0.01, 50, 0),
                 child: Row(
                   children: <Widget>[
                     Flexible(
@@ -152,8 +159,9 @@ class _HomeElderlyState extends State<HomeElderly> {
                                               fontSize: 15))
                                     ],
                                   )))),
-                          const Padding(
-                            padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(
+                                0, size.height * 0.03, 0, 0),
                           ),
                           InkWell(
                               borderRadius:
@@ -221,8 +229,9 @@ class _HomeElderlyState extends State<HomeElderly> {
                                               fontSize: 15))
                                     ],
                                   )))),
-                          const Padding(
-                            padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(
+                                0, size.height * 0.03, 0, 0),
                           ),
                           InkWell(
                               borderRadius:
@@ -256,33 +265,34 @@ class _HomeElderlyState extends State<HomeElderly> {
                         ]))
                   ],
                 )),
-            Padding(
-                // TODO: dynamically add reminders
-                padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
-                child: Padding(
-                    padding: EdgeInsets.all(15),
-                    child: Container(
-                      height: 135,
+            Container(
+                padding: EdgeInsets.fromLTRB(
+                    size.width * 0.1, size.height * 0.03, size.width * 0.1, 0),
+                height: size.height * 0.13,
+                width: size.width * 1,
+                color: Colors.transparent,
+                alignment: Alignment.centerLeft,
+                child: InkWell(
+                    borderRadius: const BorderRadius.all(Radius.circular(25)),
+                    onTap: () {
+                      // TODO: send out message to alert caregiver
+                      print('SOS');
+                    },
+                    child: Ink(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          color: Colors.transparent,
-                          border: Border.all(
-                              color: Color.fromRGBO(108, 99, 255, 1))),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                              padding: EdgeInsets.all(15),
-                              child: const Text(
-                                "Reminders",
-                                style: TextStyle(
-                                    color: Color.fromRGBO(108, 99, 255, 1),
-                                    fontWeight: FontWeight.bold),
-                              )),
-                          Container()
-                        ],
-                      ),
-                    ))),
+                          color: Color.fromARGB(255, 240, 96, 96),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(25))),
+                      child: const Center(
+                          child: Text(
+                        "SOS",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
+                        textAlign: TextAlign.center,
+                      )),
+                    )))
           ],
         )));
   }

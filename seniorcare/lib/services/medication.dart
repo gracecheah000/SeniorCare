@@ -21,11 +21,11 @@ class MedicationServices {
     });
 
     await UserDetails.addElderlyMedication(elderlyId, medicationId)
-        .then((success) {
-      return true;
-    }).catchError((error) {
+        .catchError((error) {
       return error;
     });
+
+    return true;
   }
 
   static getMedicationDetails(String medicationId) async {

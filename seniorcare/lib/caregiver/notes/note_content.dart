@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NoteContent extends StatelessWidget {
-  final textFieldController;
+  final TextEditingController textFieldController;
 
   NoteContent({required this.textFieldController});
 
@@ -15,6 +15,6 @@ class NoteContent extends StatelessWidget {
             maxLines: null,
             textCapitalization: TextCapitalization.sentences,
             decoration: null,
-            style: TextStyle(fontSize: 19, height: 1.5)));
+            style: const TextStyle(fontSize: 19, height: 1.5)));
   }
 }

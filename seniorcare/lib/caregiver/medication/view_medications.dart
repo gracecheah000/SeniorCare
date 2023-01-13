@@ -278,6 +278,7 @@ class _ViewMedicationState extends State<ViewMedication> {
 
   getElderlyMedication(List<dynamic> medicationIdList) async {
     List<Medication> medicationList = [];
+
     for (String medicationId in medicationIdList) {
       Map details = await MedicationServices.getMedicationDetails(medicationId);
       Medication medication = Medication(

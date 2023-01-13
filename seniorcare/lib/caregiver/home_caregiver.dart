@@ -95,14 +95,14 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
                               },
                               child: Ink(
                                 decoration: const BoxDecoration(
-                                    color: Color.fromARGB(255, 240, 96, 96),
+                                    color: Color.fromARGB(255, 150, 129, 224),
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(25))),
                                 child: const Center(
                                     child: Text(
                                   "Logout",
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20),
                                   textAlign: TextAlign.center,
@@ -162,7 +162,10 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  const CaregiverAppointment()));
+                                                  CaregiverAppointment(
+                                                      userEmail:
+                                                          widget.userEmail
+                                                              as String)));
                                     },
                                     child: Ink(
                                         padding: const EdgeInsets.fromLTRB(

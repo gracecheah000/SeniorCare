@@ -284,7 +284,7 @@ class _AddMedicationState extends State<AddMedication> {
                           });
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(result + '. Please try again'),
+                              content: Text('Please try again'),
                               duration: Duration(seconds: 2)));
                         }
                       },

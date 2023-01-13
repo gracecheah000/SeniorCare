@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 
 class NoteTitle extends StatelessWidget {
-  final textFieldController;
+  final TextEditingController textFieldController;
 
-  NoteTitle({required this.textFieldController});
+  NoteTitle({required this.textFieldController, super.key});
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+
     return Padding(
-        padding: EdgeInsets.only(left: 20, top: 10),
+        padding:
+            EdgeInsets.only(left: size.width * 0.07, top: size.height * 0.02),
         child: Container(
-            width: 250,
-            height: 50,
+            width: size.width * 0.5,
+            height: size.height * 0.07,
             padding: EdgeInsets.only(left: 10),
             decoration: BoxDecoration(
                 border: Border.all(
-                    color: Color.fromRGBO(108, 99, 255, 1), width: 2),
+                    color: const Color.fromRGBO(108, 99, 255, 1), width: 2),
                 borderRadius: BorderRadius.circular(25)),
             child: TextField(
               controller: textFieldController,

@@ -58,11 +58,11 @@ class UserDetails {
 
     await ref.update({
       'medication': FieldValue.arrayUnion([medicationId])
-    }).then((success) {
-      return true;
     }).catchError((e, stackTrace) {
       return e;
     });
+
+    return true;
   }
 
   static deleteElderlyMedication(String elderlyId, String medicationId) async {
@@ -72,10 +72,70 @@ class UserDetails {
 
     await ref.update({
       'medication': FieldValue.arrayRemove([medicationId])
-    }).then((success) {
-      return true;
     }).catchError((e, stackTrace) {
       return e;
+    });
+
+    return true;
+  }
+
+  static editElderlyMealTimings(
+      String elderlyId, List<String> mealTimings) async {
+    DocumentReference ref =
+        FirebaseFirestore.instance.collection('user').doc(elderlyId);
+
+    await ref.update({'meal timings': mealTimings}).catchError((e) {
+      return e;
+    });
+
+    return true;
+  }
+
+  static addNewAppointment(String elderlyId, String appointmentId) async {
+    DocumentReference ref =
+        FirebaseFirestore.instance.collection('user').doc(elderlyId);
+
+    await ref.update({
+      'appointment': FieldValue.arrayUnion([appointmentId])
+    }).catchError((e) {
+      return e;
+    });
+
+    return true;
+  }
+
+  static deleteElderlyAppointment(
+      String elderlyId, String appointmentId) async {
+    DocumentReference ref;
+
+    ref = FirebaseFirestore.instance.collection('user').doc(elderlyId);
+
+    await ref.update({
+      'appointment': FieldValue.arrayRemove([appointmentId])
+    }).catchError((e, stackTrace) {
+      return e;
+    });
+
+    return true;
+  }
+
+  static void saveCaregiverDetails(Caregiver user, User? googleUser) async {
+    DocumentReference ref;
+    String userId;
+
+    if (googleUser != null) {
+      userId = await getUserId(googleUser.email!.toLowerCase());
+    } else {
+      userId = await getUserId(user.email!.toLowerCase());
+    }
+
+    ref = FirebaseFirestore.instance.collection('user').doc(userId);
+
+    await ref.update({
+      'name': user.name,
+      'emergency contact': user.emergencyContact,
+      'role': 'caregiver',
+      'elderly': [],
     });
   }
 
@@ -128,8 +188,6 @@ class UserDetails {
 
     await ref.update({
       'elderly': FieldValue.arrayRemove([query.docs.first.id.toString()])
-    }).then((result) {
-      return true;
     }).catchError((e, stackTrace) {
       return e;
     });
@@ -139,31 +197,11 @@ class UserDetails {
 
     await ref.update({
       'caregiver': FieldValue.arrayRemove([caregiverId])
-    }).then((result) {
-      return true;
     }).catchError((e, stackTrace) {
       return e;
     });
-  }
 
-  static void saveCaregiverDetails(Caregiver user, User? googleUser) async {
-    DocumentReference ref;
-    String userId;
-
-    if (googleUser != null) {
-      userId = await getUserId(googleUser.email!.toLowerCase());
-    } else {
-      userId = await getUserId(user.email!.toLowerCase());
-    }
-
-    ref = FirebaseFirestore.instance.collection('user').doc(userId);
-
-    await ref.update({
-      'name': user.name,
-      'emergency contact': user.emergencyContact,
-      'role': 'caregiver',
-      'elderly': [],
-    });
+    return true;
   }
 
   static Future<String> getUserId(String? email) async {

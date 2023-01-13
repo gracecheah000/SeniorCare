@@ -5,7 +5,9 @@ import '../../widgets/appbar.dart';
 import 'note_title.dart';
 
 class NoteEdit extends StatefulWidget {
-  const NoteEdit({super.key});
+  const NoteEdit({super.key, this.tag, this.title});
+  final DateTime? tag;
+  final String? title;
 
   @override
   State<NoteEdit> createState() => _NoteEditState();
@@ -15,8 +17,8 @@ class _NoteEditState extends State<NoteEdit> {
   String noteTitle = '';
   String noteContent = '';
 
-  TextEditingController _titleTextController = TextEditingController();
-  TextEditingController _contentTextController = TextEditingController();
+  final TextEditingController _titleTextController = TextEditingController();
+  final TextEditingController _contentTextController = TextEditingController();
 
   void handleTitleTextChange() {
     setState(() {
@@ -46,6 +48,8 @@ class _NoteEditState extends State<NoteEdit> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const SeniorCareAppBar(start: false),
@@ -53,8 +57,17 @@ class _NoteEditState extends State<NoteEdit> {
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              NoteTitle(
-                textFieldController: _titleTextController,
+              Row(
+                children: <Widget>[
+                  NoteTitle(
+                    textFieldController: _titleTextController,
+                  ),
+                  (widget.tag == null)
+                      ? Container(
+                          width: size.width * 0.1,
+                        )
+                      : Container()
+                ],
               ),
               Padding(
                   padding:
