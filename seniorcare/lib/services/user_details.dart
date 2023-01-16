@@ -28,6 +28,7 @@ class UserDetails {
       'caregiver': [],
       'medication': [],
       'appointment': [],
+      'notes': [],
       'pin': Random().nextInt(999999),
       'meal timings': ['7:00AM', '12:00PM', '7:00PM']
     });
@@ -119,6 +120,19 @@ class UserDetails {
     return true;
   }
 
+  static addNewNoteToElderly(String elderlyId, String noteId) async {
+    DocumentReference ref =
+        FirebaseFirestore.instance.collection('user').doc(elderlyId);
+
+    await ref.update({
+      'notes': FieldValue.arrayUnion([noteId])
+    }).catchError((e) {
+      return e;
+    });
+
+    return true;
+  }
+
   static void saveCaregiverDetails(Caregiver user, User? googleUser) async {
     DocumentReference ref;
     String userId;
@@ -183,8 +197,8 @@ class UserDetails {
     if (query.docs.isEmpty) {
       return false;
     }
-    DocumentReference ref;
-    ref = FirebaseFirestore.instance.collection('user').doc(caregiverId);
+    DocumentReference ref =
+        FirebaseFirestore.instance.collection('user').doc(caregiverId);
 
     await ref.update({
       'elderly': FieldValue.arrayRemove([query.docs.first.id.toString()])

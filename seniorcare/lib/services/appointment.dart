@@ -13,7 +13,6 @@ class AppointmentServices {
       'location': newAppointment.eventLocation,
       'require fasting': newAppointment.eventRequireFasting,
       'description': newAppointment.eventDescription,
-      'notes': []
     }).then((success) {
       appointmentId = success.id;
     }).catchError((e) {

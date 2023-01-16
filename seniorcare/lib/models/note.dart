@@ -1,16 +1,16 @@
 class Note {
-  int id;
-  String userId;
+  String? id;
   String noteTitle;
   String noteContent;
   String? noteTag;
+  String? appointmentId;
 
   Note(
-      {required this.id,
-      required this.userId,
+      {this.id,
       required this.noteTitle,
       required this.noteContent,
-      this.noteTag});
+      this.noteTag,
+      this.appointmentId});
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> data = Map<String, dynamic>();
@@ -18,8 +18,11 @@ class Note {
       data['noteTag'] = noteTag;
     }
 
+    if (appointmentId != null) {
+      data['appointmentId'] = appointmentId;
+    }
+
     data['id'] = id;
-    data['userId'] = userId;
     data['noteTitle'] = noteTitle;
     data['noteContent'] = noteContent;
 
@@ -30,10 +33,10 @@ class Note {
   toString() {
     return {
       'id': id,
-      'userId': userId,
       'noteTitle': noteTitle,
       'noteContent': noteContent,
-      'noteTag': noteTag
+      'noteTag': noteTag,
+      'appointmentId': appointmentId
     }.toString();
   }
 }

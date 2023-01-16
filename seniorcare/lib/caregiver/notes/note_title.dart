@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class NoteTitle extends StatelessWidget {
   final TextEditingController textFieldController;
 
-  NoteTitle({required this.textFieldController, super.key});
+  const NoteTitle({required this.textFieldController, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,8 @@ class NoteTitle extends StatelessWidget {
         child: Container(
             width: size.width * 0.5,
             height: size.height * 0.07,
-            padding: EdgeInsets.only(left: 10),
+            padding: EdgeInsets.only(
+                left: size.width * 0.05, right: size.width * 0.05),
             decoration: BoxDecoration(
                 border: Border.all(
                     color: const Color.fromRGBO(108, 99, 255, 1), width: 2),

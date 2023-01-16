@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, prefer_conditional_assignment
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -76,170 +76,157 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                 return const Center(child: CircularProgressIndicator());
               } else {
                 List<Elderly> elderlyList = snapshot.data;
-                // ignore: prefer_conditional_assignment
                 if (selectedElderly == null) {
                   selectedElderly = elderlyList[0];
                 }
                 return SingleChildScrollView(
                     child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                        padding: const EdgeInsets.fromLTRB(35, 10, 0, 0),
-                        height: size.height * 0.07,
-                        width: size.width * 0.5,
-                        color: Colors.transparent,
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: size.width * 0.02),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color:
-                                        const Color.fromRGBO(108, 99, 255, 1),
-                                    width: 2),
-                                borderRadius: BorderRadius.circular(20)),
-                            child: DropdownButton<Elderly>(
-                                isExpanded: true,
-                                value: selectedElderly,
-                                style: const TextStyle(
-                                    color: Color.fromRGBO(108, 99, 255, 1),
-                                    fontFamily: 'Montserrat',
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                    overflow: TextOverflow.ellipsis),
-                                onChanged: (Elderly? value) {
-                                  setState(() {
-                                    selectedElderly = value;
-                                    elderlyIndex = elderlyList
-                                        .indexOf(selectedElderly as Elderly);
-                                  });
-                                },
-                                items: elderlyList.map((Elderly elderly) {
-                                  return DropdownMenuItem<Elderly>(
-                                      value: elderly,
-                                      child: Text(
-                                        elderly.name.toString().toUpperCase(),
-                                      ));
-                                }).toList(),
-                                underline: Container(),
-                                icon: const Icon(Icons.arrow_drop_down,
-                                    color: Color.fromRGBO(108, 99, 255, 1))))),
-                    StreamBuilder(
-                        stream: FirebaseFirestore.instance
-                            .collection('user')
-                            .doc(selectedElderly!.id)
-                            .snapshots(),
-                        builder: (((context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return SizedBox(
-                                height: size.height * 0.7,
-                                child: const CircularProgressIndicator(
-                                  color: Color.fromARGB(255, 29, 77, 145),
-                                ));
-                          } else {
-                            List appointmentIdList =
-                                snapshot.data!.data()!['appointment'];
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                      Container(
+                          padding: const EdgeInsets.fromLTRB(35, 10, 0, 0),
+                          height: size.height * 0.07,
+                          width: size.width * 0.5,
+                          color: Colors.transparent,
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: size.width * 0.02),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color:
+                                          const Color.fromRGBO(108, 99, 255, 1),
+                                      width: 2),
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: DropdownButton<Elderly>(
+                                  isExpanded: true,
+                                  value: selectedElderly,
+                                  style: const TextStyle(
+                                      color: Color.fromRGBO(108, 99, 255, 1),
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      overflow: TextOverflow.ellipsis),
+                                  onChanged: (Elderly? value) {
+                                    setState(() {
+                                      selectedElderly = value;
+                                      elderlyIndex = elderlyList
+                                          .indexOf(selectedElderly as Elderly);
+                                    });
+                                  },
+                                  items: elderlyList.map((Elderly elderly) {
+                                    return DropdownMenuItem<Elderly>(
+                                        value: elderly,
+                                        child: Text(
+                                          elderly.name.toString().toUpperCase(),
+                                        ));
+                                  }).toList(),
+                                  underline: Container(),
+                                  icon: const Icon(Icons.arrow_drop_down,
+                                      color:
+                                          Color.fromRGBO(108, 99, 255, 1))))),
+                      StreamBuilder(
+                          stream: FirebaseFirestore.instance
+                              .collection('user')
+                              .doc(selectedElderly!.id)
+                              .snapshots(),
+                          builder: (((context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return SizedBox(
+                                  height: size.height * 0.7,
+                                  child: const CircularProgressIndicator(
+                                    color: Color.fromARGB(255, 29, 77, 145),
+                                  ));
+                            } else {
+                              List appointmentIdList =
+                                  snapshot.data!.data()!['appointment'];
 
-                            Future<dynamic> appointments =
-                                getElderlyAppointment(appointmentIdList);
+                              Future<dynamic> appointments =
+                                  getElderlyAppointment(appointmentIdList);
 
-                            return FutureBuilder(
-                                future: appointments,
-                                builder: ((context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return const Center(
-                                        child: CircularProgressIndicator());
-                                  } else {
-                                    mySelectedEvents = {};
+                              return FutureBuilder(
+                                  future: appointments,
+                                  builder: ((context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return const Center(
+                                          child: CircularProgressIndicator());
+                                    } else {
+                                      mySelectedEvents = {};
 
-                                    for (Appointment appointment
-                                        in snapshot.data) {
-                                      if (mySelectedEvents![
-                                              appointment.eventDate] ==
-                                          null) {
-                                        mySelectedEvents![appointment
-                                            .eventDate] = [appointment];
-                                      } else if (!mySelectedEvents![
-                                              appointment.eventDate]!
-                                          .contains(appointment)) {
-                                        mySelectedEvents![
+                                      for (Appointment appointment
+                                          in snapshot.data) {
+                                        if (mySelectedEvents![
+                                                appointment.eventDate] ==
+                                            null) {
+                                          mySelectedEvents![appointment
+                                              .eventDate] = [appointment];
+                                        } else if (!mySelectedEvents![
                                                 appointment.eventDate]!
-                                            .add(appointment);
+                                            .contains(appointment)) {
+                                          mySelectedEvents![
+                                                  appointment.eventDate]!
+                                              .add(appointment);
+                                        }
                                       }
                                     }
-                                  }
-                                  return Column(
-                                    children: <Widget>[
+                                    return Column(children: <Widget>[
                                       Card(
-                                        margin: EdgeInsets.fromLTRB(
-                                            size.width * 0.02,
-                                            size.height * 0.03,
-                                            size.width * 0.02,
-                                            size.height * 0.01),
-                                        elevation: 5.0,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(10),
+                                          margin: EdgeInsets.fromLTRB(
+                                              size.width * 0.02,
+                                              size.height * 0.03,
+                                              size.width * 0.02,
+                                              size.height * 0.01),
+                                          elevation: 5.0,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10),
+                                            ),
+                                            side: BorderSide(
+                                                color: Color.fromRGBO(
+                                                    108, 99, 255, 1)),
                                           ),
-                                          side: BorderSide(
-                                              color: Color.fromRGBO(
-                                                  108, 99, 255, 1)),
-                                        ),
-                                        child: TableCalendar(
-                                          firstDay: DateTime.utc(2010, 1, 1),
-                                          focusedDay:
-                                              _focusedCalendarDate, // today's date
-                                          lastDay: DateTime.utc(2100, 12,
-                                              31), // latest allowed date
-                                          calendarFormat: _calendarFormat,
-                                          startingDayOfWeek:
-                                              StartingDayOfWeek.monday,
-                                          daysOfWeekHeight: size.height * 0.05,
-                                          rowHeight: size.height * 0.06,
-                                          daysOfWeekStyle:
-                                              const DaysOfWeekStyle(
+                                          child: TableCalendar(
+                                              firstDay:
+                                                  DateTime.utc(2010, 1, 1),
+                                              focusedDay:
+                                                  _focusedCalendarDate, // today's date
+                                              lastDay: DateTime.utc(
+                                                  2100, 12, 31), // latest allowed date
+                                              calendarFormat: _calendarFormat,
+                                              startingDayOfWeek:
+                                                  StartingDayOfWeek.monday,
+                                              daysOfWeekHeight:
+                                                  size.height * 0.05,
+                                              rowHeight: size.height * 0.06,
+                                              daysOfWeekStyle: const DaysOfWeekStyle(
                                                   weekendStyle: TextStyle(
                                                       color:
                                                           Colors.deepPurple)),
-                                          calendarStyle: const CalendarStyle(
-                                              weekendTextStyle: TextStyle(
-                                                  color: Colors.deepPurple),
-                                              markerDecoration: BoxDecoration(
-                                                  color: Color.fromARGB(
-                                                      255, 248, 134, 114),
-                                                  shape: BoxShape.circle),
-                                              todayDecoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: Color.fromARGB(
-                                                      255, 144, 139, 192)),
-                                              selectedDecoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: Color.fromARGB(
-                                                      255, 46, 38, 121))),
-                                          headerStyle: HeaderStyle(
-                                              formatButtonVisible: false,
-                                              titleCentered: true),
-                                          selectedDayPredicate:
-                                              (currentSelectedDate) {
-                                            return (isSameDay(_selectedDay,
-                                                currentSelectedDate));
-                                          },
-                                          onDaySelected:
-                                              (selectedDay, focusedDay) {
-                                            if (!isSameDay(
-                                                _selectedDay, selectedDay)) {
-                                              setState(() {
-                                                _selectedDay = selectedDay;
-                                                _focusedCalendarDate =
-                                                    focusedDay;
-                                              });
-                                            }
-                                          },
-
-                                          eventLoader: _listOfDayEvents,
-                                        ),
-                                      ),
+                                              calendarStyle: const CalendarStyle(
+                                                  weekendTextStyle: TextStyle(
+                                                      color: Colors.deepPurple),
+                                                  markerDecoration: BoxDecoration(
+                                                      color: Color.fromARGB(
+                                                          255, 248, 134, 114),
+                                                      shape: BoxShape.circle),
+                                                  todayDecoration: BoxDecoration(shape: BoxShape.circle, color: Color.fromARGB(255, 144, 139, 192)),
+                                                  selectedDecoration: BoxDecoration(shape: BoxShape.circle, color: Color.fromARGB(255, 46, 38, 121))),
+                                              headerStyle: HeaderStyle(formatButtonVisible: false, titleCentered: true),
+                                              selectedDayPredicate: (currentSelectedDate) {
+                                                return (isSameDay(_selectedDay,
+                                                    currentSelectedDate));
+                                              },
+                                              onDaySelected: (selectedDay, focusedDay) {
+                                                if (!isSameDay(_selectedDay,
+                                                    selectedDay)) {
+                                                  setState(() {
+                                                    _selectedDay = selectedDay;
+                                                    _focusedCalendarDate =
+                                                        focusedDay;
+                                                  });
+                                                }
+                                              },
+                                              eventLoader: _listOfDayEvents)),
                                       Padding(
                                           padding: EdgeInsets.only(
                                               left: size.width * 0.04,
@@ -251,71 +238,65 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                                                       .spaceBetween,
                                               children: <Widget>[
                                                 Container(
-                                                  decoration: BoxDecoration(
-                                                      border: Border.all(
-                                                          color: Color.fromRGBO(
-                                                              108,
-                                                              99,
-                                                              255,
-                                                              1))),
-                                                  child: Padding(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              vertical: 5,
-                                                              horizontal: 5),
-                                                      child: Text(
-                                                          DateFormat('dd MMMM')
-                                                              .format(
-                                                                  _selectedDay),
-                                                          style: TextStyle(
-                                                              color: Color
-                                                                  .fromRGBO(
-                                                                      108,
-                                                                      99,
-                                                                      255,
-                                                                      1),
-                                                              fontSize: 15,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold))),
-                                                ),
+                                                    decoration: BoxDecoration(
+                                                        border: Border.all(
+                                                            color: Color.fromRGBO(
+                                                                108, 99, 255, 1))),
+                                                    child: Padding(
+                                                        padding:
+                                                            EdgeInsets.symmetric(
+                                                                vertical: 5,
+                                                                horizontal: 5),
+                                                        child: Text(
+                                                            DateFormat('dd MMMM')
+                                                                .format(
+                                                                    _selectedDay),
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Color.fromRGBO(108, 99, 255, 1),
+                                                                fontSize: 15,
+                                                                fontWeight: FontWeight.bold))))
                                               ])),
-                                      ..._listOfDayEvents(_selectedDay)
-                                          .map((appointment) => ListTile(
-                                                contentPadding: EdgeInsets.only(
-                                                    left: size.width * 0.05,
-                                                    right: 0),
-                                                leading: Text(
-                                                  appointment.eventTime,
-                                                  style: TextStyle(
-                                                      color:
-                                                          const Color.fromARGB(
+                                      ..._listOfDayEvents(_selectedDay).map(
+                                          (appointment) => ListTile(
+                                              contentPadding: EdgeInsets.only(
+                                                  left: size.width * 0.05,
+                                                  right: 0),
+                                              leading: Text(
+                                                appointment.eventTime,
+                                                style: TextStyle(
+                                                    color: const Color.fromARGB(
+                                                        255, 29, 77, 145),
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              title: Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: size.height * 0.013),
+                                                  child: Text(
+                                                      appointment.eventTitle,
+                                                      style: TextStyle(
+                                                          color: const Color.fromARGB(
                                                               255, 29, 77, 145),
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                title: Padding(
-                                                    padding: EdgeInsets.only(
-                                                        top: size.height *
-                                                            0.013),
-                                                    child: Text(
-                                                        appointment.eventTitle,
-                                                        style: TextStyle(
-                                                            color: const Color
-                                                                    .fromARGB(
-                                                                255,
-                                                                29,
-                                                                77,
-                                                                145),
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold))),
-                                                subtitle: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: <Widget>[
-                                                    Text(
-                                                        'Location: ${appointment.eventLocation}',
+                                                          fontWeight: FontWeight
+                                                              .bold))),
+                                              subtitle:
+                                                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+                                                      Widget>[
+                                                Text(
+                                                    'Location: ${appointment.eventLocation}',
+                                                    style: TextStyle(
+                                                        color: Color.fromARGB(
+                                                            255, 104, 114, 158),
+                                                        fontSize: 13)),
+                                                appointment.eventRequireFasting ==
+                                                        null
+                                                    ? Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                left: 0))
+                                                    : Text(
+                                                        '${appointment.eventRequireFasting}',
                                                         style: TextStyle(
                                                             color:
                                                                 Color.fromARGB(
@@ -324,53 +305,35 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                                                                     114,
                                                                     158),
                                                             fontSize: 13)),
-                                                    appointment.eventRequireFasting ==
-                                                            null
-                                                        ? Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                    left: 0))
-                                                        : Text(
-                                                            '${appointment.eventRequireFasting}',
-                                                            style: TextStyle(
-                                                                color: Color
-                                                                    .fromARGB(
-                                                                        255,
-                                                                        104,
-                                                                        114,
-                                                                        158),
-                                                                fontSize: 13)),
-                                                    (appointment.eventDescription ==
-                                                            "")
-                                                        ? Text('Other Details: -',
-                                                            style: TextStyle(
-                                                                color: Color
-                                                                    .fromARGB(
-                                                                        255,
-                                                                        104,
-                                                                        114,
-                                                                        158),
-                                                                fontSize: 13))
-                                                        : Text(
-                                                            'Other Details: ${appointment.eventDescription}',
-                                                            style: TextStyle(
-                                                                color: Color
-                                                                    .fromARGB(
-                                                                        255,
-                                                                        104,
-                                                                        114,
-                                                                        158),
-                                                                fontSize: 13)),
-                                                  ],
-                                                ),
-                                                trailing: SizedBox(
-                                                    width: size.width * 0.28,
-                                                    child: Row(
-                                                      children: [
-                                                        IconButton(
-                                                            onPressed:
-                                                                () async {
-                                                              var result = await AppointmentServices.deleteAppointment(
+                                                (appointment.eventDescription ==
+                                                        "")
+                                                    ? Text('Other Details: -',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    104,
+                                                                    114,
+                                                                    158),
+                                                            fontSize: 13))
+                                                    : Text(
+                                                        'Other Details: ${appointment.eventDescription}',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    104,
+                                                                    114,
+                                                                    158),
+                                                            fontSize: 13))
+                                              ]),
+                                              trailing: SizedBox(
+                                                  width: size.width * 0.28,
+                                                  child: Row(children: [
+                                                    IconButton(
+                                                        onPressed: () async {
+                                                          var result = await AppointmentServices
+                                                              .deleteAppointment(
                                                                   appointment
                                                                       .eventId
                                                                       .toString(),
@@ -378,66 +341,65 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                                                                       .id
                                                                       .toString());
 
-                                                              if (result !=
-                                                                  true) {
-                                                                ScaffoldMessenger.of(
-                                                                        context)
-                                                                    .showSnackBar(SnackBar(
-                                                                        content:
-                                                                            Text(
-                                                                                'Please try again'),
-                                                                        duration:
-                                                                            Duration(seconds: 2)));
-                                                              }
-                                                            },
-                                                            splashRadius: 15,
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    0),
-                                                            icon: Icon(
-                                                              Icons.delete,
-                                                              color: const Color
-                                                                      .fromARGB(
-                                                                  255,
-                                                                  104,
-                                                                  114,
-                                                                  158),
-                                                            )),
-                                                        IconButton(
-                                                            onPressed: () {
-                                                              Navigator.of(context).push(MaterialPageRoute(
-                                                                  builder: (context) => NoteEdit(
-                                                                      title: appointment
-                                                                          .eventTitle,
-                                                                      tag: appointment
-                                                                          .eventDate)));
-                                                            },
-                                                            splashRadius: 15,
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    0),
-                                                            icon: Icon(
-                                                                Icons.note_add,
-                                                                color: const Color
-                                                                        .fromARGB(
-                                                                    255,
-                                                                    104,
-                                                                    114,
-                                                                    158))),
-                                                      ],
-                                                    )),
-                                              )),
+                                                          if (result != true) {
+                                                            ScaffoldMessenger
+                                                                    .of(context)
+                                                                .showSnackBar(SnackBar(
+                                                                    content: Text(
+                                                                        'Please try again'),
+                                                                    duration: Duration(
+                                                                        seconds:
+                                                                            2)));
+                                                          }
+                                                        },
+                                                        splashRadius: 15,
+                                                        padding:
+                                                            EdgeInsets.all(0),
+                                                        icon: Icon(Icons.delete,
+                                                            color: const Color
+                                                                    .fromARGB(
+                                                                255,
+                                                                104,
+                                                                114,
+                                                                158))),
+                                                    IconButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context).push(MaterialPageRoute(
+                                                              builder: (context) => NoteEdit(
+                                                                  title: appointment
+                                                                      .eventTitle,
+                                                                  tag: DateFormat(
+                                                                          "yyyy-MM-dd")
+                                                                      .format(appointment
+                                                                          .eventDate),
+                                                                  appointmentId:
+                                                                      appointment
+                                                                          .eventId,
+                                                                  elderlyId:
+                                                                      selectedElderly!
+                                                                          .id
+                                                                          .toString())));
+                                                        },
+                                                        splashRadius: 15,
+                                                        padding:
+                                                            EdgeInsets.all(0),
+                                                        icon: Icon(
+                                                            Icons.note_add,
+                                                            color: const Color
+                                                                    .fromARGB(
+                                                                255,
+                                                                104,
+                                                                114,
+                                                                158)))
+                                                  ])))),
                                       Padding(
-                                        padding: EdgeInsets.only(
-                                            bottom: size.height * 0.05),
-                                      )
-                                    ],
-                                  );
-                                }));
-                          }
-                        }))),
-                  ],
-                ));
+                                          padding: EdgeInsets.only(
+                                              bottom: size.height * 0.05))
+                                    ]);
+                                  }));
+                            }
+                          })))
+                    ]));
               }
             }))),
         floatingActionButton: FloatingActionButton.small(
@@ -453,37 +415,35 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
     await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              scrollable: true,
-              backgroundColor: Color.fromARGB(255, 247, 249, 250),
-              content: StatefulBuilder(
-                  builder: (BuildContext context, StateSetter setState) {
-                return Column(
-                  children: <Widget>[
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                scrollable: true,
+                backgroundColor: Color.fromARGB(255, 247, 249, 250),
+                content: StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setState) {
+                  return Column(children: <Widget>[
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('New Appointment',
-                            style: TextStyle(
-                                color: Color.fromRGBO(108, 99, 255, 1),
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold)),
-                        IconButton(
-                          onPressed: () {
-                            titleController.clear();
-                            timeController.clear();
-                            locationController.clear();
-                            requireFasting = false;
-                            descriptionController.clear();
-                            Navigator.pop(context);
-                          },
-                          icon:
-                              Image.asset('assets/images/close.png', scale: 20),
-                          iconSize: 20,
-                        )
-                      ],
-                    ),
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('New Appointment',
+                              style: TextStyle(
+                                  color: Color.fromRGBO(108, 99, 255, 1),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold)),
+                          IconButton(
+                            onPressed: () {
+                              titleController.clear();
+                              timeController.clear();
+                              locationController.clear();
+                              requireFasting = false;
+                              descriptionController.clear();
+                              Navigator.pop(context);
+                            },
+                            icon: Image.asset('assets/images/close.png',
+                                scale: 20),
+                            iconSize: 20,
+                          )
+                        ]),
                     Divider(
                       color: Color.fromRGBO(108, 99, 255, 1),
                     ),
@@ -547,49 +507,47 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                       title: Text("Require Fasting?",
                           style: TextStyle(
                               color: Color.fromRGBO(108, 99, 255, 1))),
-                    ),
-                  ],
-                );
-              }),
-              actions: [
-                TextButton(
-                    onPressed: () async {
-                      if (titleController.text.isEmpty &&
-                          timeController.text.isEmpty &&
-                          locationController.text.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text(
-                                'Please fill up title, time and location of appointment'),
-                            duration: Duration(seconds: 2)));
-                        return;
-                      } else {
-                        Appointment newAppointment = Appointment(
-                            eventTitle: titleController.text,
-                            eventDate: _selectedDay,
-                            eventTime: timeController.text,
-                            eventLocation: locationController.text,
-                            eventRequireFasting:
-                                requireFasting ? "Require Fasting" : null,
-                            eventDescription: descriptionController.text);
-                        await AppointmentServices.saveAppointments(
-                            selectedElderly!.id.toString(), newAppointment);
+                    )
+                  ]);
+                }),
+                actions: [
+                  TextButton(
+                      onPressed: () async {
+                        if (titleController.text.isEmpty &&
+                            timeController.text.isEmpty &&
+                            locationController.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                              content: Text(
+                                  'Please fill up title, time and location of appointment'),
+                              duration: Duration(seconds: 2)));
+                          return;
+                        } else {
+                          Appointment newAppointment = Appointment(
+                              eventTitle: titleController.text,
+                              eventDate: _selectedDay,
+                              eventTime: timeController.text,
+                              eventLocation: locationController.text,
+                              eventRequireFasting:
+                                  requireFasting ? "Require Fasting" : null,
+                              eventDescription: descriptionController.text);
+                          await AppointmentServices.saveAppointments(
+                              selectedElderly!.id.toString(), newAppointment);
 
-                        titleController.clear();
-                        timeController.clear();
-                        locationController.clear();
-                        requireFasting = false;
-                        descriptionController.clear();
+                          titleController.clear();
+                          timeController.clear();
+                          locationController.clear();
+                          requireFasting = false;
+                          descriptionController.clear();
 
-                        Navigator.pop(context);
-                        return;
-                      }
-                    },
-                    child: const Text('Add',
-                        style: TextStyle(
-                            color: Color.fromRGBO(108, 99, 255, 1),
-                            fontSize: 18)))
-              ],
-            ));
+                          Navigator.pop(context);
+                          return;
+                        }
+                      },
+                      child: const Text('Add',
+                          style: TextStyle(
+                              color: Color.fromRGBO(108, 99, 255, 1),
+                              fontSize: 18)))
+                ]));
   }
 
   getElderlyList() async {
