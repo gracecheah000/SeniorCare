@@ -25,6 +25,8 @@ class _MultiSelectState extends State<MultiSelect> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+
     if (widget.healthRisks.isNotEmpty &&
         _selectedItems.isEmpty &&
         editing == false) {
@@ -40,44 +42,43 @@ class _MultiSelectState extends State<MultiSelect> {
         : widget.color as Color;
 
     return Container(
-        width: 310,
+        width: size.width * 0.86,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30.0),
+            borderRadius: BorderRadius.circular(20),
             border: Border.all(color: widgetColor)),
         child: ClipRRect(
-            borderRadius: BorderRadius.circular(30.0),
+            borderRadius: BorderRadius.circular(20),
             child: ExpansionTile(
-              trailing: Icon(Icons.arrow_drop_down, color: widgetColor),
-              title: Text(_selectedItems.isEmpty ? "Select" : _selectedItems[0],
-                  style: TextStyle(color: widgetColor)),
-              children: <Widget>[
-                ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: widget.items.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                          margin: const EdgeInsets.only(bottom: 8),
-                          child: _ViewItem(
-                            color: widgetColor,
-                            item: widget.items[index],
-                            selected: (val) {
-                              setState(() {
-                                selectedText = val;
-                                if (_selectedItems.contains(val)) {
-                                  _selectedItems.remove(val);
-                                } else {
-                                  _selectedItems.add(val);
-                                }
-                              });
-                              widget.updateHealthRisks(_selectedItems);
-                            },
-                            itemSelected:
-                                _selectedItems.contains(widget.items[index]),
-                          ));
-                    })
-              ],
-            )));
+                trailing: Icon(Icons.arrow_drop_down, color: widgetColor),
+                title: Text(
+                    _selectedItems.isEmpty ? "Select" : _selectedItems[0],
+                    style: TextStyle(color: widgetColor)),
+                children: <Widget>[
+                  ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: widget.items.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            child: _ViewItem(
+                                color: widgetColor,
+                                item: widget.items[index],
+                                selected: (val) {
+                                  setState(() {
+                                    selectedText = val;
+                                    if (_selectedItems.contains(val)) {
+                                      _selectedItems.remove(val);
+                                    } else {
+                                      _selectedItems.add(val);
+                                    }
+                                  });
+                                  widget.updateHealthRisks(_selectedItems);
+                                },
+                                itemSelected: _selectedItems
+                                    .contains(widget.items[index])));
+                      })
+                ])));
   }
 }
 

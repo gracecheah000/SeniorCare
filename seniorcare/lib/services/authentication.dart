@@ -18,21 +18,36 @@ class Authentication {
 
     if (user != null) {
       bool exist = await checkExistingAccount(user);
+
       if (exist == false) {
-        registerUserDate(user);
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => FirstTimeUserInfo(
-            googleUser: user,
-          ),
-        ));
+        registerUserData(user);
+
+        if (user.providerData[0].providerId == 'google.com') {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => FirstTimeUserInfo(
+                    googleUser: user,
+                  )));
+        } else if (user.providerData[0].providerId == 'password') {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => FirstTimeUserInfo(
+                    emailUser: user,
+                  )));
+        }
       } else {
         String firstTimeLogin = await checkFirstTimeLogIn(user);
+
         if (firstTimeLogin == '') {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => FirstTimeUserInfo(
-              googleUser: user,
-            ),
-          ));
+          if (user.providerData[0].providerId == 'google.com') {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => FirstTimeUserInfo(
+                      googleUser: user,
+                    )));
+          } else if (user.providerData[0].providerId == 'password') {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => FirstTimeUserInfo(
+                      emailUser: user,
+                    )));
+          }
         } else if (firstTimeLogin == 'elderly') {
           Navigator.pushAndRemoveUntil(context,
               MaterialPageRoute(builder: (BuildContext context) {
@@ -106,11 +121,53 @@ class Authentication {
     }
   }
 
+  static Future signUpWithEmailAndPassword(
+      {required String email,
+      required String password,
+      required BuildContext context}) async {
+    User? user;
+
+    try {
+      final UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+
+      user = userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+                "The password provided is too weak. The password should at least be 6 chars.")));
+      } else if (e.code == 'email-already-in-use') {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("The account already exists for that email")));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              "Firebase error occured registering using email. Try again.")));
+    }
+
+    return user;
+  }
+
+  static Future signInWithEmailAndPassword(
+      {required String email,
+      required String password,
+      required BuildContext context}) async {
+    User? user;
+
+    final UserCredential userCredential = await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password);
+    user = userCredential.user;
+
+    return user;
+  }
+
   // check for existing account
   static Future<bool> checkExistingAccount(User user) async {
     QuerySnapshot query = await FirebaseFirestore.instance
         .collection('user')
-        .where('email', isEqualTo: user.email)
+        .where('email', isEqualTo: user.email!.toLowerCase())
         .get();
 
     if (query.docs.isEmpty) {
@@ -122,7 +179,7 @@ class Authentication {
   static Future<String> checkFirstTimeLogIn(User user) async {
     QuerySnapshot query = await FirebaseFirestore.instance
         .collection('user')
-        .where('email', isEqualTo: user.email)
+        .where('email', isEqualTo: user.email!.toLowerCase())
         .get();
 
     var data = query.docs.first.data() as Map;
@@ -133,11 +190,11 @@ class Authentication {
   }
 
   // if account does not exist, register the email user in database
-  static void registerUserDate(User user) async {
+  static registerUserData(User user) async {
+    String providerId = user.providerData[0].providerId;
+
     await FirebaseFirestore.instance
         .collection("user")
-        .add({'email': user.email!.toLowerCase(), 'type': 'google'})
-        .then((value) => print("User added"))
-        .catchError((error) => print("Failed to add user: $error"));
+        .add({'email': user.email!.toLowerCase(), 'type': providerId});
   }
 }

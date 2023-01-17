@@ -1,9 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorcare/start_screen.dart';
 import 'package:flutter_config/flutter_config.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Required by FlutterConfig
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Ensures that the UI is not rendered until initialization is done
   await FlutterConfig.loadEnvVariables();
   runApp(const MyApp());
 }

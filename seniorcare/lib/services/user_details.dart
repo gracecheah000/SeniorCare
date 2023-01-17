@@ -5,15 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:seniorcare/models/user.dart';
 
 class UserDetails {
-  static void saveElderlyDetails(Elderly user, User? googleUser) async {
+  static void saveElderlyDetails(Elderly user, User? newUser) async {
     DocumentReference ref;
     String userId;
 
-    if (googleUser != null) {
-      userId = await getUserId(googleUser.email);
-    } else {
-      userId = await getUserId(user.email);
-    }
+    userId = await getUserId(newUser!.email!.toLowerCase());
 
     ref = FirebaseFirestore.instance.collection('user').doc(userId);
 
@@ -133,15 +129,11 @@ class UserDetails {
     return true;
   }
 
-  static void saveCaregiverDetails(Caregiver user, User? googleUser) async {
+  static void saveCaregiverDetails(Caregiver user, User? newUser) async {
     DocumentReference ref;
     String userId;
 
-    if (googleUser != null) {
-      userId = await getUserId(googleUser.email!.toLowerCase());
-    } else {
-      userId = await getUserId(user.email!.toLowerCase());
-    }
+    userId = await getUserId(newUser!.email!.toLowerCase());
 
     ref = FirebaseFirestore.instance.collection('user').doc(userId);
 

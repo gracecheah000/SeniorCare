@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:seniorcare/widgets/custom_multi_select_widget.dart';
+import 'package:seniorcare/widgets/custom_text_field.dart';
 
 // ignore: must_be_immutable
 class ElderlyUserInfo extends StatefulWidget {
@@ -40,159 +41,60 @@ class _ElderlyUserInfoState extends State<ElderlyUserInfo> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        const Padding(padding: EdgeInsets.only(top: 10)),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-          child: TextFormField(
-              controller: widget.name,
-              validator: ((value) {
-                if (value == null || value.isEmpty) {
-                  return '';
-                }
-                return null;
-              }),
-              decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: const BorderSide(
-                          width: 1, color: Color.fromRGBO(108, 99, 255, 1))),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: const BorderSide(
-                          width: 2, color: Color.fromRGBO(105, 100, 173, 1))),
-                  errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: const BorderSide(
-                          width: 1, color: Color.fromARGB(255, 255, 104, 99))),
-                  hintText: 'Name',
-                  hintStyle:
-                      const TextStyle(color: Color.fromRGBO(108, 99, 255, 1))),
-              style: const TextStyle(color: Color.fromRGBO(105, 100, 173, 1))),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-          child: TextFormField(
-              validator: ((value) {
-                if (value == null || value.isEmpty) {
-                  return '';
-                }
-                return null;
-              }),
-              controller: widget.age,
-              decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: const BorderSide(
-                          width: 1, color: Color.fromRGBO(108, 99, 255, 1))),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: const BorderSide(
-                          width: 2, color: Color.fromRGBO(105, 100, 173, 1))),
-                  errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: const BorderSide(
-                          width: 1, color: Color.fromARGB(255, 255, 104, 99))),
-                  hintText: 'Age',
-                  hintStyle:
-                      const TextStyle(color: Color.fromRGBO(108, 99, 255, 1))),
-              style: const TextStyle(color: Color.fromRGBO(105, 100, 173, 1))),
-        ),
-        const Padding(
-          padding: EdgeInsets.only(top: 10),
-        ),
-        Container(
-            width: 310,
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30.0),
-                border:
-                    Border.all(color: const Color.fromRGBO(108, 99, 255, 1))),
-            child: DropdownButton<String>(
-                isExpanded: true,
-                value: widget.sex,
-                style: const TextStyle(
-                    color: Color.fromRGBO(108, 99, 255, 1),
-                    fontFamily: 'Montserrat',
-                    fontSize: 17),
-                items: sexDropDownItems,
-                onChanged: (value) {
-                  setState(() {
-                    widget.notifyParentSex(value);
-                  });
-                },
-                underline: Container(),
-                icon: const Icon(Icons.arrow_drop_down,
-                    color: Color.fromRGBO(108, 99, 255, 1)))),
-        const Padding(
-          padding: EdgeInsets.only(top: 10),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-          child: TextFormField(
-              validator: ((value) {
-                if (value == null || value.isEmpty) {
-                  return '';
-                }
-                return null;
-              }),
-              controller: widget.address,
-              decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: const BorderSide(
-                          width: 1, color: Color.fromRGBO(108, 99, 255, 1))),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: const BorderSide(
-                          width: 2, color: Color.fromRGBO(105, 100, 173, 1))),
-                  errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: const BorderSide(
-                          width: 1, color: Color.fromARGB(255, 255, 104, 99))),
-                  hintText: 'Address',
-                  hintStyle:
-                      const TextStyle(color: Color.fromRGBO(108, 99, 255, 1))),
-              style: const TextStyle(color: Color.fromRGBO(105, 100, 173, 1))),
-        ),
-        const Padding(padding: EdgeInsets.only(top: 10)),
-        MultiSelect(
-          items: items,
-          updateHealthRisks: updateParentHealthRisks,
-          healthRisks: [],
-        ),
-        const Padding(padding: EdgeInsets.only(top: 10)),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-          child: TextFormField(
-              validator: ((value) {
-                if (value == null || value.isEmpty) {
-                  return '';
-                }
-                return null;
-              }),
-              controller: widget.additionalDetails,
-              decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: const BorderSide(
-                          width: 1, color: Color.fromRGBO(108, 99, 255, 1))),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: const BorderSide(
-                          width: 2, color: Color.fromRGBO(105, 100, 173, 1))),
-                  errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: const BorderSide(
-                          width: 1, color: Color.fromARGB(255, 255, 104, 99))),
-                  hintText: 'Additional Details',
-                  hintStyle:
-                      const TextStyle(color: Color.fromRGBO(108, 99, 255, 1))),
-              style: const TextStyle(color: Color.fromRGBO(105, 100, 173, 1))),
-        ),
-      ],
-    );
+    var size = MediaQuery.of(context).size;
+
+    return Column(children: <Widget>[
+      Padding(padding: EdgeInsets.only(top: size.height * 0.01)),
+      Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: size.width * 0.07, vertical: size.height * 0.015),
+          child: customTextField(controller: widget.name, hint: 'Name')),
+      Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: size.width * 0.07, vertical: size.height * 0.01),
+          child: customTextField(controller: widget.age, hint: 'Age')),
+      Padding(padding: EdgeInsets.only(top: size.height * 0.015)),
+      Container(
+          width: size.width * 0.86,
+          padding: EdgeInsets.symmetric(
+              vertical: size.height * 0.005, horizontal: size.width * 0.03),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: const Color.fromRGBO(108, 99, 255, 1))),
+          child: DropdownButton<String>(
+              isExpanded: true,
+              value: widget.sex,
+              style: const TextStyle(
+                  color: Color.fromRGBO(108, 99, 255, 1),
+                  fontFamily: 'Montserrat',
+                  fontSize: 16),
+              items: sexDropDownItems,
+              onChanged: (value) {
+                setState(() {
+                  widget.notifyParentSex(value);
+                });
+              },
+              underline: Container(),
+              icon: const Icon(Icons.arrow_drop_down,
+                  color: Color.fromRGBO(108, 99, 255, 1)))),
+      Padding(padding: EdgeInsets.only(top: size.height * 0.01)),
+      Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: size.width * 0.07, vertical: size.height * 0.015),
+          child: customTextField(controller: widget.address, hint: 'Address')),
+      Padding(padding: EdgeInsets.only(top: size.height * 0.01)),
+      MultiSelect(
+        items: items,
+        updateHealthRisks: updateParentHealthRisks,
+        healthRisks: [],
+      ),
+      Padding(padding: EdgeInsets.only(top: size.height * 0.01)),
+      Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: size.width * 0.07, vertical: size.height * 0.015),
+          child: customTextField(
+              controller: widget.additionalDetails, hint: 'Additional Details'))
+    ]);
   }
 
   updateParentHealthRisks(List<String> updatedHealthRisks) {

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorcare/elderly/home_elderly.dart';
@@ -39,7 +41,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                     bool exist =
                         await Authentication.checkExistingAccount(user);
                     if (exist == false) {
-                      Authentication.registerUserDate(user);
+                      Authentication.registerUserData(user);
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => FirstTimeUserInfo(
                           googleUser: user,

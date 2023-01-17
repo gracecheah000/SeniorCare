@@ -1,8 +1,10 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorcare/services/authentication.dart';
 import 'package:seniorcare/authentication/forget_password.dart';
+import 'package:seniorcare/widgets/custom_text_field.dart';
 import 'package:seniorcare/widgets/google_sign_in_button.dart';
 
 import '../caregiver/home_caregiver.dart';
@@ -20,180 +22,158 @@ class _LoginScreenState extends State<LoginScreen> {
   String? role = 'Elderly';
   List<DropdownMenuItem<String>> get roleDropdownItems {
     List<DropdownMenuItem<String>> roleMenuItems = [
-      DropdownMenuItem(child: Text('Elderly'), value: 'Elderly'),
-      DropdownMenuItem(child: Text('Caregiver'), value: 'Caregiver')
+      const DropdownMenuItem(value: 'Elderly', child: Text('Elderly')),
+      const DropdownMenuItem(value: 'Caregiver', child: Text('Caregiver'))
     ];
     return roleMenuItems;
   }
 
-  // TODO: change text fields to forms
+  final email = TextEditingController();
+  final password = TextEditingController();
+  Future? _future;
+
+  @override
+  void initState() {
+    _future = Authentication.initializeFirebase(context: context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: const SeniorCareAppBar(start: false),
-      body: Center(
-          child: SingleChildScrollView(
-              child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Column(children: <Widget>[
-            const Text(
-              'LOGIN',
-              style: TextStyle(
-                  color: Color.fromRGBO(105, 100, 173, 1),
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24),
-            ),
-            const Divider(
-              height: 20,
-              thickness: 1,
-              indent: 40,
-              endIndent: 40,
-              color: Color.fromRGBO(108, 99, 255, 1),
-            )
-          ]),
-          Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-          Column(
-            children: <Widget>[
+        backgroundColor: Colors.white,
+        appBar: const SeniorCareAppBar(start: false),
+        body: Center(
+            child: SingleChildScrollView(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+              Column(children: <Widget>[
+                const Text(
+                  'LOGIN',
+                  style: TextStyle(
+                      color: Color.fromRGBO(105, 100, 173, 1),
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24),
+                ),
+                Divider(
+                  height: 20,
+                  thickness: 1,
+                  indent: size.width * 0.1,
+                  endIndent: size.width * 0.1,
+                  color: const Color.fromRGBO(108, 99, 255, 1),
+                )
+              ]),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                child: TextField(
-                    decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            borderSide: const BorderSide(
-                                width: 1,
+                  padding: EdgeInsets.fromLTRB(0, size.height * 0.03, 0, 0)),
+              Column(children: <Widget>[
+                Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: size.width * 0.07,
+                        vertical: size.height * 0.01),
+                    child: customTextField(controller: email, hint: 'Email')),
+                Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: size.width * 0.07,
+                        vertical: size.height * 0.02),
+                    child: customTextField(
+                        controller: password,
+                        hint: 'Password',
+                        obscureTextNeeded: true)),
+                Container(
+                    width: size.width * 0.8,
+                    height: size.height * 0.04,
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                        style: TextButton.styleFrom(
+                            textStyle: const TextStyle(
+                                fontSize: 12,
                                 color: Color.fromRGBO(108, 99, 255, 1))),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            borderSide: const BorderSide(
-                                width: 2,
-                                color: Color.fromRGBO(105, 100, 173, 1))),
-                        errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            borderSide: const BorderSide(
-                                width: 1,
-                                color: Color.fromARGB(255, 255, 104, 99))),
-                        hintText: 'Phone Number',
-                        hintStyle: const TextStyle(
-                            color: Color.fromRGBO(108, 99, 255, 1))),
-                    style: const TextStyle(
-                        color: Color.fromRGBO(105, 100, 173, 1))),
-              ),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const ForgetPassword()));
+                        },
+                        child: const Text('Forget Password')))
+              ]),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                child: TextField(
-                    decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            borderSide: const BorderSide(
-                                width: 1,
-                                color: Color.fromRGBO(108, 99, 255, 1))),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            borderSide: const BorderSide(
-                                width: 2,
-                                color: Color.fromRGBO(105, 100, 173, 1))),
-                        errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            borderSide: const BorderSide(
-                                width: 1,
-                                color: Color.fromARGB(255, 255, 104, 99))),
-                        hintText: 'Password',
-                        hintStyle: const TextStyle(
-                            color: Color.fromRGBO(108, 99, 255, 1))),
-                    style: const TextStyle(
-                        color: Color.fromRGBO(105, 100, 173, 1))),
-              ),
-              Container(
-                  width: 290,
-                  height: 30,
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                      style: TextButton.styleFrom(
-                          textStyle: const TextStyle(
-                              fontSize: 12,
-                              color: Color.fromRGBO(108, 99, 255, 1))),
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const ForgetPassword()));
-                      },
-                      child: const Text('Forget Password'))),
-              const Padding(padding: EdgeInsets.fromLTRB(0, 5, 0, 0)),
-              Container(
-                  width: 310,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30.0),
-                      border:
-                          Border.all(color: Color.fromRGBO(108, 99, 255, 1))),
-                  child: DropdownButton<String>(
-                      isExpanded: true,
-                      value: role,
-                      style: const TextStyle(
-                          color: Color.fromRGBO(108, 99, 255, 1),
-                          fontFamily: 'Montserrat',
-                          fontSize: 17),
-                      items: roleDropdownItems,
-                      onChanged: (value) {
-                        setState(() {
-                          role = value;
-                        });
-                      },
-                      underline: Container(),
-                      icon: const Icon(Icons.arrow_drop_down,
-                          color: Color.fromRGBO(108, 99, 255, 1))))
-            ],
-          ),
-          Padding(padding: EdgeInsets.fromLTRB(0, 50, 0, 0)),
-          FloatingActionButton.extended(
-            heroTag: "Login",
-            onPressed: () {
-              if (role == 'null') {
-                // todo: add error message
-              } else if (role == 'Elderly') {
-                // todo: authenticate user
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => HomeElderly()));
-              } else if (role == 'Caregiver') {
-                // todo: authenticate user and check for first login
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => HomeCaregiver(userEmail: '')));
-              }
-            },
-            label: const Text(
-              '    LOGIN    ',
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Montserrat'),
-            ),
-            backgroundColor: const Color.fromRGBO(108, 99, 255, 1),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(top: 50),
-          ),
-          const Text('Or login using social media',
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          FutureBuilder(
-              future: Authentication.initializeFirebase(context: context),
-              builder: ((context, snapshot) {
-                if (snapshot.hasError) {
-                  return const Text('Error initializing Firebase');
-                } else if (snapshot.connectionState == ConnectionState.done) {
-                  return GoogleSignInButton();
-                }
-                return const CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white));
-              }))
-        ],
-      ))),
-    );
+                  padding: EdgeInsets.fromLTRB(0, size.height * 0.08, 0, 0)),
+              FloatingActionButton.extended(
+                  heroTag: "Login",
+                  onPressed: () async {
+                    if (email.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text("Please fill up the email")));
+                    } else if (password.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text("Please fill up the password")));
+                    } else {
+                      try {
+                        User user =
+                            await Authentication.signInWithEmailAndPassword(
+                                email: email.text,
+                                password: password.text,
+                                context: context);
+
+                        String firstTimeLogin =
+                            await Authentication.checkFirstTimeLogIn(user);
+                        if (firstTimeLogin == 'elderly') {
+                          Navigator.pushAndRemoveUntil(context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                            return HomeElderly(googleUser: user);
+                          }), (r) {
+                            return false;
+                          });
+                        } else if (firstTimeLogin == 'caregiver') {
+                          Navigator.pushAndRemoveUntil(context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                            return HomeCaregiver(userEmail: user.email);
+                          }), (r) {
+                            return false;
+                          });
+                        }
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'user-not-found') {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content:
+                                      Text("No user found for that email")));
+                        } else if (e.code == 'wrong-password') {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      "Wrong password provided for the user")));
+                        }
+                      }
+                    }
+                  },
+                  label: const Text('    LOGIN    ',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Montserrat')),
+                  backgroundColor: const Color.fromRGBO(108, 99, 255, 1)),
+              Padding(padding: EdgeInsets.only(top: size.height * 0.04)),
+              const Text('Or login using social media',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              FutureBuilder(
+                  future: _future,
+                  builder: ((context, snapshot) {
+                    if (snapshot.hasError) {
+                      return const Text('Error initializing Firebase');
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.done) {
+                      return const GoogleSignInButton();
+                    }
+                    return const CircularProgressIndicator(
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(Colors.white));
+                  }))
+            ]))));
   }
 }

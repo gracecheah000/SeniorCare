@@ -12,9 +12,10 @@ import '../../elderly/home_elderly.dart';
 import '../../widgets/appbar.dart';
 
 class FirstTimeUserInfo extends StatefulWidget {
-  const FirstTimeUserInfo({super.key, this.googleUser});
+  const FirstTimeUserInfo({super.key, this.googleUser, this.emailUser});
 
   final User? googleUser;
+  final User? emailUser;
 
   @override
   State<FirstTimeUserInfo> createState() => _FirstTimeUserInfoState();
@@ -40,68 +41,67 @@ class _FirstTimeUserInfoState extends State<FirstTimeUserInfo> {
 
   List? healthRisks = [];
 
-  final _formKey = GlobalKey<FormState>(); // can be used to validate the form
-
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: const SeniorCareAppBar(start: false),
-      body: Center(
-          child: SingleChildScrollView(
-              child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Column(children: <Widget>[
-            const Text(
-              'First time login',
-              style: TextStyle(
-                  color: Color.fromRGBO(105, 100, 173, 1),
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24),
-            ),
-            const Divider(
-              height: 20,
-              thickness: 1,
-              indent: 40,
-              endIndent: 40,
-              color: Color.fromRGBO(108, 99, 255, 1),
-            )
-          ]),
-          const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-          Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  Container(
-                      width: 310,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 10),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30.0),
-                          border: Border.all(
-                              color: const Color.fromRGBO(108, 99, 255, 1))),
-                      child: DropdownButton<String>(
-                          isExpanded: true,
-                          value: role,
-                          style: const TextStyle(
-                              color: Color.fromRGBO(108, 99, 255, 1),
-                              fontFamily: 'Montserrat',
-                              fontSize: 17),
-                          items: roleDropdownItems,
-                          onChanged: (value) {
-                            setState(() {
-                              role = value;
-                            });
-                          },
-                          underline: Container(),
-                          icon: const Icon(Icons.arrow_drop_down,
-                              color: Color.fromRGBO(108, 99, 255, 1)))),
-                  saveOtherDetails(role),
-                  const Padding(padding: EdgeInsets.fromLTRB(0, 50, 0, 0)),
-                  FloatingActionButton.extended(
+        backgroundColor: Colors.white,
+        appBar: const SeniorCareAppBar(start: false),
+        body: Center(
+            child: SingleChildScrollView(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+              Column(children: <Widget>[
+                const Text(
+                  'First time login',
+                  style: TextStyle(
+                      color: Color.fromRGBO(105, 100, 173, 1),
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24),
+                ),
+                Divider(
+                  height: 20,
+                  thickness: 1,
+                  indent: size.width * 0.1,
+                  endIndent: size.width * 0.1,
+                  color: const Color.fromRGBO(108, 99, 255, 1),
+                )
+              ]),
+              Padding(
+                  padding: EdgeInsets.fromLTRB(0, size.height * 0.02, 0, 0)),
+              Column(children: <Widget>[
+                Container(
+                    width: size.width * 0.86,
+                    padding: EdgeInsets.symmetric(
+                        vertical: size.height * 0.005, horizontal: 10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                            color: const Color.fromRGBO(108, 99, 255, 1))),
+                    child: DropdownButton<String>(
+                        isExpanded: true,
+                        value: role,
+                        style: const TextStyle(
+                            color: Color.fromRGBO(108, 99, 255, 1),
+                            fontFamily: 'Montserrat',
+                            fontSize: 17),
+                        items: roleDropdownItems,
+                        onChanged: (value) {
+                          setState(() {
+                            role = value;
+                          });
+                        },
+                        underline: Container(),
+                        icon: const Icon(Icons.arrow_drop_down,
+                            color: Color.fromRGBO(108, 99, 255, 1)))),
+                saveOtherDetails(role),
+                Padding(
+                    padding: EdgeInsets.fromLTRB(0, size.height * 0.02, 0, 0)),
+                FloatingActionButton.extended(
                     heroTag: "Save",
                     onPressed: () {
                       if (role == 'Elderly') {
@@ -113,19 +113,30 @@ class _FirstTimeUserInfoState extends State<FirstTimeUserInfo> {
                             additionalDetails: additionalDetails.text,
                             healthRisks: healthRisks);
                         UserDetails.saveElderlyDetails(
-                            elderly, widget.googleUser);
+                            elderly,
+                            (widget.googleUser != null)
+                                ? widget.googleUser
+                                : widget.emailUser);
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                HomeElderly(googleUser: widget.googleUser)));
+                            builder: (context) => HomeElderly(
+                                googleUser: (widget.googleUser != null)
+                                    ? widget.googleUser
+                                    : widget.emailUser)));
                       } else if (role == 'Caregiver') {
                         Caregiver caregiver = Caregiver(
                             name: name.text,
                             emergencyContact: emergencyContact.text);
                         UserDetails.saveCaregiverDetails(
-                            caregiver, widget.googleUser);
+                            caregiver,
+                            (widget.googleUser != null)
+                                ? widget.googleUser
+                                : widget.emailUser);
                         Navigator.pushAndRemoveUntil(context,
                             MaterialPageRoute(builder: (context) {
-                          return HomeCaregiver(userEmail: caregiver.email);
+                          return HomeCaregiver(
+                              userEmail: (widget.googleUser != null)
+                                  ? widget.googleUser!.email
+                                  : widget.emailUser!.email);
                         }), (r) {
                           return false;
                         });
@@ -138,14 +149,10 @@ class _FirstTimeUserInfoState extends State<FirstTimeUserInfo> {
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Montserrat'),
                     ),
-                    backgroundColor: const Color.fromRGBO(108, 99, 255, 1),
-                  ),
-                  const Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 10)),
-                ],
-              )),
-        ],
-      ))),
-    );
+                    backgroundColor: const Color.fromRGBO(108, 99, 255, 1)),
+                const Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 10))
+              ])
+            ]))));
   }
 
   saveOtherDetails(String? role) {
