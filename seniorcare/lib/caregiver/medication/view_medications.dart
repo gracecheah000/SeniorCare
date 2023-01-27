@@ -47,6 +47,10 @@ class _ViewMedicationState extends State<ViewMedication> {
           builder: ((context, snapshot) {
             if (!snapshot.hasData) {
               return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.data.isEmpty) {
+              return const Center(
+                  child: Text('No elderly has been added',
+                      style: TextStyle(fontWeight: FontWeight.bold)));
             } else {
               List<Elderly> elderlyList = snapshot.data;
 

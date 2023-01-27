@@ -12,10 +12,9 @@ import '../../elderly/home_elderly.dart';
 import '../../widgets/appbar.dart';
 
 class FirstTimeUserInfo extends StatefulWidget {
-  const FirstTimeUserInfo({super.key, this.googleUser, this.emailUser});
+  const FirstTimeUserInfo({super.key, required this.user});
 
-  final User? googleUser;
-  final User? emailUser;
+  final User? user;
 
   @override
   State<FirstTimeUserInfo> createState() => _FirstTimeUserInfoState();
@@ -112,31 +111,19 @@ class _FirstTimeUserInfoState extends State<FirstTimeUserInfo> {
                             address: address.text,
                             additionalDetails: additionalDetails.text,
                             healthRisks: healthRisks);
-                        UserDetails.saveElderlyDetails(
-                            elderly,
-                            (widget.googleUser != null)
-                                ? widget.googleUser
-                                : widget.emailUser);
+                        UserDetails.saveElderlyDetails(elderly, widget.user);
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => HomeElderly(
-                                googleUser: (widget.googleUser != null)
-                                    ? widget.googleUser
-                                    : widget.emailUser)));
+                            builder: (context) =>
+                                HomeElderly(userEmail: widget.user!.email)));
                       } else if (role == 'Caregiver') {
                         Caregiver caregiver = Caregiver(
                             name: name.text,
                             emergencyContact: emergencyContact.text);
                         UserDetails.saveCaregiverDetails(
-                            caregiver,
-                            (widget.googleUser != null)
-                                ? widget.googleUser
-                                : widget.emailUser);
+                            caregiver, widget.user);
                         Navigator.pushAndRemoveUntil(context,
                             MaterialPageRoute(builder: (context) {
-                          return HomeCaregiver(
-                              userEmail: (widget.googleUser != null)
-                                  ? widget.googleUser!.email
-                                  : widget.emailUser!.email);
+                          return HomeCaregiver(userEmail: widget.user!.email);
                         }), (r) {
                           return false;
                         });

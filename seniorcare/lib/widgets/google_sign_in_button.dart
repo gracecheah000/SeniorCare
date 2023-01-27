@@ -44,7 +44,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                       Authentication.registerUserData(user);
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => FirstTimeUserInfo(
-                          googleUser: user,
+                          user: user,
                         ),
                       ));
                     } else {
@@ -53,13 +53,13 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                       if (firstTimeLogin == '') {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => FirstTimeUserInfo(
-                            googleUser: user,
+                            user: user,
                           ),
                         ));
                       } else if (firstTimeLogin == 'elderly') {
                         Navigator.pushAndRemoveUntil(context,
                             MaterialPageRoute(builder: (BuildContext context) {
-                          return HomeElderly(googleUser: user);
+                          return HomeElderly(userEmail: user.email);
                         }), (r) {
                           return false;
                         });

@@ -87,9 +87,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     if (user != null) {
                       await Authentication.registerUserData(user);
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => FirstTimeUserInfo(
-                                emailUser: user,
-                              )));
+                          builder: (context) => FirstTimeUserInfo(user: user)));
                     }
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

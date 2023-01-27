@@ -22,36 +22,20 @@ class Authentication {
       if (exist == false) {
         registerUserData(user);
 
-        if (user.providerData[0].providerId == 'google.com') {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => FirstTimeUserInfo(
-                    googleUser: user,
-                  )));
-        } else if (user.providerData[0].providerId == 'password') {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => FirstTimeUserInfo(
-                    emailUser: user,
-                  )));
-        }
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => FirstTimeUserInfo(user: user)));
       } else {
         String firstTimeLogin = await checkFirstTimeLogIn(user);
 
         if (firstTimeLogin == '') {
           if (user.providerData[0].providerId == 'google.com') {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => FirstTimeUserInfo(
-                      googleUser: user,
-                    )));
-          } else if (user.providerData[0].providerId == 'password') {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => FirstTimeUserInfo(
-                      emailUser: user,
-                    )));
+                builder: (context) => FirstTimeUserInfo(user: user)));
           }
         } else if (firstTimeLogin == 'elderly') {
           Navigator.pushAndRemoveUntil(context,
               MaterialPageRoute(builder: (BuildContext context) {
-            return HomeElderly(googleUser: user);
+            return HomeElderly(userEmail: user.email);
           }), (r) {
             return false;
           });

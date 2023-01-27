@@ -28,7 +28,9 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
+    var size = MediaQuery.of(context).size;
+
+    return StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('user')
             .where('email', isEqualTo: widget.userEmail)
@@ -50,10 +52,10 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(35, 10, 0, 0),
-                                height: 50,
-                                width: 130,
+                                padding: EdgeInsets.fromLTRB(
+                                    size.width * 0.1, size.height * 0.02, 0, 0),
+                                height: size.height * 0.07,
+                                width: size.width * 0.35,
                                 color: Colors.transparent,
                                 alignment: Alignment.centerLeft,
                                 child: Container(
@@ -66,15 +68,13 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
                                         borderRadius: const BorderRadius.all(
                                             Radius.circular(25))),
                                     child: const Center(
-                                        child: Text(
-                                      "Home",
-                                      style: TextStyle(
-                                          color:
-                                              Color.fromRGBO(108, 99, 255, 1),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20),
-                                      textAlign: TextAlign.center,
-                                    )))),
+                                        child: Text("Home",
+                                            style: TextStyle(
+                                                color: Color.fromRGBO(
+                                                    108, 99, 255, 1),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20),
+                                            textAlign: TextAlign.center)))),
                             Container(
                                 padding:
                                     const EdgeInsets.fromLTRB(0, 10, 35, 0),
@@ -128,8 +128,8 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     EditElderlyProfile(
-                                                      caregiverData: userData,
-                                                    )));
+                                                        caregiverData:
+                                                            userData)));
                                       },
                                       child: Ink(
                                           padding: const EdgeInsets.fromLTRB(
@@ -148,7 +148,7 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
                                               const Padding(
                                                   padding: EdgeInsets.fromLTRB(
                                                       0, 10, 0, 0)),
-                                              const Text("Edit Elderly",
+                                              const Text("Your Elderly",
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -156,8 +156,8 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
                                             ],
                                           )))),
                                   const Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
-                                  ),
+                                      padding:
+                                          EdgeInsets.fromLTRB(0, 40, 0, 0)),
                                   InkWell(
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(20)),
@@ -225,8 +225,7 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
                                           ])))),
                                 ])),
                             const Padding(
-                              padding: EdgeInsets.fromLTRB(40, 0, 0, 0),
-                            ),
+                                padding: EdgeInsets.fromLTRB(40, 0, 0, 0)),
                             Flexible(
                                 child: Column(
                                     crossAxisAlignment:
@@ -253,24 +252,21 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(20))),
                                           child: Align(
-                                              child: Column(
-                                            children: <Widget>[
-                                              Image.asset(
-                                                  'assets/images/pills.png',
-                                                  scale: 6),
-                                              const Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 10, 0, 0)),
-                                              const Text("Medication",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 15))
-                                            ],
-                                          )))),
+                                              child: Column(children: <Widget>[
+                                            Image.asset(
+                                                'assets/images/pills.png',
+                                                scale: 6),
+                                            const Padding(
+                                                padding: EdgeInsets.fromLTRB(
+                                                    0, 10, 0, 0)),
+                                            const Text("Medication",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15))
+                                          ])))),
                                   const Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
-                                  ),
+                                      padding:
+                                          EdgeInsets.fromLTRB(0, 40, 0, 0)),
                                   InkWell(
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(20)),

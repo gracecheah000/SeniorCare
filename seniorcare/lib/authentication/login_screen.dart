@@ -120,11 +120,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
                         String firstTimeLogin =
                             await Authentication.checkFirstTimeLogIn(user);
+
                         if (firstTimeLogin == 'elderly') {
                           Navigator.pushAndRemoveUntil(context,
                               MaterialPageRoute(
                                   builder: (BuildContext context) {
-                            return HomeElderly(googleUser: user);
+                            return HomeElderly(userEmail: user.email);
                           }), (r) {
                             return false;
                           });

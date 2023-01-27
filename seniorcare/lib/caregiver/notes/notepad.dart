@@ -26,21 +26,25 @@ class _NotepadState extends State<Notepad> {
   Widget build(BuildContext context) {
     Future<dynamic> caregiverElderlyList = getElderlyList();
     var size = MediaQuery.of(context).size;
-    return FutureBuilder(
-        future: caregiverElderlyList,
-        builder: (((context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          } else {
-            List<Elderly> elderlyList = snapshot.data;
-            if (selectedElderly == null) {
-              selectedElderly = elderlyList[0];
-            }
-            return Scaffold(
-                resizeToAvoidBottomInset: false,
-                backgroundColor: Colors.white,
-                appBar: SeniorCareAppBar(start: false),
-                body: Column(
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.white,
+        appBar: SeniorCareAppBar(start: false),
+        body: FutureBuilder(
+            future: caregiverElderlyList,
+            builder: (((context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.data.isEmpty) {
+                return const Center(
+                    child: Text('No elderly has been added',
+                        style: TextStyle(fontWeight: FontWeight.bold)));
+              } else {
+                List<Elderly> elderlyList = snapshot.data;
+                if (selectedElderly == null) {
+                  selectedElderly = elderlyList[0];
+                }
+                return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
@@ -170,42 +174,50 @@ class _NotepadState extends State<Notepad> {
                                                                     color: Color.fromARGB(255, 29, 77, 145),
                                                                     fontWeight: FontWeight.bold)),
                                                             subtitle: notes[index].noteTag != null
-                                                                ? Row(
-                                                                    children: [
-                                                                      Text(
-                                                                          'Appointment on: ',
-                                                                          style: TextStyle(
-                                                                              color: Color.fromARGB(255, 104, 114, 158),
-                                                                              fontSize: 13)),
-                                                                      Text(
-                                                                          notes[index]
-                                                                              .noteTag
-                                                                              .toString(),
-                                                                          style: TextStyle(
-                                                                              color: Color.fromARGB(255, 104, 114, 158),
-                                                                              fontSize: 13))
-                                                                    ],
-                                                                  )
+                                                                ? Row(children: [
+                                                                    Text(
+                                                                        'Appointment on: ',
+                                                                        style: TextStyle(
+                                                                            color: Color.fromARGB(
+                                                                                255,
+                                                                                104,
+                                                                                114,
+                                                                                158),
+                                                                            fontSize:
+                                                                                13)),
+                                                                    Text(
+                                                                        notes[index]
+                                                                            .noteTag
+                                                                            .toString(),
+                                                                        style: TextStyle(
+                                                                            color: Color.fromARGB(
+                                                                                255,
+                                                                                104,
+                                                                                114,
+                                                                                158),
+                                                                            fontSize:
+                                                                                13))
+                                                                  ])
                                                                 : null));
                                                   })));
                                     }
                                   })));
                             }
                           })))
-                    ]),
-                floatingActionButton: FloatingActionButton.small(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NoteEdit(
-                                  elderlyId: selectedElderly!.id.toString())));
-                    },
-                    backgroundColor: Color.fromARGB(255, 160, 171, 221),
-                    heroTag: "AddNote",
-                    child: Image.asset('assets/images/add.png')));
-          }
-        })));
+                    ]);
+              }
+            }))),
+        floatingActionButton: FloatingActionButton.small(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          NoteEdit(elderlyId: selectedElderly!.id.toString())));
+            },
+            backgroundColor: Color.fromARGB(255, 160, 171, 221),
+            heroTag: "AddNote",
+            child: Image.asset('assets/images/add.png')));
   }
 
   getElderlyList() async {

@@ -74,6 +74,10 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
             builder: (((context, snapshot) {
               if (!snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.data.isEmpty) {
+                return const Center(
+                    child: Text('No elderly has been added',
+                        style: TextStyle(fontWeight: FontWeight.bold)));
               } else {
                 List<Elderly> elderlyList = snapshot.data;
                 if (selectedElderly == null) {
