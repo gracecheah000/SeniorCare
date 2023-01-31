@@ -160,15 +160,15 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                                       for (Appointment appointment
                                           in snapshot.data) {
                                         if (mySelectedEvents![
-                                                appointment.eventDate] ==
+                                                appointment.eventDateTime] ==
                                             null) {
                                           mySelectedEvents![appointment
-                                              .eventDate] = [appointment];
+                                              .eventDateTime] = [appointment];
                                         } else if (!mySelectedEvents![
-                                                appointment.eventDate]!
+                                                appointment.eventDateTime]!
                                             .contains(appointment)) {
                                           mySelectedEvents![
-                                                  appointment.eventDate]!
+                                                  appointment.eventDateTime]!
                                               .add(appointment);
                                         }
                                       }
@@ -375,7 +375,7 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                                                                   tag: DateFormat(
                                                                           "yyyy-MM-dd")
                                                                       .format(appointment
-                                                                          .eventDate),
+                                                                          .eventDateTime),
                                                                   appointmentId:
                                                                       appointment
                                                                           .eventId,
@@ -416,6 +416,8 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
   }
 
   _showAddAppointmentDialog() async {
+    DateTime parsedDateTime = DateTime.now();
+
     await showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -478,14 +480,14 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                           );
 
                           if (pickedTime != null) {
-                            DateTime parsedTime = DateTime(
-                                DateTime.now().year,
-                                DateTime.now().month,
-                                DateTime.now().day,
+                            parsedDateTime = DateTime(
+                                _selectedDay.year,
+                                _selectedDay.month,
+                                _selectedDay.day,
                                 pickedTime.hour,
                                 pickedTime.minute);
                             String formattedTime =
-                                DateFormat("h:mma").format(parsedTime);
+                                DateFormat("h:mma").format(parsedDateTime);
 
                             setState(() {
                               timeController.text = formattedTime;
@@ -501,17 +503,16 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                         controller: descriptionController),
                     Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
                     CheckboxListTile(
-                      activeColor: Color.fromRGBO(108, 99, 255, 1),
-                      value: requireFasting,
-                      onChanged: (value) {
-                        setState(() {
-                          requireFasting = value!;
-                        });
-                      },
-                      title: Text("Require Fasting?",
-                          style: TextStyle(
-                              color: Color.fromRGBO(108, 99, 255, 1))),
-                    )
+                        activeColor: Color.fromRGBO(108, 99, 255, 1),
+                        value: requireFasting,
+                        onChanged: (value) {
+                          setState(() {
+                            requireFasting = value!;
+                          });
+                        },
+                        title: Text("Require Fasting?",
+                            style: TextStyle(
+                                color: Color.fromRGBO(108, 99, 255, 1))))
                   ]);
                 }),
                 actions: [
@@ -528,7 +529,7 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                         } else {
                           Appointment newAppointment = Appointment(
                               eventTitle: titleController.text,
-                              eventDate: _selectedDay,
+                              eventDateTime: parsedDateTime,
                               eventTime: timeController.text,
                               eventLocation: locationController.text,
                               eventRequireFasting:
@@ -581,9 +582,10 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
         Appointment newAppointment = Appointment(
             eventId: id,
             eventTitle: appointmentDetails['name'],
-            eventDate: DateTime.parse(DateFormat("yyyy-MM-dd' 'HH:mm:ss.SSS'Z'")
-                .format(DateTime.parse(DateFormat("yyyy-MM-dd'").format(
-                    (appointmentDetails['date'] as Timestamp).toDate())))),
+            eventDateTime: DateTime.parse(
+                DateFormat("yyyy-MM-dd' 'HH:mm:ss.SSS'Z'").format(
+                    DateTime.parse(DateFormat("yyyy-MM-dd'").format(
+                        (appointmentDetails['date'] as Timestamp).toDate())))),
             eventTime: appointmentDetails['time'],
             eventLocation: appointmentDetails['location'],
             eventRequireFasting: appointmentDetails['require fasting'],

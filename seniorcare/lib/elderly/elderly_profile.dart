@@ -144,51 +144,43 @@ class _ElderlyProfileState extends State<ElderlyProfile> {
                                                           color: const Color.fromARGB(
                                                               255, 176, 200, 233),
                                                           border: Border.all(
-                                                              color: const Color.fromARGB(
+                                                              color: const Color
+                                                                      .fromARGB(
                                                                   255,
                                                                   176,
                                                                   200,
                                                                   233)),
                                                           borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      20)),
+                                                              BorderRadius.circular(
+                                                                  20)),
                                                       padding: EdgeInsets.only(
-                                                        top: size.height * 0.01,
-                                                        left: size.width * 0.02,
-                                                        bottom:
-                                                            size.height * 0.01,
-                                                        right:
-                                                            size.width * 0.02,
-                                                      ),
-                                                      child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: <Widget>[
-                                                            Text(
-                                                                'age :'
-                                                                    .toUpperCase(),
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontSize: 15,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                )),
-                                                            Padding(
-                                                                padding: EdgeInsets.only(
+                                                          top: size.height * 0.01,
+                                                          left: size.width * 0.02,
+                                                          bottom: size.height * 0.01,
+                                                          right: size.width * 0.02),
+                                                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+                                                        Text(
+                                                            'age :'
+                                                                .toUpperCase(),
+                                                            style: const TextStyle(
+                                                                fontSize: 15,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                        Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
                                                                     left: size
                                                                             .width *
                                                                         0.1)),
-                                                            Text(
-                                                                widget.elderlyData[
-                                                                    'age'],
-                                                                style:
-                                                                    const TextStyle(
-                                                                        fontSize:
-                                                                            15))
-                                                          ])),
+                                                        Text(
+                                                            widget.elderlyData[
+                                                                'age'],
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        15))
+                                                      ])),
                                                   Container(
                                                       decoration: BoxDecoration(
                                                           color: const Color.fromARGB(
@@ -241,44 +233,41 @@ class _ElderlyProfileState extends State<ElderlyProfile> {
                                                     color: const Color.fromARGB(
                                                         255, 176, 200, 233),
                                                     border: Border.all(
-                                                        color: const Color.fromARGB(
-                                                            255, 176, 200, 233)),
-                                                    borderRadius: BorderRadius.circular(
-                                                        20)),
+                                                        color:
+                                                            const Color.fromARGB(
+                                                                255,
+                                                                176,
+                                                                200,
+                                                                233)),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20)),
                                                 padding: EdgeInsets.only(
-                                                  top: size.height * 0.01,
-                                                  left: size.width * 0.02,
-                                                  bottom: size.height * 0.01,
-                                                  right: size.width * 0.02,
-                                                ),
-                                                child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: <Widget>[
-                                                      Text(
-                                                          'address :'
-                                                              .toUpperCase(),
-                                                          style: const TextStyle(
-                                                              fontSize: 15,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold)),
-                                                      Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  left:
-                                                                      size.width *
-                                                                          0.1)),
-                                                      Text(
-                                                          widget.elderlyData[
-                                                              'address'],
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize: 15))
-                                                    ]))),
+                                                    top: size.height * 0.01,
+                                                    left: size.width * 0.02,
+                                                    bottom: size.height * 0.01,
+                                                    right: size.width * 0.02),
+                                                child:
+                                                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+                                                  Text(
+                                                      'address :'.toUpperCase(),
+                                                      style: const TextStyle(
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  Padding(
+                                                      padding: EdgeInsets.only(
+                                                          left: size.width *
+                                                              0.1)),
+                                                  Text(
+                                                      widget.elderlyData[
+                                                          'address'],
+                                                      style: const TextStyle(
+                                                          fontSize: 15))
+                                                ]))),
                                         Padding(
                                             padding: EdgeInsets.symmetric(
-                                              horizontal: size.width * 0.06,
-                                            ),
+                                                horizontal: size.width * 0.06),
                                             child: Container(
                                                 decoration: BoxDecoration(
                                                     color: const Color.fromARGB(
@@ -294,48 +283,41 @@ class _ElderlyProfileState extends State<ElderlyProfile> {
                                                         BorderRadius.circular(
                                                             20)),
                                                 padding: EdgeInsets.only(
-                                                  top: size.height * 0.01,
-                                                  left: size.width * 0.02,
-                                                  bottom: size.height * 0.01,
-                                                  right: size.width * 0.02,
-                                                ),
-                                                child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: <Widget>[
-                                                      Text(
-                                                          'health risks :'
-                                                              .toUpperCase(),
-                                                          style: const TextStyle(
-                                                              fontSize: 15,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold)),
-                                                      Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  left:
-                                                                      size.width *
-                                                                          0.1)),
-                                                      Expanded(
-                                                          child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .end,
-                                                              children: [
-                                                            for (var item in widget
-                                                                    .elderlyData[
-                                                                'health risks'])
-                                                              Text(item,
-                                                                  style: const TextStyle(
+                                                    top: size.height * 0.01,
+                                                    left: size.width * 0.02,
+                                                    bottom: size.height * 0.01,
+                                                    right: size.width * 0.02),
+                                                child:
+                                                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+                                                  Text(
+                                                      'health risks :'
+                                                          .toUpperCase(),
+                                                      style: const TextStyle(
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  Padding(
+                                                      padding: EdgeInsets.only(
+                                                          left: size.width *
+                                                              0.1)),
+                                                  Expanded(
+                                                      child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                        for (var item in widget
+                                                                .elderlyData[
+                                                            'health risks'])
+                                                          Text(item,
+                                                              style:
+                                                                  const TextStyle(
                                                                       fontSize:
                                                                           15),
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .end)
-                                                          ]))
-                                                    ]))),
+                                                              textAlign:
+                                                                  TextAlign.end)
+                                                      ]))
+                                                ]))),
                                         Padding(
                                             padding: EdgeInsets.symmetric(
                                                 horizontal: size.width * 0.06,

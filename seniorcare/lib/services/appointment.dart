@@ -8,7 +8,7 @@ class AppointmentServices {
 
     await FirebaseFirestore.instance.collection('appointment').add({
       'name': newAppointment.eventTitle,
-      'date': newAppointment.eventDate,
+      'date': newAppointment.eventDateTime,
       'time': newAppointment.eventTime,
       'location': newAppointment.eventLocation,
       'require fasting': newAppointment.eventRequireFasting,
@@ -52,5 +52,26 @@ class AppointmentServices {
     } else {
       return result;
     }
+  }
+
+  static getNextAppointment(String elderlyId, List appointmentIdList) async {
+    final DateTime currentDateTime = DateTime.now();
+    List appointmentsAfterCurrentDateTime = [];
+
+    QuerySnapshot query = await FirebaseFirestore.instance
+        .collection('appointment')
+        .where(FieldPath.documentId, whereIn: appointmentIdList)
+        .get();
+
+    for (DocumentSnapshot appointment in query.docs) {
+      var date = (appointment.data()! as Map)['date'].toDate();
+      if (date.isAfter(currentDateTime)) {
+        appointmentsAfterCurrentDateTime.add(appointment.data());
+      }
+    }
+    appointmentsAfterCurrentDateTime
+        .sort((a, b) => a['date'].compareTo(b['date']));
+
+    return appointmentsAfterCurrentDateTime[0];
   }
 }

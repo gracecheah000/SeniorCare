@@ -1,7 +1,7 @@
 class Appointment {
   String? eventId;
   String eventTitle;
-  DateTime eventDate;
+  DateTime eventDateTime;
   String eventTime;
   String eventLocation;
   String? eventRequireFasting;
@@ -10,7 +10,7 @@ class Appointment {
   Appointment({
     this.eventId,
     required this.eventTitle,
-    required this.eventDate,
+    required this.eventDateTime,
     required this.eventTime,
     required this.eventLocation,
     required this.eventRequireFasting,
@@ -23,7 +23,7 @@ class Appointment {
       other is Appointment &&
           other.runtimeType == runtimeType &&
           other.eventTitle == eventTitle &&
-          other.eventDate == eventDate &&
+          other.eventDateTime == eventDateTime &&
           other.eventTime == eventTime &&
           other.eventLocation == eventLocation &&
           other.eventRequireFasting == eventRequireFasting &&
@@ -32,7 +32,7 @@ class Appointment {
   @override
   int get hashCode =>
       eventTitle.hashCode ^
-      eventDate.hashCode ^
+      eventDateTime.hashCode ^
       eventTime.hashCode ^
       eventLocation.hashCode ^
       eventRequireFasting.hashCode ^
