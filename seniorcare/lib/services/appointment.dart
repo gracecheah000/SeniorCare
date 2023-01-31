@@ -72,6 +72,11 @@ class AppointmentServices {
     appointmentsAfterCurrentDateTime
         .sort((a, b) => a['date'].compareTo(b['date']));
 
+    print(appointmentsAfterCurrentDateTime);
+
+    if (appointmentsAfterCurrentDateTime == []) {
+      return null;
+    }
     return appointmentsAfterCurrentDateTime[0];
   }
 }

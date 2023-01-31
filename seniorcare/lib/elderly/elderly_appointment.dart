@@ -103,9 +103,7 @@ class _ElderlyAppointmentState extends State<ElderlyAppointment> {
                         future: nextAppointment,
                         builder: ((context, snapshot) {
                           if (!snapshot.hasData) {
-                            return const Center(
-                                child: CircularProgressIndicator(
-                                    color: Color.fromARGB(255, 29, 77, 145)));
+                            return Container();
                           } else {
                             return Container(
                                 height: size.height * 0.17,
@@ -119,10 +117,11 @@ class _ElderlyAppointmentState extends State<ElderlyAppointment> {
                                     border: Border.all(
                                         color:
                                             Color.fromRGBO(108, 99, 255, 1))),
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
+                                child: SingleChildScrollView(
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
                                       Padding(
                                           padding: EdgeInsets.only(
                                             top: size.height * 0.007,
@@ -141,8 +140,7 @@ class _ElderlyAppointmentState extends State<ElderlyAppointment> {
                                           endIndent: size.width * 0.4),
                                       ListTile(
                                           contentPadding: EdgeInsets.only(
-                                              left: size.width * 0.1,
-                                              top: size.height * 0.005),
+                                              left: size.width * 0.08),
                                           leading: Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: <Widget>[
@@ -223,7 +221,7 @@ class _ElderlyAppointmentState extends State<ElderlyAppointment> {
                                                             255, 104, 114, 158),
                                                         fontSize: 14))
                                           ]))
-                                    ]));
+                                    ])));
                           }
                         })),
                     FutureBuilder(

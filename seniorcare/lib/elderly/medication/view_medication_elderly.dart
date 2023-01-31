@@ -1,13 +1,16 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:seniorcare/models/medication.dart';
+import 'package:seniorcare/services/medication.dart';
+import 'package:seniorcare/services/user_details.dart';
 import 'package:seniorcare/widgets/appbar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-
-import '../../widgets/medication_card_elderly.dart';
+import 'package:seniorcare/widgets/medication_card_elderly.dart';
 
 class ViewMedicationElderly extends StatefulWidget {
-  const ViewMedicationElderly({super.key});
+  const ViewMedicationElderly({super.key, required this.userId});
+
+  final String userId;
 
   @override
   State<ViewMedicationElderly> createState() => _ViewMedicationElderlyState();
@@ -19,21 +22,9 @@ class _ViewMedicationElderlyState extends State<ViewMedicationElderly> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: get medications from backend and map
-    List<ElderlyMedicationCard> medications = [
-      ElderlyMedicationCard("a-glucosidase inhibitors", "assets/images/map.png",
-          "3 times a day", "1 tablet each", "after meals", "To Complete", "-"),
-      ElderlyMedicationCard(
-          "vitamin c",
-          "assets/images/pills.png",
-          "2 times a day",
-          "1 tablet each",
-          "before meals",
-          "Stop upon recovery",
-          "-"),
-    ];
+    var size = MediaQuery.of(context).size;
 
-    List<T> map<T>(List list, Function handler) {
+    List<T> listToMap<T>(List list, Function handler) {
       List<T> result = [];
       for (var i = 0; i < list.length; i++) {
         result.add(handler(i, list[i]));
@@ -44,17 +35,19 @@ class _ViewMedicationElderlyState extends State<ViewMedicationElderly> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: SeniorCareAppBar(start: false),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-                padding: const EdgeInsets.fromLTRB(35, 20, 0, 0),
-                height: 60,
-                width: 170,
-                color: Colors.transparent,
-                alignment: Alignment.centerLeft,
-                child: Container(
+        appBar: const SeniorCareAppBar(start: false),
+        body: SingleChildScrollView(
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+                    Widget>[
+          Container(
+              padding: EdgeInsets.fromLTRB(
+                  size.width * 0.05, size.height * 0.01, 0, 0),
+              height: size.height * 0.065,
+              width: 150,
+              color: Colors.transparent,
+              alignment: Alignment.centerLeft,
+              child: Container(
                   decoration: BoxDecoration(
                       color: Colors.transparent,
                       border: Border.all(
@@ -63,58 +56,111 @@ class _ViewMedicationElderlyState extends State<ViewMedicationElderly> {
                       borderRadius:
                           const BorderRadius.all(Radius.circular(25))),
                   child: const Center(
-                      child: Text(
-                    "Medication",
-                    style: TextStyle(
-                        color: Color.fromRGBO(108, 99, 255, 1),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20),
-                    textAlign: TextAlign.center,
-                  )),
-                )),
-            Padding(
-                padding: EdgeInsets.all(10),
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(10, 15, 10, 0),
-                  child: Column(
-                    children: <Widget>[
-                      CarouselSlider(
-                        items: medications.map((medication) {
-                          return SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.30,
-                              width: MediaQuery.of(context).size.width,
-                              child: Container(
-                                  color: Colors.white, child: medication));
-                        }).toList(),
-                        options: CarouselOptions(
-                            enableInfiniteScroll: false,
-                            height: 550,
-                            onPageChanged: ((index, reason) {
-                              setState(() {
-                                _currentMedicationIndex = index;
-                              });
-                            })),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: map<Widget>(medications, (index, url) {
-                          return Container(
-                            width: 10,
-                            height: 10,
-                            margin: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 2),
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: _currentMedicationIndex == index
-                                    ? Color.fromARGB(255, 182, 115, 60)
-                                    : Colors.grey),
-                          );
-                        }),
-                      )
-                    ],
-                  ),
-                )),
-          ],
-        ));
+                      child: Text("Medication",
+                          style: TextStyle(
+                              color: Color.fromRGBO(108, 99, 255, 1),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                          textAlign: TextAlign.center)))),
+          StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('user')
+                  .doc(widget.userId)
+                  .snapshots(),
+              builder: (((context, snapshot) {
+                if (!snapshot.hasData) {
+                  return SizedBox(
+                      height: size.height * 0.7,
+                      child: const CircularProgressIndicator(
+                          color: Color.fromARGB(255, 29, 77, 145)));
+                } else {
+                  List<dynamic> medicationIdList =
+                      snapshot.data!.data()!['medication'];
+
+                  if (medicationIdList.isEmpty) {
+                    return SizedBox(
+                        height: size.height * 0.7,
+                        child: const Center(child: Text('No medications yet')));
+                  } else {
+                    Future<dynamic> medications =
+                        getElderlyMedication(medicationIdList);
+
+                    return FutureBuilder(
+                        future: medications,
+                        builder: (((context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          } else {
+                            return Padding(
+                                padding:
+                                    EdgeInsets.only(top: size.height * 0.03),
+                                child: Column(children: <Widget>[
+                                  CarouselSlider(
+                                      items: snapshot.data!
+                                          .map<Widget>((medication) {
+                                        return SizedBox(
+                                            height: size.height * 0.30,
+                                            width: size.width,
+                                            child: Container(
+                                                color: Colors.white,
+                                                child: ElderlyMedicationCard(
+                                                    medication: medication,
+                                                    medicationId: medicationIdList[
+                                                        _currentMedicationIndex],
+                                                    elderlyId: widget.userId)));
+                                      }).toList(),
+                                      options: CarouselOptions(
+                                          enableInfiniteScroll: false,
+                                          height: size.height * 0.72,
+                                          onPageChanged: ((index, reason) {
+                                            setState(() {
+                                              _currentMedicationIndex = index;
+                                            });
+                                          }))),
+                                  Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: listToMap<Widget>(snapshot.data,
+                                          (index, url) {
+                                        return Container(
+                                            width: 10,
+                                            height: 10,
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 10, horizontal: 2),
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color:
+                                                    _currentMedicationIndex ==
+                                                            index
+                                                        ? const Color.fromARGB(
+                                                            255, 29, 77, 145)
+                                                        : Colors.grey));
+                                      }))
+                                ]));
+                          }
+                        })));
+                  }
+                }
+              })))
+        ])));
+  }
+
+  getElderlyMedication(List<dynamic> medicationIdList) async {
+    List<Medication> medicationList = [];
+
+    for (String medicationId in medicationIdList) {
+      Map details = await MedicationServices.getMedicationDetails(medicationId);
+      Medication medication = Medication(
+          medicationName: details['name'],
+          medicationFrequency: details['frequency'],
+          medicationQuantity: details['quantity'],
+          medicationTime: details['timing'],
+          medicationImage: details['image'],
+          medicationPrescription: details['prescription'],
+          otherDescription: details['other details']);
+      medicationList.add(medication);
+    }
+    return medicationList;
   }
 }

@@ -232,7 +232,8 @@ class _HomeElderlyState extends State<HomeElderly> {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const ViewMedicationElderly()));
+                                                    ViewMedicationElderly(
+                                                        userId: userId)));
                                       },
                                       child: Ink(
                                           padding: const EdgeInsets.fromLTRB(
