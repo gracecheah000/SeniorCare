@@ -23,7 +23,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void initState() {
-    _future = Authentication.initializeFirebase(context: context);
+    _future = Authentication.initializeFirebase(start: false, context: context);
     super.initState();
   }
 

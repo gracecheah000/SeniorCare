@@ -2,7 +2,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:seniorcare/caregiver/home_caregiver.dart';
@@ -10,10 +9,8 @@ import 'package:seniorcare/authentication/userinfo/user_info.dart';
 import 'package:seniorcare/elderly/home_elderly.dart';
 
 class Authentication {
-  static Future<FirebaseApp> initializeFirebase(
-      {required BuildContext context}) async {
-    FirebaseApp firebaseApp = await Firebase.initializeApp();
-
+  static Future initializeFirebase(
+      {required BuildContext context, required bool start}) async {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
@@ -49,8 +46,6 @@ class Authentication {
         }
       }
     }
-
-    return firebaseApp;
   }
 
   static Future<User?> signInWithGoogle({required BuildContext context}) async {

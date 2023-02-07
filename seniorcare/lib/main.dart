@@ -1,25 +1,21 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorcare/start_screen.dart';
 import 'package:flutter_config/flutter_config.dart';
-import 'package:workmanager/workmanager.dart';
+
+Future _backgroundMessageHandler(RemoteMessage message) async {
+  print('hello');
+}
 
 void main() async {
   WidgetsFlutterBinding
       .ensureInitialized(); // Ensures that the UI is not rendered until initialization is done
+  await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_backgroundMessageHandler);
   await FlutterConfig.loadEnvVariables();
-  // Workmanager().initialize(callbackDispatcher);
   runApp(const MyApp());
 }
-
-// void callbackDispatcher() {
-//   Workmanager().executeTask((task, inputData) {
-//     switch (task) {
-
-//     }
-//     return Future.value(true);
-//   });
-// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

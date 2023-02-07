@@ -227,4 +227,14 @@ class UserDetails {
 
     return details.data();
   }
+
+  static void updateMessagingToken(String token, String userEmail) async {
+    String userId = await UserDetails.getUserId(userEmail);
+    DocumentReference ref =
+        FirebaseFirestore.instance.collection('user').doc(userId);
+
+    await ref.update({'deviceToken': token}).catchError((e, stackTrace) {
+      return e;
+    });
+  }
 }

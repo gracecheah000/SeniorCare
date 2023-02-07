@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    _future = Authentication.initializeFirebase(context: context);
+    _future = Authentication.initializeFirebase(start: false, context: context);
     super.initState();
   }
 
@@ -52,21 +52,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
               Column(children: <Widget>[
-                const Text(
-                  'LOGIN',
-                  style: TextStyle(
-                      color: Color.fromRGBO(105, 100, 173, 1),
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24),
-                ),
+                const Text('LOGIN',
+                    style: TextStyle(
+                        color: Color.fromRGBO(105, 100, 173, 1),
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24)),
                 Divider(
-                  height: 20,
-                  thickness: 1,
-                  indent: size.width * 0.1,
-                  endIndent: size.width * 0.1,
-                  color: const Color.fromRGBO(108, 99, 255, 1),
-                )
+                    height: 20,
+                    thickness: 1,
+                    indent: size.width * 0.1,
+                    endIndent: size.width * 0.1,
+                    color: const Color.fromRGBO(108, 99, 255, 1))
               ]),
               Padding(
                   padding: EdgeInsets.fromLTRB(0, size.height * 0.03, 0, 0)),

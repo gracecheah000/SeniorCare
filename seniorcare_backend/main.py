@@ -1,14 +1,12 @@
 from flask import Flask
-from authentication import authentication_blueprint
-from firebase_admin import credentials, initialize_app
+from message import messageBlueprint
 
 app = Flask(__name__)
+app.register_blueprint(messageBlueprint, url_prefix = '/notification')
 
-cred = credentials.Certificate('serviceAccountKey.json')
-default_app = initialize_app(cred)
-
-# Blueprints to other functions of the application
-app.register_blueprint(authentication_blueprint)
+@app.route('/')
+def index():
+    return 'Home'
 
 if __name__ == "__main__":
     app.run()
