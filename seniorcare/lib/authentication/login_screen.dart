@@ -2,8 +2,11 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:seniorcare/const.dart';
+import 'package:seniorcare/models/user.dart';
 import 'package:seniorcare/services/authentication.dart';
 import 'package:seniorcare/authentication/forget_password.dart';
+import 'package:seniorcare/services/user_details.dart';
 import 'package:seniorcare/widgets/custom_text_field.dart';
 import 'package:seniorcare/widgets/google_sign_in_button.dart';
 
@@ -20,13 +23,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   String? role = 'Elderly';
-  List<DropdownMenuItem<String>> get roleDropdownItems {
-    List<DropdownMenuItem<String>> roleMenuItems = [
-      const DropdownMenuItem(value: 'Elderly', child: Text('Elderly')),
-      const DropdownMenuItem(value: 'Caregiver', child: Text('Caregiver'))
-    ];
-    return roleMenuItems;
-  }
+
+  List<DropdownMenuItem<String>> roleMenuItems = Constants.roleMenuItems;
 
   final email = TextEditingController();
   final password = TextEditingController();
@@ -119,10 +117,17 @@ class _LoginScreenState extends State<LoginScreen> {
                             await Authentication.checkFirstTimeLogIn(user);
 
                         if (firstTimeLogin == 'elderly') {
+                          List elderlyDetails =
+                              await UserDetails.getUserDetailsWithEmail(
+                                  user.email!);
+                          Elderly elderlyUser = Elderly(
+                              id: elderlyDetails[0],
+                              email: elderlyDetails[1]['email'],
+                              mealTimings: elderlyDetails[1]['meal timings']);
                           Navigator.pushAndRemoveUntil(context,
                               MaterialPageRoute(
                                   builder: (BuildContext context) {
-                            return HomeElderly(userEmail: user.email);
+                            return HomeElderly(user: elderlyUser);
                           }), (r) {
                             return false;
                           });

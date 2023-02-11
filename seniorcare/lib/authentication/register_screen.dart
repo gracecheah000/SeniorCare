@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -50,12 +50,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       fontSize: 24),
                 ),
                 Divider(
-                  height: 20,
-                  thickness: 1,
-                  indent: size.width * 0.1,
-                  endIndent: size.width * 0.1,
-                  color: const Color.fromRGBO(108, 99, 255, 1),
-                )
+                    height: 20,
+                    thickness: 1,
+                    indent: size.width * 0.1,
+                    endIndent: size.width * 0.1,
+                    color: const Color.fromRGBO(108, 99, 255, 1))
               ]),
               Padding(padding: EdgeInsets.only(top: size.height * 0.04)),
               Column(children: <Widget>[
@@ -75,38 +74,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ]),
               Padding(padding: EdgeInsets.only(top: size.height * 0.04)),
               FloatingActionButton.extended(
-                heroTag: "Register",
-                onPressed: () async {
-                  try {
-                    User? user =
-                        await Authentication.signUpWithEmailAndPassword(
-                            email: email.text,
-                            password: password.text,
-                            context: context);
+                  heroTag: "Register",
+                  onPressed: () async {
+                    try {
+                      User? user =
+                          await Authentication.signUpWithEmailAndPassword(
+                              email: email.text,
+                              password: password.text,
+                              context: context);
 
-                    if (user != null) {
-                      await Authentication.registerUserData(user);
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => FirstTimeUserInfo(user: user)));
+                      if (user != null) {
+                        await Authentication.registerUserData(user);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                FirstTimeUserInfo(user: user)));
+                      }
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text(
+                              "Error occurred while creating account. Try again.")));
                     }
-                  } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text(
-                            "Error occurred while creating account. Try again.")));
-                  }
-                },
-                label: const Text(
-                  '    REGISTER    ',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Montserrat'),
-                ),
-                backgroundColor: const Color.fromRGBO(108, 99, 255, 1),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: size.height * 0.05),
-              ),
+                  },
+                  label: const Text('    REGISTER    ',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Montserrat')),
+                  backgroundColor: const Color.fromRGBO(108, 99, 255, 1)),
+              Padding(padding: EdgeInsets.only(top: size.height * 0.05)),
               const Text('Or register using social media',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               FutureBuilder(

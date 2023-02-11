@@ -3,9 +3,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorcare/elderly/home_elderly.dart';
+import 'package:seniorcare/models/user.dart';
 import 'package:seniorcare/services/authentication.dart';
 import 'package:seniorcare/caregiver/home_caregiver.dart';
 import 'package:seniorcare/authentication/userinfo/user_info.dart';
+import 'package:seniorcare/services/user_details.dart';
 
 class GoogleSignInButton extends StatefulWidget {
   const GoogleSignInButton({super.key});
@@ -43,23 +45,28 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                     if (exist == false) {
                       Authentication.registerUserData(user);
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => FirstTimeUserInfo(
-                          user: user,
-                        ),
-                      ));
+                          builder: (context) => FirstTimeUserInfo(
+                                user: user,
+                              )));
                     } else {
                       String firstTimeLogin =
                           await Authentication.checkFirstTimeLogIn(user);
                       if (firstTimeLogin == '') {
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => FirstTimeUserInfo(
-                            user: user,
-                          ),
-                        ));
+                            builder: (context) => FirstTimeUserInfo(
+                                  user: user,
+                                )));
                       } else if (firstTimeLogin == 'elderly') {
+                        List elderlyDetails =
+                            await UserDetails.getUserDetailsWithEmail(
+                                user.email!);
+                        Elderly elderlyUser = Elderly(
+                            id: elderlyDetails[0],
+                            email: elderlyDetails[1]['email'],
+                            mealTimings: elderlyDetails[1]['meal timings']);
                         Navigator.pushAndRemoveUntil(context,
                             MaterialPageRoute(builder: (BuildContext context) {
-                          return HomeElderly(userEmail: user.email);
+                          return HomeElderly(user: elderlyUser);
                         }), (r) {
                           return false;
                         });

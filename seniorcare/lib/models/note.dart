@@ -13,7 +13,7 @@ class Note {
       this.appointmentId});
 
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> data = Map<String, dynamic>();
+    Map<String, dynamic> data = {};
     if (noteTag != null) {
       data['noteTag'] = noteTag;
     }

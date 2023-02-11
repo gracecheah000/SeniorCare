@@ -1,5 +1,6 @@
 class Appointment {
   String? eventId;
+  int? notificationId;
   String eventTitle;
   DateTime eventDateTime;
   String eventTime;
@@ -9,6 +10,7 @@ class Appointment {
 
   Appointment({
     this.eventId,
+    this.notificationId,
     required this.eventTitle,
     required this.eventDateTime,
     required this.eventTime,

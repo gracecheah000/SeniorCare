@@ -221,14 +221,13 @@ class _NotepadState extends State<Notepad> {
   }
 
   getElderlyList() async {
-    var userId = await UserDetails.getUserId(widget.userEmail);
-    Map details = await UserDetails.getUserDetails(userId);
-    List<dynamic> elderlyList = details['elderly'];
+    List details = await UserDetails.getUserDetailsWithEmail(widget.userEmail);
+    List<dynamic> elderlyList = details[1]['elderly'];
 
     List<Elderly> elderlyDetails = [];
 
     for (var element in elderlyList) {
-      Map details = await UserDetails.getUserDetails(element);
+      Map details = await UserDetails.getUserDetailsWithId(element);
       Elderly elderly =
           Elderly(email: details['email'], name: details['name'], id: element);
       elderlyDetails.add(elderly);

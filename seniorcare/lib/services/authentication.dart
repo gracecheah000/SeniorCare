@@ -7,6 +7,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:seniorcare/caregiver/home_caregiver.dart';
 import 'package:seniorcare/authentication/userinfo/user_info.dart';
 import 'package:seniorcare/elderly/home_elderly.dart';
+import 'package:seniorcare/models/user.dart';
+import 'package:seniorcare/services/user_details.dart';
 
 class Authentication {
   static Future initializeFirebase(
@@ -30,9 +32,15 @@ class Authentication {
                 builder: (context) => FirstTimeUserInfo(user: user)));
           }
         } else if (firstTimeLogin == 'elderly') {
+          List elderlyDetails =
+              await UserDetails.getUserDetailsWithEmail(user.email!);
+          Elderly elderlyUser = Elderly(
+              id: elderlyDetails[0],
+              email: elderlyDetails[1]['email'],
+              mealTimings: elderlyDetails[1]['meal timings']);
           Navigator.pushAndRemoveUntil(context,
               MaterialPageRoute(builder: (BuildContext context) {
-            return HomeElderly(userEmail: user.email);
+            return HomeElderly(user: elderlyUser);
           }), (r) {
             return false;
           });
@@ -170,10 +178,8 @@ class Authentication {
 
   // if account does not exist, register the email user in database
   static registerUserData(User user) async {
-    String providerId = user.providerData[0].providerId;
-
     await FirebaseFirestore.instance
         .collection("user")
-        .add({'email': user.email!.toLowerCase(), 'type': providerId});
+        .add({'email': user.email!.toLowerCase()});
   }
 }

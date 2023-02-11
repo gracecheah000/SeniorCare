@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -42,17 +42,14 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
   }
 
   void handleMessage(RemoteMessage message) {
-    if (message.data['type'] == 'Medication') {
-      print('medication');
-    } else if (message.data['type'] == 'Appointment') {
-      print('appointment');
-    }
+    print('handling message');
   }
 
   @override
   void initState() {
     super.initState();
 
+    listenNotifications();
     registrationToken = FirebaseMessagingService.initializeMessaging();
 
     // to detect token changes
@@ -61,8 +58,6 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
     });
 
     setUpInteractedMessage();
-    NotificationServices.init();
-    listenNotifications();
   }
 
   void listenNotifications() {
@@ -186,9 +181,8 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
                                                 CrossAxisAlignment.start,
                                             children: <Widget>[
                                           InkWell(
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                      Radius.circular(20)),
+                                              borderRadius: const BorderRadius.all(
+                                                  Radius.circular(20)),
                                               onTap: () {
                                                 Navigator.of(context).push(
                                                     MaterialPageRoute(
@@ -209,23 +203,21 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
                                                               Radius.circular(
                                                                   20))),
                                                   child: Align(
-                                                      child: Column(
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                          'assets/images/profileButton.png',
-                                                          scale: 6),
-                                                      const Padding(
-                                                          padding: EdgeInsets
-                                                              .fromLTRB(
-                                                                  0, 10, 0, 0)),
-                                                      const Text("Your Elderly",
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 15))
-                                                    ],
-                                                  )))),
+                                                      child: Column(children: <
+                                                          Widget>[
+                                                    Image.asset(
+                                                        'assets/images/profileButton.png',
+                                                        scale: 6),
+                                                    const Padding(
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                0, 10, 0, 0)),
+                                                    const Text("Your Elderly",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 15))
+                                                  ])))),
                                           const Padding(
                                               padding: EdgeInsets.fromLTRB(
                                                   0, 40, 0, 0)),
@@ -396,9 +388,8 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
                                                             fontSize: 15))
                                                   ])))),
                                           const Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                0, 40, 0, 0),
-                                          ),
+                                              padding: EdgeInsets.fromLTRB(
+                                                  0, 40, 0, 0)),
                                           InkWell(
                                               borderRadius: const BorderRadius.all(
                                                   Radius.circular(20)),

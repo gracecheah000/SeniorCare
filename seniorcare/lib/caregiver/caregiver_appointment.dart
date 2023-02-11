@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, prefer_conditional_assignment
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, prefer_conditional_assignment, use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +6,7 @@ import 'package:seniorcare/caregiver/notes/notes_edit.dart';
 import 'package:seniorcare/models/appointment.dart';
 import 'package:seniorcare/models/user.dart';
 import 'package:seniorcare/services/appointment.dart';
+import 'package:seniorcare/services/server_api.dart';
 import 'package:seniorcare/services/user_details.dart';
 import 'package:seniorcare/widgets/appbar.dart';
 import 'package:seniorcare/widgets/custom_text_field.dart';
@@ -121,9 +122,9 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                                   items: elderlyList.map((Elderly elderly) {
                                     return DropdownMenuItem<Elderly>(
                                         value: elderly,
-                                        child: Text(
-                                          elderly.name.toString().toUpperCase(),
-                                        ));
+                                        child: Text(elderly.name
+                                            .toString()
+                                            .toUpperCase()));
                                   }).toList(),
                                   underline: Container(),
                                   icon: const Icon(Icons.arrow_drop_down,
@@ -136,11 +137,8 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                               .snapshots(),
                           builder: (((context, snapshot) {
                             if (!snapshot.hasData) {
-                              return SizedBox(
-                                  height: size.height * 0.7,
-                                  child: const CircularProgressIndicator(
-                                    color: Color.fromARGB(255, 29, 77, 145),
-                                  ));
+                              return const CircularProgressIndicator(
+                                  color: Color.fromARGB(255, 29, 77, 145));
                             } else {
                               List appointmentIdList =
                                   snapshot.data!.data()!['appointment'];
@@ -152,6 +150,7 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                                   future: appointments,
                                   builder: ((context, snapshot) {
                                     if (!snapshot.hasData) {
+                                      print('no data');
                                       return const Center(
                                           child: CircularProgressIndicator());
                                     } else {
@@ -182,13 +181,11 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                                               size.height * 0.01),
                                           elevation: 5.0,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(10),
-                                            ),
-                                            side: BorderSide(
-                                                color: Color.fromRGBO(
-                                                    108, 99, 255, 1)),
-                                          ),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10)),
+                                              side: BorderSide(
+                                                  color: Color.fromRGBO(
+                                                      108, 99, 255, 1))),
                                           child: TableCalendar(
                                               firstDay:
                                                   DateTime.utc(2010, 1, 1),
@@ -207,12 +204,8 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                                                       color:
                                                           Colors.deepPurple)),
                                               calendarStyle: const CalendarStyle(
-                                                  weekendTextStyle: TextStyle(
-                                                      color: Colors.deepPurple),
-                                                  markerDecoration: BoxDecoration(
-                                                      color: Color.fromARGB(
-                                                          255, 248, 134, 114),
-                                                      shape: BoxShape.circle),
+                                                  weekendTextStyle: TextStyle(color: Colors.deepPurple),
+                                                  markerDecoration: BoxDecoration(color: Color.fromARGB(255, 248, 134, 114), shape: BoxShape.circle),
                                                   todayDecoration: BoxDecoration(shape: BoxShape.circle, color: Color.fromARGB(255, 144, 139, 192)),
                                                   selectedDecoration: BoxDecoration(shape: BoxShape.circle, color: Color.fromARGB(255, 46, 38, 121))),
                                               headerStyle: HeaderStyle(formatButtonVisible: false, titleCentered: true),
@@ -355,6 +348,10 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                                                                         seconds:
                                                                             2)));
                                                           }
+                                                          ServerApi.deleteAppointmentPush(
+                                                              appointment,
+                                                              selectedElderly!
+                                                                  .registrationToken!);
                                                         },
                                                         splashRadius: 15,
                                                         padding:
@@ -437,18 +434,17 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold)),
                           IconButton(
-                            onPressed: () {
-                              titleController.clear();
-                              timeController.clear();
-                              locationController.clear();
-                              requireFasting = false;
-                              descriptionController.clear();
-                              Navigator.pop(context);
-                            },
-                            icon: Image.asset('assets/images/close.png',
-                                scale: 20),
-                            iconSize: 20,
-                          )
+                              onPressed: () {
+                                titleController.clear();
+                                timeController.clear();
+                                locationController.clear();
+                                requireFasting = false;
+                                descriptionController.clear();
+                                Navigator.pop(context);
+                              },
+                              icon: Image.asset('assets/images/close.png',
+                                  scale: 20),
+                              iconSize: 20)
                         ]),
                     Divider(
                       color: Color.fromRGBO(108, 99, 255, 1),
@@ -459,25 +455,23 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                     TextField(
                         controller: timeController,
                         decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Color.fromRGBO(108, 99, 255, 1)),
-                              borderRadius: BorderRadius.circular(20)),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Color.fromRGBO(108, 99, 255, 1)),
-                              borderRadius: BorderRadius.circular(20)),
-                          labelText: 'Time',
-                          labelStyle:
-                              TextStyle(color: Color.fromRGBO(108, 99, 255, 1)),
-                        ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Color.fromRGBO(108, 99, 255, 1)),
+                                borderRadius: BorderRadius.circular(20)),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Color.fromRGBO(108, 99, 255, 1)),
+                                borderRadius: BorderRadius.circular(20)),
+                            labelText: 'Time',
+                            labelStyle: TextStyle(
+                                color: Color.fromRGBO(108, 99, 255, 1))),
                         readOnly: true,
                         onTap: () async {
                           TimeOfDay? pickedTime = await showTimePicker(
-                            initialTime: TimeOfDay.now(),
-                            context: context,
-                            initialEntryMode: TimePickerEntryMode.inputOnly,
-                          );
+                              initialTime: TimeOfDay.now(),
+                              context: context,
+                              initialEntryMode: TimePickerEntryMode.inputOnly);
 
                           if (pickedTime != null) {
                             parsedDateTime = DateTime(
@@ -535,8 +529,15 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                               eventRequireFasting:
                                   requireFasting ? "Require Fasting" : null,
                               eventDescription: descriptionController.text);
-                          await AppointmentServices.saveAppointments(
-                              selectedElderly!.id.toString(), newAppointment);
+                          String appointmentId =
+                              await AppointmentServices.saveAppointments(
+                                  selectedElderly!.id.toString(),
+                                  newAppointment);
+
+                          ServerApi.sendAddAppointmentPush(
+                              newAppointment,
+                              selectedElderly!.registrationToken!,
+                              appointmentId);
 
                           titleController.clear();
                           timeController.clear();
@@ -556,16 +557,18 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
   }
 
   getElderlyList() async {
-    var userId = await UserDetails.getUserId(widget.userEmail);
-    Map details = await UserDetails.getUserDetails(userId);
-    List<dynamic> elderlyList = details['elderly'];
+    List details = await UserDetails.getUserDetailsWithEmail(widget.userEmail);
+    List<dynamic> elderlyList = details[1]['elderly'];
 
     List<Elderly> elderlyDetails = [];
 
     for (var element in elderlyList) {
-      Map details = await UserDetails.getUserDetails(element);
-      Elderly elderly =
-          Elderly(email: details['email'], name: details['name'], id: element);
+      Map details = await UserDetails.getUserDetailsWithId(element);
+      Elderly elderly = Elderly(
+          email: details['email'],
+          name: details['name'],
+          id: element,
+          registrationToken: details['deviceToken']);
       elderlyDetails.add(elderly);
     }
 
@@ -581,6 +584,7 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
 
         Appointment newAppointment = Appointment(
             eventId: id,
+            notificationId: appointmentDetails['notification Id'],
             eventTitle: appointmentDetails['name'],
             eventDateTime: DateTime.parse(
                 DateFormat("yyyy-MM-dd' 'HH:mm:ss.SSS'Z'").format(
@@ -590,11 +594,9 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
             eventLocation: appointmentDetails['location'],
             eventRequireFasting: appointmentDetails['require fasting'],
             eventDescription: appointmentDetails['description']);
-
         appointmentList.add(newAppointment);
       }
     }
-
     return appointmentList;
   }
 }

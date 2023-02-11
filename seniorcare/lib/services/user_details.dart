@@ -26,7 +26,8 @@ class UserDetails {
       'appointment': [],
       'notes': [],
       'pin': Random().nextInt(999999),
-      'meal timings': ['7:00AM', '12:00PM', '7:00PM']
+      'meal timings': ['7:00AM', '12:00PM', '7:00PM'],
+      'notification': [0, 0, 0]
     });
   }
 
@@ -88,6 +89,54 @@ class UserDetails {
     return true;
   }
 
+  static getNotifications(String userId) async {
+    Map details = await getUserDetailsWithId(userId);
+    List notification = details['notification'];
+    return notification;
+  }
+
+  // to track duplicated notifications on elderly device
+  static addNumberOfNotifications(
+      String userId, List numberOfNotifications) async {
+    DocumentReference ref =
+        FirebaseFirestore.instance.collection('user').doc(userId);
+
+    DocumentSnapshot details = await ref.get();
+
+    List list = (details.data() as Map)['notification'];
+
+    for (int i = 0; i < 3; i++) {
+      list[i] = list[i] + numberOfNotifications[i];
+    }
+
+    await ref.update({'notification': list}).catchError((e) {
+      return e;
+    });
+
+    return true;
+  }
+
+// to track duplicated notifications on elderly device
+  static deleteNumberOfNotifications(
+      String userId, List numberOfNotifications) async {
+    DocumentReference ref =
+        FirebaseFirestore.instance.collection('user').doc(userId);
+
+    DocumentSnapshot details = await ref.get();
+
+    List list = (details.data() as Map)['notification'];
+
+    for (int i = 0; i < 3; i++) {
+      list[i] = list[i] - numberOfNotifications[i];
+    }
+
+    await ref.update({'notification': list}).catchError((e) {
+      return e;
+    });
+
+    return true;
+  }
+
   static addNewAppointment(String elderlyId, String appointmentId) async {
     DocumentReference ref =
         FirebaseFirestore.instance.collection('user').doc(elderlyId);
@@ -141,7 +190,7 @@ class UserDetails {
       'name': user.name,
       'emergency contact': user.emergencyContact,
       'role': 'caregiver',
-      'elderly': [],
+      'elderly': []
     });
   }
 
@@ -221,11 +270,19 @@ class UserDetails {
     return query.docs.first.id;
   }
 
-  static getUserDetails(String userId) async {
+  static getUserDetailsWithId(String userId) async {
     DocumentSnapshot details =
         await FirebaseFirestore.instance.collection('user').doc(userId).get();
 
     return details.data();
+  }
+
+  static getUserDetailsWithEmail(String userEmail) async {
+    String userId = await getUserId(userEmail);
+    DocumentSnapshot details =
+        await FirebaseFirestore.instance.collection('user').doc(userId).get();
+
+    return [userId, details.data()];
   }
 
   static void updateMessagingToken(String token, String userEmail) async {

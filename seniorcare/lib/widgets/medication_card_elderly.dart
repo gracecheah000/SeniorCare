@@ -31,21 +31,19 @@ class _ElderlyMedicationCardState extends State<ElderlyMedicationCard> {
           width: 150,
           color: Colors.transparent,
           child: FloatingActionButton.extended(
-              heroTag: "Complete" + medicationName,
+              heroTag: "Complete$medicationName",
               backgroundColor: Color.fromARGB(255, 29, 77, 145),
               onPressed: () {
                 setState(() {
                   _isComplete = true;
                 });
               },
-              label: Text(
-                "COMPLETE",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18),
-                textAlign: TextAlign.center,
-              )));
+              label: Text("COMPLETE",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18),
+                  textAlign: TextAlign.center)));
     } else {
       return Container();
     }
@@ -175,7 +173,8 @@ class _ElderlyMedicationCardState extends State<ElderlyMedicationCard> {
                                   style: TextStyle(
                                       color: Color.fromARGB(255, 29, 77, 145),
                                       fontSize: 18)))))),
-          enableButton(widget.medication.medicationName)
+          enableButton(widget.medication.medicationName),
+          Padding(padding: EdgeInsets.only(bottom: 10))
         ])));
   }
 }

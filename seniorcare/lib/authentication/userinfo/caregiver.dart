@@ -19,20 +19,17 @@ class _CaregiverUserInfoState extends State<CaregiverUserInfo> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    return Column(
-      children: <Widget>[
-        const Padding(padding: EdgeInsets.only(top: 10)),
-        Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: size.width * 0.07, vertical: size.height * 0.015),
-            child: customTextField(controller: widget.name, hint: 'Name')),
-        Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: size.width * 0.07, vertical: size.height * 0.015),
-            child: customTextField(
-                controller: widget.emergencyContact,
-                hint: 'Emergency Contact')),
-      ],
-    );
+    return Column(children: <Widget>[
+      const Padding(padding: EdgeInsets.only(top: 10)),
+      Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: size.width * 0.07, vertical: size.height * 0.015),
+          child: customTextField(controller: widget.name, hint: 'Name')),
+      Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: size.width * 0.07, vertical: size.height * 0.015),
+          child: customTextField(
+              controller: widget.emergencyContact, hint: 'Emergency Contact'))
+    ]);
   }
 }

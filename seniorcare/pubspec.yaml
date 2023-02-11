@@ -49,6 +49,7 @@ dependencies:
   rxdart: ^0.27.7 # listen for notifications
   flutter_native_timezone: ^2.0.0
   http: ^0.13.5
+  provider: ^6.0.5
 
 dev_dependencies:
   flutter_test:

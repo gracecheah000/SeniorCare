@@ -1,11 +1,9 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorcare/authentication/login_screen.dart';
 import 'package:seniorcare/authentication/register_screen.dart';
 import 'package:seniorcare/services/authentication.dart';
-import 'package:seniorcare/services/notification_api.dart';
 import 'package:seniorcare/widgets/appbar.dart';
 
 class StartScreen extends StatefulWidget {

@@ -3,9 +3,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:seniorcare/authentication/login_screen.dart';
+import 'package:intl/intl.dart';
+import 'package:seniorcare/const.dart';
 import 'package:seniorcare/elderly/elderly_appointment.dart';
 import 'package:seniorcare/elderly/medication/view_medication_elderly.dart';
+import 'package:seniorcare/models/user.dart';
 import 'package:seniorcare/services/authentication.dart';
 import 'package:seniorcare/services/firebase_messaging.dart';
 import 'package:seniorcare/services/notification_api.dart';
@@ -16,9 +18,9 @@ import '../widgets/appbar.dart';
 import 'elderly_profile.dart';
 
 class HomeElderly extends StatefulWidget {
-  const HomeElderly({super.key, required this.userEmail});
+  const HomeElderly({super.key, required this.user});
 
-  final String? userEmail;
+  final Elderly user;
 
   @override
   State<HomeElderly> createState() => _HomeElderlyState();
@@ -26,6 +28,7 @@ class HomeElderly extends StatefulWidget {
 
 class _HomeElderlyState extends State<HomeElderly> {
   Future<String?>? registrationToken;
+  List<String> elderlyMealTimings = <String>[];
 
   Future<void> setUpInteractedMessage() async {
     // get any messages which caused the application to open from a terminated state
@@ -36,17 +39,47 @@ class _HomeElderlyState extends State<HomeElderly> {
       handleMessage(initialMessage);
     }
 
-    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
+    FirebaseMessaging.onMessageOpenedApp
+        .listen(handleMessage); // listens to messages when in background
 
-    FirebaseMessaging.onMessage.listen(handleMessage);
+    FirebaseMessaging.onMessage
+        .listen(handleMessage); // listens to messages when in foreground
   }
 
   void handleMessage(RemoteMessage message) {
+    print('handling message');
+    if (message.data['action'] == 'add') {
+      if (message.data['type'] == 'Medication') {
+        for (String timing in widget.user.mealTimings!) {
+          DateTime dateTime = DateFormat("hh:mma").parse(timing);
+          elderlyMealTimings.add(DateFormat("HH:mm").format(dateTime));
+        }
 
-    if (message.data['type'] == 'Medication') {
-      print('medication');
-    } else if (message.data['type'] == 'Appointment') {
-      print('appointment');
+        NotificationServices.createRepeatedNotification(
+            userId: widget.user.id!,
+            frequency: message.data['frequency'],
+            title: Constants.medNotificationTitle,
+            body: Constants.medNotificationBody,
+            payload: 'Medication ${message.data['frequency']}',
+            mealTimings: elderlyMealTimings);
+      } else if (message.data['type'] == 'Appointment') {
+        NotificationServices.createScheduledNotification(
+            userId: widget.user.id!,
+            appointmentId: message.data['appointmentId'],
+            title: Constants.apptNotificationTitle,
+            body: Constants.apptNotificationBody,
+            payload: 'Appointment',
+            scheduledDate: DateTime.parse(message.data['scheduledDateTime']));
+      }
+    } else if (message.data['action'] == 'delete') {
+      if (message.data['type'] == 'Medication') {
+        NotificationServices.cancelMedicationNotification(
+            widget.user.id!, message.data['frequency']);
+      } else if (message.data['type'] == 'Appointment') {
+        print('hello');
+        NotificationServices.cancelAppointmentNotifications(
+            message.data['notificationId'].toInt());
+      }
     }
   }
 
@@ -54,22 +87,29 @@ class _HomeElderlyState extends State<HomeElderly> {
   void initState() {
     super.initState();
 
+    listenNotifications();
     registrationToken = FirebaseMessagingService.initializeMessaging();
 
     FirebaseMessaging.instance.onTokenRefresh.listen((token) {
-      UserDetails.updateMessagingToken(token, widget.userEmail!);
+      UserDetails.updateMessagingToken(token, widget.user.email!);
     });
 
     setUpInteractedMessage();
-    NotificationServices.init();
-    listenNotifications();
   }
 
-  void onClickedMedicationNotification(String? payload) => print('medication');
+  void onClickedMedicationNotification(String? payload) =>
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ViewMedicationElderly(
+              userId: widget.user.id!, payload: payload)));
+  void onClickedAppointmentNotifications(String? payload) =>
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ElderlyAppointment(userId: widget.user.id!)));
 
   void listenNotifications() {
     NotificationServices.onMedicationNotifications.stream
         .listen(onClickedMedicationNotification);
+    NotificationServices.onAppointmentNotifications.stream
+        .listen(onClickedAppointmentNotifications);
   }
 
   @override
@@ -81,11 +121,12 @@ class _HomeElderlyState extends State<HomeElderly> {
           if (!snapshot.hasData) {
             return const CircularProgressIndicator();
           } else {
-            UserDetails.updateMessagingToken(snapshot.data!, widget.userEmail!);
+            UserDetails.updateMessagingToken(
+                snapshot.data!, widget.user.email!);
             return StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('user')
-                    .where('email', isEqualTo: widget.userEmail)
+                    .where('email', isEqualTo: widget.user.email!)
                     .snapshots(),
                 builder: ((BuildContext context, AsyncSnapshot snapshot) {
                   if (!snapshot.hasData) {

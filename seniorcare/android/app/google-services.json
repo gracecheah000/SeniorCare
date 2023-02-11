@@ -1,21 +1,20 @@
 {
   "project_info": {
-    "project_number": "797954724060",
-    "firebase_url": "https://seniorcare-372108-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "seniorcare-372108",
-    "storage_bucket": "seniorcare-372108.appspot.com"
+    "project_number": "21137349372",
+    "project_id": "seniorcare-377202",
+    "storage_bucket": "seniorcare-377202.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:797954724060:android:2d80394e37bbbfd342e419",
+        "mobilesdk_app_id": "1:21137349372:android:b6eb913022b1a473ed5579",
         "android_client_info": {
           "package_name": "com.example.seniorcare"
         }
       },
       "oauth_client": [
         {
-          "client_id": "797954724060-bqu0vepbdbe5hi14sb4vie964qfvej55.apps.googleusercontent.com",
+          "client_id": "21137349372-gt0r2k522uoue0c1amqdecfjugom3a7f.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.seniorcare",
@@ -23,20 +22,20 @@
           }
         },
         {
-          "client_id": "797954724060-qj7osr4k1op9k7bvnhih9a1cphe3dr7o.apps.googleusercontent.com",
+          "client_id": "21137349372-2unvfpj7ths2g3cuqag1ojc4rjj68uj4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAvc5AxVJcE8ukofH9BV-fs4KYKY5O_s1E"
+          "current_key": "AIzaSyCYigC5HEIRyC6vlMqn8G577tKBGmiPBPU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "797954724060-qj7osr4k1op9k7bvnhih9a1cphe3dr7o.apps.googleusercontent.com",
+              "client_id": "21137349372-2unvfpj7ths2g3cuqag1ojc4rjj68uj4.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

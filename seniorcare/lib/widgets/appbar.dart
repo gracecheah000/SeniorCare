@@ -12,7 +12,8 @@ class SeniorCareAppBar extends StatelessWidget implements PreferredSizeWidget {
       return AppBar(
         backgroundColor: determineColour(profile),
         leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black),
+            icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                color: Colors.black),
             onPressed: () => Navigator.of(context).pop(),
             splashRadius: 20),
         title: Row(

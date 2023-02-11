@@ -12,7 +12,7 @@ class AppointmentServices {
       'time': newAppointment.eventTime,
       'location': newAppointment.eventLocation,
       'require fasting': newAppointment.eventRequireFasting,
-      'description': newAppointment.eventDescription,
+      'description': newAppointment.eventDescription
     }).then((success) {
       appointmentId = success.id;
     }).catchError((e) {
@@ -21,7 +21,7 @@ class AppointmentServices {
 
     var result = await UserDetails.addNewAppointment(elderlyId, appointmentId);
     if (result == true) {
-      return true;
+      return appointmentId;
     } else {
       return result;
     }
@@ -72,5 +72,17 @@ class AppointmentServices {
     appointmentsAfterCurrentDateTime
         .sort((a, b) => a['date'].compareTo(b['date']));
     return appointmentsAfterCurrentDateTime[0];
+  }
+
+  static updateAppointmentNotificationId(
+      String appointmentId, int notificationId) async {
+    DocumentReference ref =
+        FirebaseFirestore.instance.collection('appointment').doc(appointmentId);
+
+    await ref.update({'notification Id': notificationId}).catchError((e) {
+      return e;
+    });
+
+    return true;
   }
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorcare/models/user.dart';
@@ -229,7 +231,7 @@ class _EditElderlyProfileState extends State<EditElderlyProfile> {
                             pinController.clear();
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text(success + '. Please try again'),
-                                duration: Duration(seconds: 2)));
+                                duration: const Duration(seconds: 2)));
                           }
                         }
                       },
@@ -247,7 +249,7 @@ class _EditElderlyProfileState extends State<EditElderlyProfile> {
       List<dynamic> elderlyList = caregiverElderlyList;
 
       for (String element in elderlyList) {
-        Map details = await UserDetails.getUserDetails(element);
+        Map details = await UserDetails.getUserDetailsWithId(element);
         Elderly elderly = Elderly(
             email: details['email'],
             name: details['name'],

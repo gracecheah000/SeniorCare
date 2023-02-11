@@ -13,7 +13,8 @@ class MedicationServices {
       'timing': medication.medicationTime,
       'image': medication.medicationImage,
       'prescription': medication.medicationPrescription,
-      'other details': medication.otherDescription
+      'other details': medication.otherDescription,
+      'status': 'ongoing'
     }).then((value) {
       medicationId = value.id;
     }).catchError((error) {
@@ -23,6 +24,28 @@ class MedicationServices {
     await UserDetails.addElderlyMedication(elderlyId, medicationId)
         .catchError((error) {
       return error;
+    });
+
+    return true;
+  }
+
+  static updateElderlyMedication(String elderlyId, String medicationId) async {
+    DocumentReference ref;
+
+    ref = FirebaseFirestore.instance.collection('user').doc(elderlyId);
+
+    await ref.update({
+      'medication': FieldValue.arrayRemove([medicationId]),
+      'past medication': FieldValue.arrayUnion([medicationId])
+    }).catchError((e, stackTrace) {
+      return e;
+    });
+
+    await FirebaseFirestore.instance
+        .collection('medication')
+        .doc(medicationId)
+        .update({'status': 'completed'}).catchError((e) {
+      return e;
     });
 
     return true;

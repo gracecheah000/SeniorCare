@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:seniorcare/const.dart';
 import 'package:seniorcare/widgets/custom_multi_select_widget.dart';
 import 'package:seniorcare/widgets/custom_text_field.dart';
 
@@ -29,13 +30,7 @@ class ElderlyUserInfo extends StatefulWidget {
 }
 
 class _ElderlyUserInfoState extends State<ElderlyUserInfo> {
-  List<DropdownMenuItem<String>> get sexDropDownItems {
-    List<DropdownMenuItem<String>> sexMenuItems = [
-      const DropdownMenuItem(value: 'Male', child: Text('Male')),
-      const DropdownMenuItem(value: 'Female', child: Text('Female'))
-    ];
-    return sexMenuItems;
-  }
+  List<DropdownMenuItem<String>> sexMenuItems = Constants.sexMenuItems;
 
   List<String> items = ['Diabetes', 'High Blood Cholesterol'];
 
@@ -68,7 +63,7 @@ class _ElderlyUserInfoState extends State<ElderlyUserInfo> {
                   color: Color.fromRGBO(108, 99, 255, 1),
                   fontFamily: 'Montserrat',
                   fontSize: 16),
-              items: sexDropDownItems,
+              items: sexMenuItems,
               onChanged: (value) {
                 setState(() {
                   widget.notifyParentSex(value);
@@ -84,10 +79,9 @@ class _ElderlyUserInfoState extends State<ElderlyUserInfo> {
           child: customTextField(controller: widget.address, hint: 'Address')),
       Padding(padding: EdgeInsets.only(top: size.height * 0.01)),
       MultiSelect(
-        items: items,
-        updateHealthRisks: updateParentHealthRisks,
-        healthRisks: [],
-      ),
+          items: items,
+          updateHealthRisks: updateParentHealthRisks,
+          healthRisks: []),
       Padding(padding: EdgeInsets.only(top: size.height * 0.01)),
       Padding(
           padding: EdgeInsets.symmetric(

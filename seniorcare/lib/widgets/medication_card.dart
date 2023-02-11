@@ -1,21 +1,22 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, use_build_context_synchronously
 
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:seniorcare/models/medication.dart';
 import 'package:seniorcare/services/medication.dart';
+import 'package:seniorcare/services/server_api.dart';
 
 class MedicationCard extends StatefulWidget {
   final Medication medication;
-  final String medicationId;
   final String elderlyId;
+  final String registrationToken;
 
   const MedicationCard(
       {super.key,
       required this.medication,
-      required this.medicationId,
-      required this.elderlyId});
+      required this.elderlyId,
+      required this.registrationToken});
 
   @override
   State<MedicationCard> createState() => _MedicationCardState();
@@ -34,21 +35,14 @@ class _MedicationCardState extends State<MedicationCard> {
             Widget>[
           Padding(
               padding: EdgeInsets.fromLTRB(
-                  0, size.height * 0.01, size.width * 0.04, size.height * 0.01),
+                  0, size.height * 0.01, size.width * 0.04, 0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     IconButton(
                         padding: EdgeInsets.all(0),
-                        onPressed: () async {
-                          var result =
-                              await MedicationServices.deleteMedication(
-                                  widget.elderlyId, widget.medicationId);
-                          if (result != true) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(result),
-                                duration: Duration(seconds: 2)));
-                          }
+                        onPressed: () {
+                          _showDialog(context);
                         },
                         icon: Image.asset('assets/images/bin_blue.png'),
                         iconSize: 55,
@@ -60,7 +54,7 @@ class _MedicationCardState extends State<MedicationCard> {
                   fontWeight: FontWeight.bold,
                   fontSize: 18)),
           Divider(
-              height: size.height * 0.03,
+              height: size.height * 0.02,
               thickness: 1,
               indent: size.width * 0.1,
               endIndent: size.width * 0.1,
@@ -140,9 +134,7 @@ class _MedicationCardState extends State<MedicationCard> {
                       child: Text(widget.medication.medicationPrescription,
                           style: TextStyle(
                               color: Color.fromARGB(255, 29, 77, 145)))))),
-          Padding(
-            padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-          ),
+          Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
           (widget.medication.otherDescription == '')
               ? Container()
               : Container(
@@ -164,5 +156,51 @@ class _MedicationCardState extends State<MedicationCard> {
                                       color:
                                           Color.fromARGB(255, 29, 77, 145)))))))
         ]));
+  }
+
+  _showDialog(BuildContext context) async {
+    await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+                title: Text("Removing medication"),
+                content: Text(
+                    "Would you like to delete it completely, or move to medication history?"),
+                actions: [
+                  TextButton(
+                      child: Text("Delete"),
+                      onPressed: () async {
+                        var result = await MedicationServices.deleteMedication(
+                            widget.elderlyId, widget.medication.medicationId!);
+                        if (result != true) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(result),
+                              duration: Duration(seconds: 2)));
+                        } else {
+                          ServerApi.deleteMedicationPush(
+                              widget.medication, widget.registrationToken);
+                          Navigator.pop(context);
+                          return;
+                        }
+                      }),
+                  TextButton(
+                      child: Text("Completed"),
+                      onPressed: () async {
+                        var result =
+                            await MedicationServices.updateElderlyMedication(
+                                widget.elderlyId,
+                                widget.medication.medicationId!);
+
+                        if (result != true) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(result),
+                              duration: Duration(seconds: 2)));
+                        } else {
+                          ServerApi.deleteMedicationPush(
+                              widget.medication, widget.registrationToken);
+                          Navigator.of(context).pop();
+                          return;
+                        }
+                      })
+                ]));
   }
 }

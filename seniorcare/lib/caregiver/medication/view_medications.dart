@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages, prefer_conditional_assignment
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorcare/models/medication.dart';
@@ -54,7 +56,6 @@ class _ViewMedicationState extends State<ViewMedication> {
               } else {
                 List<Elderly> elderlyList = snapshot.data;
 
-                // ignore: prefer_conditional_assignment
                 if (selectedElderly == null) {
                   selectedElderly = elderlyList[0];
                 }
@@ -103,22 +104,19 @@ class _ViewMedicationState extends State<ViewMedication> {
                                             elderlyList.map((Elderly elderly) {
                                           return DropdownMenuItem<Elderly>(
                                               value: elderly,
-                                              child: Text(
-                                                elderly.name
-                                                    .toString()
-                                                    .toUpperCase(),
-                                              ));
+                                              child: Text(elderly.name
+                                                  .toString()
+                                                  .toUpperCase()));
                                         }).toList(),
                                         underline: Container(),
                                         icon: const Icon(Icons.arrow_drop_down,
                                             color: Color.fromRGBO(
                                                 108, 99, 255, 1))))),
-                            Row(
-                              children: <Widget>[
-                                Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                    child: IconButton(
+                            Row(children: <Widget>[
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                  child: IconButton(
                                       padding: const EdgeInsets.all(0),
                                       splashRadius: 15,
                                       onPressed: () {
@@ -126,35 +124,32 @@ class _ViewMedicationState extends State<ViewMedication> {
                                             MaterialPageRoute(
                                                 builder: ((context) =>
                                                     AddMedication(
-                                                      elderly: selectedElderly,
-                                                    ))));
+                                                        elderly:
+                                                            selectedElderly))));
                                       },
                                       icon: Image.asset('assets/images/add.png',
                                           scale: 20),
-                                      iconSize: 20,
-                                    )),
-                                Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 10, 30, 0),
-                                    child: IconButton(
-                                      padding: EdgeInsets.all(0),
+                                      iconSize: 20)),
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 10, 30, 0),
+                                  child: IconButton(
+                                      padding: const EdgeInsets.all(0),
                                       splashRadius: 15,
                                       onPressed: () {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: ((context) =>
                                                     MedicationSettings(
-                                                      elderlyId:
-                                                          selectedElderly!.id
-                                                              .toString(),
-                                                    ))));
+                                                        elderlyId:
+                                                            selectedElderly!.id
+                                                                .toString()))));
                                       },
                                       icon: Image.asset(
                                           'assets/images/settings.png',
                                           scale: 1),
-                                      iconSize: 60,
-                                    )),
-                              ],
-                            )
+                                      iconSize: 60))
+                            ])
                           ]),
                       StreamBuilder(
                           stream: FirebaseFirestore.instance
@@ -166,8 +161,7 @@ class _ViewMedicationState extends State<ViewMedication> {
                               return SizedBox(
                                   height: size.height * 0.7,
                                   child: const CircularProgressIndicator(
-                                    color: Color.fromARGB(255, 29, 77, 145),
-                                  ));
+                                      color: Color.fromARGB(255, 29, 77, 145)));
                             } else {
                               List<dynamic> medicationIdList =
                                   snapshot.data!.data()!['medication'];
@@ -176,9 +170,7 @@ class _ViewMedicationState extends State<ViewMedication> {
                                 return SizedBox(
                                     height: size.height * 0.7,
                                     child: const Center(
-                                        child: Text(
-                                      'No medications yet',
-                                    )));
+                                        child: Text('No medications yet')));
                               } else {
                                 Future<dynamic> medications =
                                     getElderlyMedication(medicationIdList);
@@ -194,7 +186,7 @@ class _ViewMedicationState extends State<ViewMedication> {
                                             padding: const EdgeInsets.all(5),
                                             child: Column(children: <Widget>[
                                               CarouselSlider(
-                                                  items: snapshot.data!
+                                                  items: snapshot.data
                                                       .map<Widget>(
                                                           (medication) {
                                                     return SizedBox(
@@ -203,24 +195,21 @@ class _ViewMedicationState extends State<ViewMedication> {
                                                         width: size.width,
                                                         child: Container(
                                                             color: Colors.white,
-                                                            child:
-                                                                MedicationCard(
-                                                              medication:
-                                                                  medication,
-                                                              medicationId:
-                                                                  medicationIdList[
-                                                                      _currentMedicationIndex],
-                                                              elderlyId:
-                                                                  selectedElderly!
-                                                                      .id
-                                                                      .toString(),
-                                                            )));
+                                                            child: MedicationCard(
+                                                                medication:
+                                                                    medication,
+                                                                elderlyId:
+                                                                    selectedElderly!
+                                                                        .id
+                                                                        .toString(),
+                                                                registrationToken:
+                                                                    selectedElderly!
+                                                                        .registrationToken!)));
                                                   }).toList(),
                                                   options: CarouselOptions(
                                                       enableInfiniteScroll:
                                                           false,
-                                                      height:
-                                                          size.height * 0.72,
+                                                      height: size.height * 0.7,
                                                       onPageChanged:
                                                           ((index, reason) {
                                                         setState(() {
@@ -266,16 +255,18 @@ class _ViewMedicationState extends State<ViewMedication> {
   }
 
   getElderlyList() async {
-    var userId = await UserDetails.getUserId(widget.userEmail);
-    Map details = await UserDetails.getUserDetails(userId);
-    List<dynamic> elderlyList = details['elderly'];
+    List details = await UserDetails.getUserDetailsWithEmail(widget.userEmail);
+    List<dynamic> elderlyList = details[1]['elderly'];
 
     List<Elderly> elderlyDetails = [];
 
     for (var element in elderlyList) {
-      Map details = await UserDetails.getUserDetails(element);
-      Elderly elderly =
-          Elderly(email: details['email'], name: details['name'], id: element);
+      Map details = await UserDetails.getUserDetailsWithId(element);
+      Elderly elderly = Elderly(
+          email: details['email'],
+          name: details['name'],
+          id: element,
+          registrationToken: details['deviceToken']);
       elderlyDetails.add(elderly);
     }
 
@@ -288,6 +279,8 @@ class _ViewMedicationState extends State<ViewMedication> {
     for (String medicationId in medicationIdList) {
       Map details = await MedicationServices.getMedicationDetails(medicationId);
       Medication medication = Medication(
+          status: details['status'],
+          medicationId: medicationId,
           medicationName: details['name'],
           medicationFrequency: details['frequency'],
           medicationQuantity: details['quantity'],
