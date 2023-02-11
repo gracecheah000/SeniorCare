@@ -1,0 +1,5 @@
+runtime: python310
+entrypoint: gunicorn -b :8080 main:app
+
+env_variables:
+  IS_APP_ENGINE: 1
