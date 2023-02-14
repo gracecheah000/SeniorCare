@@ -81,9 +81,9 @@ class _NotepadState extends State<Notepad> {
                                   items: elderlyList.map((Elderly elderly) {
                                     return DropdownMenuItem<Elderly>(
                                         value: elderly,
-                                        child: Text(
-                                          elderly.name.toString().toUpperCase(),
-                                        ));
+                                        child: Text(elderly.name
+                                            .toString()
+                                            .toUpperCase()));
                                   }).toList(),
                                   underline: Container(),
                                   icon: const Icon(Icons.arrow_drop_down,

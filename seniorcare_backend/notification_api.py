@@ -2,12 +2,17 @@
 import firebase_admin
 from firebase_admin import credentials, messaging
 from flask import Blueprint, request
-import os;
+import os
+import json
+from dotenv import load_dotenv
+    
+load_dotenv()
+
 
 if (os.environ.get("IS_APP_ENGINE")):
     cred = credentials.Certificate("serviceAccountKey.json")
 else:
-    cred = credentials.Certificate("seniorcare_backend/serviceAccountKey.json")
+    cred = credentials.Certificate(json.loads(os.environ["FIREBASE_CREDENTIALS"]))
 firebase_admin.initialize_app(cred)
 
 messageBlueprint = Blueprint('message_blueprint', __name__)

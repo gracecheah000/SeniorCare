@@ -213,7 +213,8 @@ class _ViewMedicationElderlyState extends State<ViewMedicationElderly> {
                           return SizedBox(
                               height: size.height * 0.7,
                               child: const Center(
-                                  child: Text('No medications yet')));
+                                  child: Text('No current medication',
+                                      style: TextStyle(fontSize: 18))));
                         } else {
                           Future<dynamic> medications =
                               getElderlyMedication(medicationIdList);

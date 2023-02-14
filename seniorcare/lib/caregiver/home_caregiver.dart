@@ -18,7 +18,7 @@ import 'elderly/edit_elderly_details.dart';
 class HomeCaregiver extends StatefulWidget {
   const HomeCaregiver({super.key, required this.userEmail});
 
-  final String? userEmail;
+  final String userEmail;
 
   @override
   State<HomeCaregiver> createState() => _HomeCaregiverState();
@@ -26,24 +26,6 @@ class HomeCaregiver extends StatefulWidget {
 
 class _HomeCaregiverState extends State<HomeCaregiver> {
   Future<String?>? registrationToken;
-
-  Future<void> setUpInteractedMessage() async {
-    // get any messages which caused the application to open from a terminated state
-    RemoteMessage? initialMessage =
-        await FirebaseMessaging.instance.getInitialMessage();
-
-    if (initialMessage != null) {
-      handleMessage(initialMessage);
-    }
-
-    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
-
-    FirebaseMessaging.onMessage.listen(handleMessage);
-  }
-
-  void handleMessage(RemoteMessage message) {
-    print('handling message');
-  }
 
   @override
   void initState() {
@@ -56,19 +38,17 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
     FirebaseMessaging.instance.onTokenRefresh.listen((token) {
       UserDetails.updateMessagingToken(token, widget.userEmail!);
     });
-
-    setUpInteractedMessage();
   }
 
-  void listenNotifications() {
-    NotificationServices.onMedicationNotifications.stream
-        .listen(onClickedMedicationNotification);
-  }
-
-  void onClickedMedicationNotification(String? payload) =>
+  void onClickedAppointmentNotifications(String? payload) =>
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) =>
-              CaregiverAppointment(userEmail: widget.userEmail as String)));
+              CaregiverAppointment(userEmail: widget.userEmail)));
+
+  void listenNotifications() {
+    NotificationServices.onAppointmentNotifications.stream
+        .listen(onClickedAppointmentNotifications);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -230,8 +210,7 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
                                                         builder: (context) =>
                                                             CaregiverAppointment(
                                                                 userEmail: widget
-                                                                        .userEmail
-                                                                    as String)));
+                                                                    .userEmail)));
                                               },
                                               child: Ink(
                                                   padding:
@@ -261,9 +240,8 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
                                                             fontSize: 15))
                                                   ])))),
                                           const Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                0, 40, 0, 0),
-                                          ),
+                                              padding: EdgeInsets.fromLTRB(
+                                                  0, 40, 0, 0)),
                                           InkWell(
                                               borderRadius: const BorderRadius.all(
                                                   Radius.circular(20)),
@@ -271,7 +249,9 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
                                                 Navigator.of(context).push(
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            const LocationTracking()));
+                                                            LocationTracking(
+                                                                userEmail: widget
+                                                                    .userEmail)));
                                               },
                                               child: Ink(
                                                   padding:
@@ -318,8 +298,7 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
                                                         builder: (context) =>
                                                             ViewMedication(
                                                                 userEmail: widget
-                                                                        .userEmail
-                                                                    as String)));
+                                                                    .userEmail)));
                                               },
                                               child: Ink(
                                                   padding:

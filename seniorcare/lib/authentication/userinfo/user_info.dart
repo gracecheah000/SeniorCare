@@ -126,7 +126,8 @@ class _FirstTimeUserInfoState extends State<FirstTimeUserInfo> {
                             caregiver, widget.user);
                         Navigator.pushAndRemoveUntil(context,
                             MaterialPageRoute(builder: (context) {
-                          return HomeCaregiver(userEmail: widget.user!.email);
+                          return HomeCaregiver(
+                              userEmail: widget.user!.email.toString());
                         }), (r) {
                           return false;
                         });

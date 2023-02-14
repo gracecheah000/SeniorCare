@@ -68,9 +68,9 @@ class _ViewMedicationState extends State<ViewMedication> {
                           children: <Widget>[
                             Container(
                                 padding:
-                                    const EdgeInsets.fromLTRB(35, 10, 0, 0),
+                                    const EdgeInsets.fromLTRB(20, 10, 0, 0),
                                 height: size.height * 0.07,
-                                width: size.width * 0.5,
+                                width: size.width * 0.4,
                                 color: Colors.transparent,
                                 alignment: Alignment.centerLeft,
                                 child: Container(
@@ -170,7 +170,8 @@ class _ViewMedicationState extends State<ViewMedication> {
                                 return SizedBox(
                                     height: size.height * 0.7,
                                     child: const Center(
-                                        child: Text('No medications yet')));
+                                        child: Text('No current medication',
+                                            style: TextStyle(fontSize: 18))));
                               } else {
                                 Future<dynamic> medications =
                                     getElderlyMedication(medicationIdList);

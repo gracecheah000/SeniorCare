@@ -71,7 +71,6 @@ class NotificationServices {
       required String appointmentId,
       required DateTime scheduledDate}) async {
     int id = Random().nextInt((pow(2, 31) - 1).toInt());
-    print(id);
     _notifications.zonedSchedule(
         id,
         title,
@@ -224,16 +223,12 @@ class NotificationServices {
         {
           if (notification[0] >= 1 && notification[2] >= 1) {
             await UserDetails.deleteNumberOfNotifications(userId, [1, 0, 1]);
-          } else if (notification[0] == 1 && notification[2] == 1) {
+          } else if (notification[0] == 1) {
             await UserDetails.deleteNumberOfNotifications(userId, [1, 0, 1]);
             await _notifications.cancel(Constants.morningNotificationId);
-            await _notifications.cancel(Constants.nightNotificationId);
-          } else if (notification[0] >= 1) {
+          } else if (notification[2] == 1) {
             await UserDetails.deleteNumberOfNotifications(userId, [1, 0, 1]);
             await _notifications.cancel(Constants.nightNotificationId);
-          } else if (notification[2] >= 1) {
-            await UserDetails.deleteNumberOfNotifications(userId, [1, 0, 1]);
-            await _notifications.cancel(Constants.morningNotificationId);
           }
         }
         break;
@@ -243,37 +238,15 @@ class NotificationServices {
               notification[1] >= 1 &&
               notification[2] >= 1) {
             await UserDetails.deleteNumberOfNotifications(userId, [1, 1, 1]);
-          } else if (notification[0] == 1 &&
-              notification[2] == 1 &&
-              notification[1] == 1) {
+          } else if (notification[0] == 1) {
             await UserDetails.deleteNumberOfNotifications(userId, [1, 1, 1]);
             await _notifications.cancel(Constants.morningNotificationId);
-            await _notifications.cancel(Constants.afternoonNotificationId);
-            await _notifications.cancel(Constants.nightNotificationId);
-          } else if (notification[0] >= 1 && notification[1] >= 1) {
-            await UserDetails.deleteNumberOfNotifications(userId, [1, 1, 1]);
-            await _notifications.cancel(Constants.nightNotificationId);
-          } else if (notification[0] >= 1 && notification[2] >= 1) {
+          } else if (notification[1] == 1) {
             await UserDetails.deleteNumberOfNotifications(userId, [1, 1, 1]);
             await _notifications.cancel(Constants.afternoonNotificationId);
-          } else if (notification[1] >= 1 && notification[2] >= 1) {
-            await UserDetails.deleteNumberOfNotifications(userId, [1, 1, 1]);
-            await _notifications.cancel(Constants.morningNotificationId);
-          } else if (notification[0] >= 1 && notification[1] >= 1) {
+          } else if (notification[2] == 1) {
             await UserDetails.deleteNumberOfNotifications(userId, [1, 1, 1]);
             await _notifications.cancel(Constants.nightNotificationId);
-          } else if (notification[0] >= 1) {
-            await UserDetails.deleteNumberOfNotifications(userId, [1, 1, 1]);
-            await _notifications.cancel(Constants.afternoonNotificationId);
-            await _notifications.cancel(Constants.nightNotificationId);
-          } else if (notification[1] >= 1) {
-            await UserDetails.deleteNumberOfNotifications(userId, [1, 1, 1]);
-            await _notifications.cancel(Constants.nightNotificationId);
-            await _notifications.cancel(Constants.morningNotificationId);
-          } else if (notification[2] >= 1) {
-            await UserDetails.deleteNumberOfNotifications(userId, [1, 1, 1]);
-            await _notifications.cancel(Constants.afternoonNotificationId);
-            await _notifications.cancel(Constants.morningNotificationId);
           }
         }
         break;
@@ -282,7 +255,6 @@ class NotificationServices {
 
   static Future<void> cancelAppointmentNotifications(int id) async {
     _notifications.cancel(id);
-    print(id);
   }
 
   static Future<void> cancelAll() => _notifications.cancelAll();

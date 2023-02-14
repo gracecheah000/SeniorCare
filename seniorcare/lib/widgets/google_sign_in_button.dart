@@ -73,7 +73,8 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                       } else if (firstTimeLogin == 'caregiver') {
                         Navigator.pushAndRemoveUntil(context,
                             MaterialPageRoute(builder: (BuildContext context) {
-                          return HomeCaregiver(userEmail: user.email);
+                          return HomeCaregiver(
+                              userEmail: user.email.toString());
                         }), (r) {
                           return false;
                         });

@@ -3,9 +3,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorcare/caregiver/notes/notes_edit.dart';
+import 'package:seniorcare/const.dart';
 import 'package:seniorcare/models/appointment.dart';
 import 'package:seniorcare/models/user.dart';
 import 'package:seniorcare/services/appointment.dart';
+import 'package:seniorcare/services/notification_api.dart';
 import 'package:seniorcare/services/server_api.dart';
 import 'package:seniorcare/services/user_details.dart';
 import 'package:seniorcare/widgets/appbar.dart';
@@ -26,6 +28,7 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
   DateTime _focusedCalendarDate = DateTime.now();
   DateTime _selectedDay = DateTime.now();
   final CalendarFormat _calendarFormat = CalendarFormat.month;
+  String? userId;
 
   final titleController = TextEditingController();
   final timeController = TextEditingController();
@@ -80,7 +83,10 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                     child: Text('No elderly has been added',
                         style: TextStyle(fontWeight: FontWeight.bold)));
               } else {
-                List<Elderly> elderlyList = snapshot.data;
+                List<Elderly> elderlyList = snapshot.data[1];
+
+                userId = snapshot.data[0];
+
                 if (selectedElderly == null) {
                   selectedElderly = elderlyList[0];
                 }
@@ -150,7 +156,6 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                                   future: appointments,
                                   builder: ((context, snapshot) {
                                     if (!snapshot.hasData) {
-                                      print('no data');
                                       return const Center(
                                           child: CircularProgressIndicator());
                                     } else {
@@ -352,6 +357,11 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                                                               appointment,
                                                               selectedElderly!
                                                                   .registrationToken!);
+
+                                                          NotificationServices
+                                                              .cancelAppointmentNotifications(
+                                                                  appointment
+                                                                      .notificationId!);
                                                         },
                                                         splashRadius: 15,
                                                         padding:
@@ -405,14 +415,14 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
             }))),
         floatingActionButton: FloatingActionButton.small(
             onPressed: () {
-              _showAddAppointmentDialog();
+              _showAddAppointmentDialog(userId.toString());
             },
             backgroundColor: Color.fromARGB(99, 160, 171, 221),
             heroTag: "AddAppointment",
             child: Image.asset('assets/images/add.png')));
   }
 
-  _showAddAppointmentDialog() async {
+  _showAddAppointmentDialog(String userId) async {
     DateTime parsedDateTime = DateTime.now();
 
     await showDialog(
@@ -446,9 +456,7 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                                   scale: 20),
                               iconSize: 20)
                         ]),
-                    Divider(
-                      color: Color.fromRGBO(108, 99, 255, 1),
-                    ),
+                    Divider(color: Color.fromRGBO(108, 99, 255, 1)),
                     Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
                     customTextField(hint: 'Title', controller: titleController),
                     Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
@@ -539,6 +547,14 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                               selectedElderly!.registrationToken!,
                               appointmentId);
 
+                          NotificationServices.createScheduledNotification(
+                              userId: userId,
+                              appointmentId: appointmentId,
+                              title: Constants.apptNotificationTitle,
+                              body: Constants.apptNotificationBody,
+                              payload: 'Appointment',
+                              scheduledDate: newAppointment.eventDateTime);
+
                           titleController.clear();
                           timeController.clear();
                           locationController.clear();
@@ -559,6 +575,7 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
   getElderlyList() async {
     List details = await UserDetails.getUserDetailsWithEmail(widget.userEmail);
     List<dynamic> elderlyList = details[1]['elderly'];
+    String userId = details[0];
 
     List<Elderly> elderlyDetails = [];
 
@@ -572,7 +589,7 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
       elderlyDetails.add(elderly);
     }
 
-    return elderlyDetails;
+    return [userId, elderlyDetails];
   }
 
   getElderlyAppointment(List appointmentIdList) async {
