@@ -5,7 +5,6 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
 import 'package:seniorcare/services/notification_api.dart';
 import 'package:seniorcare/start_screen.dart';
 import 'package:flutter_config/flutter_config.dart';
@@ -13,9 +12,6 @@ import 'package:flutter_config/flutter_config.dart';
 Future _backgroundMessageHandler(RemoteMessage message) async {
   print('background message received');
 }
-
-final Location location = Location();
-StreamSubscription<LocationData>? _locationSubscription;
 
 void main() async {
   WidgetsFlutterBinding

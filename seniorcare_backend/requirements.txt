@@ -1,5 +1,9 @@
 flask
 firebase_admin
 gunicorn
-python-dotenv
 fitbit
+python-dotenv
+python-dateutil
+requests-oauthlib
+cherrypy
+pandas

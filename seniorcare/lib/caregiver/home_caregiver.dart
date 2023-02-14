@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:seniorcare/caregiver/health_metrics/health_metric.dart';
 import 'package:seniorcare/services/authentication.dart';
 import 'package:seniorcare/caregiver/caregiver_appointment.dart';
 import 'package:seniorcare/caregiver/location/location_tracking.dart';
@@ -36,7 +37,7 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
 
     // to detect token changes
     FirebaseMessaging.instance.onTokenRefresh.listen((token) {
-      UserDetails.updateMessagingToken(token, widget.userEmail!);
+      UserDetails.updateMessagingToken(token, widget.userEmail);
     });
   }
 
@@ -60,7 +61,7 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
           if (!snapshot.hasData) {
             return const CircularProgressIndicator();
           } else {
-            UserDetails.updateMessagingToken(snapshot.data!, widget.userEmail!);
+            UserDetails.updateMessagingToken(snapshot.data!, widget.userEmail);
             return StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('user')
@@ -334,10 +335,12 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
                                               borderRadius: const BorderRadius.all(
                                                   Radius.circular(20)),
                                               onTap: () {
-                                                // Navigator.of(context).push(
-                                                //     MaterialPageRoute(
-                                                //         builder: (context) =>
-                                                //             const ElderlyProfile()));
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            HealthMetric(
+                                                                userEmail: widget
+                                                                    .userEmail)));
                                               },
                                               child: Ink(
                                                   padding:
@@ -378,8 +381,7 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
                                                         builder: (context) =>
                                                             Notepad(
                                                                 userEmail: widget
-                                                                        .userEmail
-                                                                    as String)));
+                                                                    .userEmail)));
                                               },
                                               child: Ink(
                                                   padding:
