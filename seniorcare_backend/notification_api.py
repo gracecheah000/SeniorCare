@@ -8,7 +8,6 @@ from dotenv import load_dotenv
     
 load_dotenv()
 
-
 if (os.environ.get("IS_APP_ENGINE")):
     cred = credentials.Certificate("serviceAccountKey.json")
 else:
