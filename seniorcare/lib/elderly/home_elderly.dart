@@ -7,8 +7,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:seniorcare/const.dart';
 import 'package:seniorcare/elderly/elderly_appointment.dart';
+import 'package:seniorcare/elderly/google_fit_set_up.dart';
 import 'package:seniorcare/elderly/medication/view_medication_elderly.dart';
 import 'package:seniorcare/models/user.dart';
 import 'package:seniorcare/services/authentication.dart';
@@ -18,6 +20,7 @@ import 'package:seniorcare/services/notification_api.dart';
 import 'package:seniorcare/services/user_details.dart';
 import 'package:seniorcare/start_screen.dart';
 import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/appbar.dart';
 import 'elderly_profile.dart';
@@ -39,9 +42,11 @@ class _HomeElderlyState extends State<HomeElderly> {
   final Location location = Location();
   StreamSubscription<LocationData>? _locationSubscription;
 
-  final fetchLocationBackground = "fetchLocationBackground";
-
   Future<void> updateLocation() async {
+    await Permission.phone.request();
+
+    await Permission.location.request();
+    await Permission.locationAlways.request();
     _locationSubscription = location.onLocationChanged.handleError((onError) {
       _locationSubscription!.cancel();
       setState(() {
@@ -51,6 +56,13 @@ class _HomeElderlyState extends State<HomeElderly> {
       await LocationServices.updateLocation(
           widget.user.email!, currentLocation);
     });
+
+    location.enableBackgroundMode(enable: true);
+  }
+
+  void setUpSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userId', widget.user.id!);
   }
 
   Future<void> setUpInteractedMessage() async {
@@ -104,21 +116,6 @@ class _HomeElderlyState extends State<HomeElderly> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-    listenNotifications();
-    registrationToken = FirebaseMessagingService.initializeMessaging();
-
-    FirebaseMessaging.instance.onTokenRefresh.listen((token) {
-      UserDetails.updateMessagingToken(token, widget.user.email!);
-    });
-
-    setUpInteractedMessage();
-    location.enableBackgroundMode(enable: true);
-  }
-
   void onClickedMedicationNotification(String? payload) =>
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => ViewMedicationElderly(
@@ -135,6 +132,22 @@ class _HomeElderlyState extends State<HomeElderly> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    listenNotifications();
+    registrationToken = FirebaseMessagingService.initializeMessaging();
+
+    FirebaseMessaging.instance.onTokenRefresh.listen((token) {
+      UserDetails.updateMessagingToken(token, widget.user.email!);
+    });
+
+    setUpInteractedMessage();
+
+    setUpSharedPreferences();
+  }
+
+  @override
   Widget build(BuildContext context) {
     updateLocation();
     var size = MediaQuery.of(context).size;
@@ -146,6 +159,7 @@ class _HomeElderlyState extends State<HomeElderly> {
           } else {
             UserDetails.updateMessagingToken(
                 snapshot.data!, widget.user.email!);
+
             return StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('user')
@@ -256,12 +270,12 @@ class _HomeElderlyState extends State<HomeElderly> {
                                                 Padding(
                                                     padding: EdgeInsets.all(15),
                                                     child: const Text(
-                                                      "Health Status",
-                                                      style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    )),
+                                                        "Health Status",
+                                                        style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold))),
                                                 // TODO: get health status
                                                 Container()
                                               ])))),
@@ -313,9 +327,8 @@ class _HomeElderlyState extends State<HomeElderly> {
                                                             fontSize: 15))
                                                   ])))),
                                           Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                0, size.height * 0.03, 0, 0),
-                                          ),
+                                              padding: EdgeInsets.fromLTRB(
+                                                  0, size.height * 0.03, 0, 0)),
                                           InkWell(
                                               borderRadius: const BorderRadius.all(
                                                   Radius.circular(20)),
@@ -407,7 +420,12 @@ class _HomeElderlyState extends State<HomeElderly> {
                                           InkWell(
                                               borderRadius: const BorderRadius.all(
                                                   Radius.circular(20)),
-                                              onTap: () {},
+                                              onTap: () {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            GoogleFitSetUp()));
+                                              },
                                               child: Ink(
                                                   padding:
                                                       const EdgeInsets.fromLTRB(
@@ -423,13 +441,13 @@ class _HomeElderlyState extends State<HomeElderly> {
                                                       child: Column(children: <
                                                           Widget>[
                                                     Image.asset(
-                                                        'assets/images/memo.png',
-                                                        scale: 6),
+                                                        'assets/images/google_fit.png',
+                                                        scale: 2.1),
                                                     const Padding(
                                                         padding:
                                                             EdgeInsets.fromLTRB(
                                                                 0, 10, 0, 0)),
-                                                    const Text("Health Log",
+                                                    const Text("Setup",
                                                         style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.bold,
@@ -448,7 +466,6 @@ class _HomeElderlyState extends State<HomeElderly> {
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(25)),
                                       onTap: () {
-                                        print('SOS');
                                         _showCallCaregiverDialog();
                                       },
                                       child: Ink(

@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:seniorcare/services/notification_api.dart';
 import 'package:seniorcare/start_screen.dart';
 import 'package:flutter_config/flutter_config.dart';
+import 'package:workmanager/workmanager.dart';
+import 'services/workmanager_callback.dart';
 
 Future _backgroundMessageHandler(RemoteMessage message) async {
   print('background message received');
@@ -20,6 +22,7 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_backgroundMessageHandler);
   NotificationServices.init();
   await FlutterConfig.loadEnvVariables();
+  Workmanager().initialize(callbackDispatcher);
   runApp(const MyApp());
 }
 

@@ -2,10 +2,9 @@ import 'package:health/health.dart';
 
 class Steps {
   int value;
-  DateTime dateFrom;
-  DateTime dateTo;
+  DateTime? dateFrom;
 
-  Steps({required this.value, required this.dateFrom, required this.dateTo});
+  Steps({required this.value, this.dateFrom});
 }
 
 class HeartRate {

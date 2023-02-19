@@ -48,4 +48,20 @@ class Constants {
     'Diabetes',
     'High Blood Cholesterol'
   ];
+
+  static const int badNoOfSteps = 5500;
+  static const int avgNoOfSteps = 7000;
+
+  static const String googleFitDownloadTitle = "Download Google Fit";
+  static const String googleFitDownloadContent =
+      'Download Google Fit from the Google Play Store';
+
+  static const String googleFitPermissionTitle = 'Authorize Google Fit';
+  static const String googleFitPermissionContent =
+      'Authorize Google Fit to access your health data.\n\nOnce authorized, data from Google Fit will be synced to Seniorcare for viewing.';
+
+  static const String fitbitDownloadTitle =
+      "Download Fitbit and FitToFit (optional)";
+  static const String fitbitDownloadContent =
+      "Download Fitbit from the Google Play Store. \n\nTo sync your Fitbit data with Google Fit, install FitToFit from the Google Play Store.\n\nOnce setup, enable Autosync in FitToFit's settings.";
 }
