@@ -34,15 +34,16 @@ class _StepsHealthCardState extends State<StepsHealthCard> {
   List<BarChartGroupData> _stepsChart(List<Steps> stepList) {
     stepList = stepList
         .where((element) =>
-            element.dateFrom!.isAfter(startDate!) &&
-            element.dateFrom!.isBefore(endDate!))
-        .toList()
-        .reversed
+            (element.dateFrom.isAfter(startDate!) ||
+                element.dateFrom.isAtSameMomentAs(startDate!)) &&
+            (element.dateFrom.isBefore(endDate!) ||
+                element.dateFrom.isAtSameMomentAs(endDate!)))
         .toList();
+
+    stepList.sort((a, b) => a.dateFrom.compareTo(b.dateFrom));
 
     return stepList.map((data) {
       Color color;
-
       if (data.value < Constants.badNoOfSteps) {
         color = Colors.red;
       } else if (data.value < Constants.avgNoOfSteps) {
@@ -52,7 +53,7 @@ class _StepsHealthCardState extends State<StepsHealthCard> {
       }
 
       return BarChartGroupData(
-          x: data.dateFrom!.weekday,
+          x: data.dateFrom.weekday,
           barRods: [BarChartRodData(toY: data.value.toDouble(), color: color)],
           showingTooltipIndicators: [0]);
     }).toList();
@@ -62,8 +63,10 @@ class _StepsHealthCardState extends State<StepsHealthCard> {
   Widget build(BuildContext context) {
     if (startDate == null && endDate == null) {
       setState(() {
-        startDate = now.subtract(Duration(days: now.weekday));
-        endDate = now.add(Duration(days: DateTime.daysPerWeek - now.weekday));
+        startDate = DateTime(now.year, now.month, now.day)
+            .subtract(Duration(days: now.weekday));
+        endDate = DateTime(now.year, now.month, now.day)
+            .add(Duration(days: DateTime.daysPerWeek - now.weekday));
       });
     }
 
@@ -87,71 +90,67 @@ class _StepsHealthCardState extends State<StepsHealthCard> {
                 aspectRatio: 1,
                 child: Padding(
                     padding: const EdgeInsets.all(16),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Daily Steps',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17)),
-                          const SizedBox(height: 10),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        startDate = startDate!
-                                            .subtract(const Duration(days: 7));
-                                        endDate = endDate!
-                                            .subtract(const Duration(days: 7));
-                                      });
-                                    },
-                                    icon: const Icon(
-                                        Icons.arrow_back_ios_new_rounded,
-                                        size: 15,
-                                        color: Colors.white),
-                                    splashRadius: 10),
-                                Text(
-                                    '${DateFormat.yMMMd().format(startDate!).toString()} - ${DateFormat.yMMMd().format(endDate!).toString()}',
-                                    style:
-                                        const TextStyle(color: Colors.white)),
-                                IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        startDate = startDate!
-                                            .add(const Duration(days: 7));
-                                        endDate = endDate!
-                                            .add(const Duration(days: 7));
-                                      });
-                                    },
-                                    icon: const Icon(
-                                        Icons.arrow_forward_ios_rounded,
-                                        size: 15,
-                                        color: Colors.white),
-                                    splashRadius: 10)
-                              ]),
-                          const SizedBox(height: 40),
-                          Expanded(
-                              child: BarChart(BarChartData(
-                                  barTouchData: barTouchData,
-                                  barGroups: _stepsChart(stepList),
-                                  borderData: FlBorderData(show: false),
-                                  gridData: FlGridData(show: false),
-                                  titlesData: FlTitlesData(
-                                      leftTitles: AxisTitles(
-                                          sideTitles:
-                                              SideTitles(showTitles: false)),
-                                      bottomTitles:
-                                          AxisTitles(sideTitles: _bottomTitles),
-                                      topTitles: AxisTitles(
-                                          sideTitles:
-                                              SideTitles(showTitles: false)),
-                                      rightTitles: AxisTitles(
-                                          sideTitles:
-                                              SideTitles(showTitles: false))))))
-                        ])));
+                    child: Column(children: [
+                      const Text('Weekly Steps',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17)),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    startDate = startDate!
+                                        .subtract(const Duration(days: 8));
+                                    endDate = endDate!
+                                        .subtract(const Duration(days: 8));
+                                  });
+                                },
+                                icon: const Icon(
+                                    Icons.arrow_back_ios_new_rounded,
+                                    size: 15,
+                                    color: Colors.white),
+                                splashRadius: 10),
+                            Text(
+                                '${DateFormat.yMMMd().format(startDate!).toString()} - ${DateFormat.yMMMd().format(endDate!).toString()}',
+                                style: const TextStyle(color: Colors.white)),
+                            IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    startDate =
+                                        startDate!.add(const Duration(days: 8));
+                                    endDate =
+                                        endDate!.add(const Duration(days: 8));
+                                  });
+                                },
+                                icon: const Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    size: 15,
+                                    color: Colors.white),
+                                splashRadius: 10)
+                          ]),
+                      const SizedBox(height: 40),
+                      Expanded(
+                          child: BarChart(BarChartData(
+                              barTouchData: barTouchData,
+                              barGroups: _stepsChart(stepList),
+                              borderData: FlBorderData(show: false),
+                              gridData: FlGridData(show: false),
+                              titlesData: FlTitlesData(
+                                  leftTitles: AxisTitles(
+                                      sideTitles:
+                                          SideTitles(showTitles: false)),
+                                  bottomTitles:
+                                      AxisTitles(sideTitles: _bottomTitles),
+                                  topTitles: AxisTitles(
+                                      sideTitles:
+                                          SideTitles(showTitles: false)),
+                                  rightTitles: AxisTitles(
+                                      sideTitles:
+                                          SideTitles(showTitles: false))))))
+                    ])));
           }
         });
   }

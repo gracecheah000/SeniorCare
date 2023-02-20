@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:seniorcare/models/user.dart';
 import 'package:seniorcare/services/user_details.dart';
 import 'package:seniorcare/widgets/appbar.dart';
+import 'package:seniorcare/widgets/heart_rate_card.dart';
 import 'package:seniorcare/widgets/steps_card.dart';
 
 class HealthMetric extends StatefulWidget {
@@ -44,9 +45,10 @@ class _HealthMetricState extends State<HealthMetric> {
                   selectedElderly = elderlyList[0];
                 }
 
-                return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                return SingleChildScrollView(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                       StreamBuilder(
                           stream: FirebaseFirestore.instance
                               .collection('user')
@@ -107,8 +109,7 @@ class _HealthMetricState extends State<HealthMetric> {
                                                   108, 99, 255, 1)))));
                             }
                           }),
-                      Padding(
-                          padding: EdgeInsets.only(top: size.height * 0.03)),
+                      SizedBox(height: size.height * 0.03),
                       Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -124,9 +125,23 @@ class _HealthMetricState extends State<HealthMetric> {
                                             BorderRadius.circular(20)),
                                     elevation: 5,
                                     child: StepsHealthCard(
-                                        elderlyId: selectedElderly!.id!)))
+                                        elderlyId: selectedElderly!.id!))),
+                            SizedBox(height: size.height * 0.03),
+                            Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: size.width * 0.05),
+                                child: Card(
+                                    color:
+                                        const Color.fromARGB(255, 58, 71, 100),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    elevation: 5,
+                                    child: HeartRateCard(
+                                        elderlyId: selectedElderly!.id!))),
+                            SizedBox(height: size.height * 0.03),
                           ])
-                    ]);
+                    ]));
               }
             })));
   }

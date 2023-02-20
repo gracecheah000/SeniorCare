@@ -18,12 +18,9 @@ Future fetchSteps(HealthFactory healthFactory) async {
     int? stepOfDay = await healthFactory.getTotalStepsInInterval(yest, now);
     if (stepOfDay == null) {
       stepOfDay = 0;
-
-      step = Steps(value: stepOfDay, dateFrom: yest);
-      return step;
     }
-
-    return Steps(value: 0, dateFrom: yest);
+    step = Steps(value: stepOfDay, dateFrom: yest);
+    return step;
   } catch (error) {
     print(error);
     return;
@@ -51,6 +48,7 @@ Future fetchHeartRateData(HealthFactory healthFactory) async {
   }
 }
 
+@pragma('vm:entry-point')
 void callbackDispatcher() async {
   WidgetsFlutterBinding.ensureInitialized();
   Workmanager().executeTask((taskName, inputData) async {
@@ -60,12 +58,16 @@ void callbackDispatcher() async {
     HealthFactory healthFactory = HealthFactory();
 
     Steps steps = await fetchSteps(healthFactory);
+    List<HealthDataPoint> heartRateData =
+        await fetchHeartRateData(healthFactory);
 
     try {
       final prefs = await SharedPreferences.getInstance();
       final userId = prefs.getString('userId');
 
       await HealthServices.saveSteps(steps, userId!);
+      await HealthServices.saveHeartRate(heartRateData, userId);
+
       return true;
     } catch (err) {
       return false;

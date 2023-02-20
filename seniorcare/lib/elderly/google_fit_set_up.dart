@@ -141,10 +141,11 @@ class _GoogleFitSetUpState extends State<GoogleFitSetUp> {
                                   bool authorized = await authorize();
                                   if (authorized) {
                                     await Workmanager().registerPeriodicTask(
-                                        "test", "test",
+                                        "health metrics update",
+                                        "health metrics update",
                                         existingWorkPolicy:
                                             ExistingWorkPolicy.replace,
-                                        frequency: const Duration(hours: 1),
+                                        frequency: const Duration(minutes: 60),
                                         backoffPolicy: BackoffPolicy.linear,
                                         backoffPolicyDelay:
                                             const Duration(seconds: 5));
