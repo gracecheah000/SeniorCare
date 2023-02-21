@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:seniorcare/caregiver/medication/past_medication.dart';
 import 'package:seniorcare/models/medication.dart';
 import 'package:seniorcare/models/user.dart';
 import 'package:seniorcare/services/medication.dart';
@@ -112,44 +113,66 @@ class _ViewMedicationState extends State<ViewMedication> {
                                         icon: const Icon(Icons.arrow_drop_down,
                                             color: Color.fromRGBO(
                                                 108, 99, 255, 1))))),
-                            Row(children: <Widget>[
-                              Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                  child: IconButton(
-                                      padding: const EdgeInsets.all(0),
-                                      splashRadius: 15,
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: ((context) =>
-                                                    AddMedication(
-                                                        elderly:
-                                                            selectedElderly))));
-                                      },
-                                      icon: Image.asset('assets/images/add.png',
-                                          scale: 20),
-                                      iconSize: 20)),
-                              Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 10, 30, 0),
-                                  child: IconButton(
-                                      padding: const EdgeInsets.all(0),
-                                      splashRadius: 15,
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: ((context) =>
-                                                    MedicationSettings(
-                                                        elderlyId:
-                                                            selectedElderly!.id
-                                                                .toString()))));
-                                      },
-                                      icon: Image.asset(
-                                          'assets/images/settings.png',
-                                          scale: 1),
-                                      iconSize: 60))
-                            ])
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  Padding(
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: IconButton(
+                                          padding: const EdgeInsets.all(0),
+                                          splashRadius: 15,
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: ((context) =>
+                                                        AddMedication(
+                                                            elderly:
+                                                                selectedElderly))));
+                                          },
+                                          icon: Image.asset(
+                                              'assets/images/add.png',
+                                              scale: 20),
+                                          iconSize: 20)),
+                                  Padding(
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: IconButton(
+                                          padding: const EdgeInsets.all(0),
+                                          splashRadius: 15,
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: ((context) =>
+                                                        MedicationSettings(
+                                                            elderlyId:
+                                                                selectedElderly!
+                                                                    .id
+                                                                    .toString()))));
+                                          },
+                                          icon: Image.asset(
+                                              'assets/images/settings.png'),
+                                          iconSize: 60)),
+                                  Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 10, right: 10),
+                                      child: IconButton(
+                                          padding: const EdgeInsets.all(0),
+                                          splashRadius: 15,
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: ((context) =>
+                                                        PastMedication(
+                                                            elderlyId:
+                                                                selectedElderly!
+                                                                    .id
+                                                                    .toString()))));
+                                          },
+                                          icon: const Icon(Icons.history,
+                                              size: 25,
+                                              color: Color.fromRGBO(
+                                                  108, 99, 255, 1)),
+                                          iconSize: 60))
+                                ])
                           ]),
                       StreamBuilder(
                           stream: FirebaseFirestore.instance
@@ -280,7 +303,6 @@ class _ViewMedicationState extends State<ViewMedication> {
     for (String medicationId in medicationIdList) {
       Map details = await MedicationServices.getMedicationDetails(medicationId);
       Medication medication = Medication(
-          status: details['status'],
           medicationId: medicationId,
           medicationName: details['name'],
           medicationFrequency: details['frequency'],

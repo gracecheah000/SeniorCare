@@ -7,7 +7,7 @@ import 'package:seniorcare/caregiver/health_metrics/health_metric.dart';
 import 'package:seniorcare/services/authentication.dart';
 import 'package:seniorcare/caregiver/caregiver_appointment.dart';
 import 'package:seniorcare/caregiver/location/location_tracking.dart';
-import 'package:seniorcare/caregiver/medication/view_medications.dart';
+import 'package:seniorcare/caregiver/medication/medication.dart';
 import 'package:seniorcare/caregiver/notes/notepad.dart';
 import 'package:seniorcare/services/notification_api.dart';
 import 'package:seniorcare/services/user_details.dart';

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:seniorcare/models/medication.dart';
 import 'package:seniorcare/services/user_details.dart';
 
@@ -14,7 +15,8 @@ class MedicationServices {
       'image': medication.medicationImage,
       'prescription': medication.medicationPrescription,
       'other details': medication.otherDescription,
-      'status': 'ongoing'
+      'status': 'ongoing',
+      'start date': medication.startDate
     }).then((value) {
       medicationId = value.id;
     }).catchError((error) {
@@ -44,7 +46,10 @@ class MedicationServices {
     await FirebaseFirestore.instance
         .collection('medication')
         .doc(medicationId)
-        .update({'status': 'completed'}).catchError((e) {
+        .update({
+      'status': 'completed',
+      'end date': DateFormat('yyyy-MM-dd').format(DateTime.now())
+    }).catchError((e) {
       return e;
     });
 

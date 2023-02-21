@@ -54,161 +54,157 @@ class _MedicationSettingsState extends State<MedicationSettings> {
                                 color: Colors.transparent,
                                 alignment: Alignment.centerLeft,
                                 child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      border: Border.all(
-                                          color: const Color.fromRGBO(
-                                              108, 99, 255, 1),
-                                          width: 2),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(25))),
-                                  child: const Center(
-                                      child: Text(
-                                    "Medication Settings",
-                                    style: TextStyle(
-                                        color: Color.fromRGBO(108, 99, 255, 1),
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
-                                    textAlign: TextAlign.center,
-                                  )),
-                                )),
+                                    decoration: BoxDecoration(
+                                        color: Colors.transparent,
+                                        border: Border.all(
+                                            color: const Color.fromRGBO(
+                                                108, 99, 255, 1),
+                                            width: 2),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(25))),
+                                    child: const Center(
+                                        child: Text(
+                                      "Medication Settings",
+                                      style: TextStyle(
+                                          color:
+                                              Color.fromRGBO(108, 99, 255, 1),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
+                                      textAlign: TextAlign.center,
+                                    )))),
                             Padding(
                                 padding: EdgeInsets.only(
                                     left: size.width * 0.1,
                                     top: size.height * 0.06,
                                     right: size.width * 0.1),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Text('Breakfast\ntiming'.toUpperCase(),
-                                        style: TextStyle(
-                                            color: Color.fromARGB(
-                                                255, 29, 77, 145),
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.bold)),
-                                    SizedBox(
-                                        width: size.width * 0.45,
-                                        child: TextField(
-                                            controller: breakfast,
-                                            decoration: InputDecoration(
-                                              focusedBorder: OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Color.fromARGB(
-                                                          255, 29, 77, 145)),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20)),
-                                              enabledBorder: OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Color.fromARGB(
-                                                          255, 29, 77, 145)),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20)),
-                                              labelText: 'Time',
-                                              labelStyle: TextStyle(
-                                                  color: Color.fromARGB(
-                                                      255, 29, 77, 145)),
-                                            ),
-                                            readOnly: true,
-                                            onTap: () async {
-                                              TimeOfDay? pickedTime =
-                                                  await showTimePicker(
-                                                initialTime: TimeOfDay.now(),
-                                                context: context,
-                                                initialEntryMode:
-                                                    TimePickerEntryMode
-                                                        .inputOnly,
-                                              );
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text('Breakfast\ntiming'.toUpperCase(),
+                                          style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 29, 77, 145),
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.bold)),
+                                      SizedBox(
+                                          width: size.width * 0.45,
+                                          child: TextField(
+                                              controller: breakfast,
+                                              decoration: InputDecoration(
+                                                  focusedBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                          color: Color.fromARGB(
+                                                              255, 29, 77, 145)),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20)),
+                                                  enabledBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                          color: Color.fromARGB(
+                                                              255, 29, 77, 145)),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20)),
+                                                  labelText: 'Time',
+                                                  labelStyle:
+                                                      TextStyle(color: Color.fromARGB(255, 29, 77, 145))),
+                                              readOnly: true,
+                                              onTap: () async {
+                                                TimeOfDay? pickedTime =
+                                                    await showTimePicker(
+                                                        initialTime:
+                                                            TimeOfDay.now(),
+                                                        context: context,
+                                                        initialEntryMode:
+                                                            TimePickerEntryMode
+                                                                .inputOnly);
 
-                                              if (pickedTime != null) {
-                                                DateTime parsedTime = DateTime(
-                                                    DateTime.now().year,
-                                                    DateTime.now().month,
-                                                    DateTime.now().day,
-                                                    pickedTime.hour,
-                                                    pickedTime.minute);
-                                                String formattedTime =
-                                                    DateFormat("h:mma")
-                                                        .format(parsedTime);
+                                                if (pickedTime != null) {
+                                                  DateTime parsedTime =
+                                                      DateTime(
+                                                          DateTime.now().year,
+                                                          DateTime.now().month,
+                                                          DateTime.now().day,
+                                                          pickedTime.hour,
+                                                          pickedTime.minute);
+                                                  String formattedTime =
+                                                      DateFormat("h:mma")
+                                                          .format(parsedTime);
 
-                                                setState(() {
-                                                  breakfast.text =
-                                                      formattedTime;
-                                                });
-                                              }
-                                            })),
-                                  ],
-                                )),
+                                                  setState(() {
+                                                    breakfast.text =
+                                                        formattedTime;
+                                                  });
+                                                }
+                                              }))
+                                    ])),
                             Padding(
                                 padding: EdgeInsets.only(
                                     left: size.width * 0.1,
                                     top: size.height * 0.06,
                                     right: size.width * 0.1),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Text('Lunch\ntiming'.toUpperCase(),
-                                        style: TextStyle(
-                                            color: Color.fromARGB(
-                                                255, 29, 77, 145),
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.bold)),
-                                    SizedBox(
-                                        width: size.width * 0.45,
-                                        child: TextField(
-                                            controller: lunch,
-                                            decoration: InputDecoration(
-                                              focusedBorder: OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Color.fromARGB(
-                                                          255, 29, 77, 145)),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20)),
-                                              enabledBorder: OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Color.fromARGB(
-                                                          255, 29, 77, 145)),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20)),
-                                              labelText: 'Time',
-                                              labelStyle: TextStyle(
-                                                  color: Color.fromARGB(
-                                                      255, 29, 77, 145)),
-                                            ),
-                                            readOnly: true,
-                                            onTap: () async {
-                                              TimeOfDay? pickedTime =
-                                                  await showTimePicker(
-                                                initialTime: TimeOfDay.now(),
-                                                context: context,
-                                                initialEntryMode:
-                                                    TimePickerEntryMode
-                                                        .inputOnly,
-                                              );
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text('Lunch\ntiming'.toUpperCase(),
+                                          style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 29, 77, 145),
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.bold)),
+                                      SizedBox(
+                                          width: size.width * 0.45,
+                                          child: TextField(
+                                              controller: lunch,
+                                              decoration: InputDecoration(
+                                                  focusedBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                          color: Color.fromARGB(
+                                                              255, 29, 77, 145)),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20)),
+                                                  enabledBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                          color: Color.fromARGB(
+                                                              255, 29, 77, 145)),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20)),
+                                                  labelText: 'Time',
+                                                  labelStyle:
+                                                      TextStyle(color: Color.fromARGB(255, 29, 77, 145))),
+                                              readOnly: true,
+                                              onTap: () async {
+                                                TimeOfDay? pickedTime =
+                                                    await showTimePicker(
+                                                        initialTime:
+                                                            TimeOfDay.now(),
+                                                        context: context,
+                                                        initialEntryMode:
+                                                            TimePickerEntryMode
+                                                                .inputOnly);
 
-                                              if (pickedTime != null) {
-                                                DateTime parsedTime = DateTime(
-                                                    DateTime.now().year,
-                                                    DateTime.now().month,
-                                                    DateTime.now().day,
-                                                    pickedTime.hour,
-                                                    pickedTime.minute);
-                                                String formattedTime =
-                                                    DateFormat("h:mma")
-                                                        .format(parsedTime);
+                                                if (pickedTime != null) {
+                                                  DateTime parsedTime =
+                                                      DateTime(
+                                                          DateTime.now().year,
+                                                          DateTime.now().month,
+                                                          DateTime.now().day,
+                                                          pickedTime.hour,
+                                                          pickedTime.minute);
+                                                  String formattedTime =
+                                                      DateFormat("h:mma")
+                                                          .format(parsedTime);
 
-                                                setState(() {
-                                                  lunch.text = formattedTime;
-                                                });
-                                              }
-                                            })),
-                                  ],
-                                )),
+                                                  setState(() {
+                                                    lunch.text = formattedTime;
+                                                  });
+                                                }
+                                              }))
+                                    ])),
                             Padding(
                                 padding: EdgeInsets.only(
                                     left: size.width * 0.1,
@@ -229,47 +225,33 @@ class _MedicationSettingsState extends State<MedicationSettings> {
                                           child: TextField(
                                               controller: dinner,
                                               decoration: InputDecoration(
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                        borderSide:
-                                                            const BorderSide(
-                                                                color: Color
-                                                                    .fromARGB(
-                                                                        255,
-                                                                        29,
-                                                                        77,
-                                                                        145)),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20)),
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                        borderSide:
-                                                            const BorderSide(
-                                                                color: Color
-                                                                    .fromARGB(
-                                                                        255,
-                                                                        29,
-                                                                        77,
-                                                                        145)),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20)),
-                                                labelText: 'Time',
-                                                labelStyle: TextStyle(
-                                                    color: Color.fromARGB(
-                                                        255, 29, 77, 145)),
-                                              ),
+                                                  focusedBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                          color: Color.fromARGB(
+                                                              255, 29, 77, 145)),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20)),
+                                                  enabledBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                          color: Color.fromARGB(
+                                                              255, 29, 77, 145)),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20)),
+                                                  labelText: 'Time',
+                                                  labelStyle:
+                                                      TextStyle(color: Color.fromARGB(255, 29, 77, 145))),
                                               readOnly: true,
                                               onTap: () async {
                                                 TimeOfDay? pickedTime =
                                                     await showTimePicker(
-                                                  initialTime: TimeOfDay.now(),
-                                                  context: context,
-                                                  initialEntryMode:
-                                                      TimePickerEntryMode
-                                                          .inputOnly,
-                                                );
+                                                        initialTime:
+                                                            TimeOfDay.now(),
+                                                        context: context,
+                                                        initialEntryMode:
+                                                            TimePickerEntryMode
+                                                                .inputOnly);
 
                                                 if (pickedTime != null) {
                                                   DateTime parsedTime =

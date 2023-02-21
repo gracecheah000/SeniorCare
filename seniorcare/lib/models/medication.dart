@@ -8,6 +8,8 @@ class Medication {
   String medicationPrescription;
   String? otherDescription;
   String? status;
+  String? startDate;
+  String? endDate;
 
   Medication(
       {this.medicationId,
@@ -18,5 +20,7 @@ class Medication {
       required this.medicationTime,
       required this.medicationPrescription,
       this.otherDescription,
-      this.status});
+      this.status,
+      this.startDate,
+      this.endDate});
 }

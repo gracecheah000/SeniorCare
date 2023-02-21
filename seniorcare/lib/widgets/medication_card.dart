@@ -10,13 +10,13 @@ import 'package:seniorcare/services/server_api.dart';
 class MedicationCard extends StatefulWidget {
   final Medication medication;
   final String elderlyId;
-  final String registrationToken;
+  final String? registrationToken;
 
   const MedicationCard(
       {super.key,
       required this.medication,
       required this.elderlyId,
-      required this.registrationToken});
+      this.registrationToken});
 
   @override
   State<MedicationCard> createState() => _MedicationCardState();
@@ -33,21 +33,23 @@ class _MedicationCardState extends State<MedicationCard> {
             borderRadius: BorderRadius.circular(20)),
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: <
             Widget>[
-          Padding(
-              padding: EdgeInsets.fromLTRB(
-                  0, size.height * 0.01, size.width * 0.04, 0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    IconButton(
-                        padding: EdgeInsets.all(0),
-                        onPressed: () {
-                          _showDialog(context);
-                        },
-                        icon: Image.asset('assets/images/bin_blue.png'),
-                        iconSize: 55,
-                        splashRadius: 20)
-                  ])),
+          widget.registrationToken != null
+              ? Padding(
+                  padding: EdgeInsets.fromLTRB(
+                      0, size.height * 0.01, size.width * 0.04, 0),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        IconButton(
+                            padding: EdgeInsets.all(0),
+                            onPressed: () {
+                              _showDialog(context);
+                            },
+                            icon: Image.asset('assets/images/bin_blue.png'),
+                            iconSize: 55,
+                            splashRadius: 20)
+                      ]))
+              : SizedBox(height: size.height * 0.05),
           Text(widget.medication.medicationName,
               style: TextStyle(
                   color: Color.fromARGB(255, 29, 77, 145),
@@ -134,10 +136,10 @@ class _MedicationCardState extends State<MedicationCard> {
                       child: Text(widget.medication.medicationPrescription,
                           style: TextStyle(
                               color: Color.fromARGB(255, 29, 77, 145)))))),
-          Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
           (widget.medication.otherDescription == '')
               ? Container()
               : Container(
+                  padding: EdgeInsets.fromLTRB(0, size.height * 0.02, 0, 0),
                   width: size.width * 0.55,
                   height: size.height * 0.1,
                   decoration: BoxDecoration(
@@ -153,8 +155,47 @@ class _MedicationCardState extends State<MedicationCard> {
                               child: Text(
                                   widget.medication.otherDescription as String,
                                   style: TextStyle(
-                                      color:
-                                          Color.fromARGB(255, 29, 77, 145)))))))
+                                      color: Color.fromARGB(
+                                          255, 29, 77, 145))))))),
+          (widget.medication.startDate == null)
+              ? Container()
+              : Container(
+                  padding: EdgeInsets.fromLTRB(0, size.height * 0.02, 0, 0),
+                  height: size.height * 0.05,
+                  width: size.width * 0.55,
+                  color: Colors.transparent,
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(
+                              color: const Color.fromARGB(255, 29, 77, 145)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(25))),
+                      child: Center(
+                          child: Text(
+                              'Started On: ${widget.medication.startDate!}',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 29, 77, 145)))))),
+          (widget.medication.endDate == null)
+              ? Container()
+              : Container(
+                  padding: EdgeInsets.fromLTRB(0, size.height * 0.02, 0, 0),
+                  height: size.height * 0.05,
+                  width: size.width * 0.55,
+                  color: Colors.transparent,
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(
+                              color: const Color.fromARGB(255, 29, 77, 145)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(25))),
+                      child: Center(
+                          child: Text('Ended On: ${widget.medication.endDate!}',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 29, 77, 145))))))
         ]));
   }
 
@@ -177,7 +218,7 @@ class _MedicationCardState extends State<MedicationCard> {
                               duration: Duration(seconds: 2)));
                         } else {
                           ServerApi.deleteMedicationPush(
-                              widget.medication, widget.registrationToken);
+                              widget.medication, widget.registrationToken!);
                           Navigator.pop(context);
                           return;
                         }
@@ -196,7 +237,7 @@ class _MedicationCardState extends State<MedicationCard> {
                               duration: Duration(seconds: 2)));
                         } else {
                           ServerApi.deleteMedicationPush(
-                              widget.medication, widget.registrationToken);
+                              widget.medication, widget.registrationToken!);
                           Navigator.of(context).pop();
                           return;
                         }

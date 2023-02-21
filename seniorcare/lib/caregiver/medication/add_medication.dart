@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:seniorcare/const.dart';
 import 'package:seniorcare/models/medication.dart';
 import 'package:seniorcare/models/user.dart';
@@ -252,7 +253,9 @@ class _AddMedicationState extends State<AddMedication> {
                           medicationTime: timing.toString(),
                           medicationImage: base64Image,
                           medicationPrescription: toComplete.toString(),
-                          otherDescription: others.text);
+                          otherDescription: others.text,
+                          startDate:
+                              DateFormat('yyyy-MM-dd').format(DateTime.now()));
 
                       var result = await MedicationServices.saveMedication(
                           widget.elderly!.id!, newMedication);
@@ -276,13 +279,11 @@ class _AddMedicationState extends State<AddMedication> {
                             duration: Duration(seconds: 2)));
                       }
                     },
-                    label: const Text(
-                      '    ADD    ',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Montserrat'),
-                    ),
+                    label: const Text('    ADD    ',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Montserrat')),
                     backgroundColor: const Color.fromRGBO(108, 99, 255, 1)))
           ])
         ])));
