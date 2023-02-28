@@ -20,6 +20,8 @@ import 'package:seniorcare/services/notification_api.dart';
 import 'package:seniorcare/services/user_details.dart';
 import 'package:seniorcare/start_screen.dart';
 import 'package:location/location.dart';
+import 'package:seniorcare/widgets/heart_beat.dart';
+import 'package:seniorcare/widgets/steps_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/appbar.dart';
@@ -60,6 +62,7 @@ class _HomeElderlyState extends State<HomeElderly> {
     location.enableBackgroundMode(enable: true);
   }
 
+  // to pull in workmaanger
   void setUpSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('userId', widget.user.id!);
@@ -151,6 +154,7 @@ class _HomeElderlyState extends State<HomeElderly> {
   Widget build(BuildContext context) {
     updateLocation();
     var size = MediaQuery.of(context).size;
+
     return FutureBuilder(
         future: registrationToken,
         builder: ((context, snapshot) {
@@ -184,12 +188,9 @@ class _HomeElderlyState extends State<HomeElderly> {
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Container(
-                                        padding: EdgeInsets.fromLTRB(
-                                            size.width * 0.1,
-                                            size.height * 0.02,
-                                            0,
-                                            0),
-                                        height: size.height * 0.07,
+                                        padding: EdgeInsets.only(
+                                            left: size.width * 0.1),
+                                        height: size.height * 0.05,
                                         width: size.width * 0.35,
                                         color: Colors.transparent,
                                         alignment: Alignment.centerLeft,
@@ -211,16 +212,15 @@ class _HomeElderlyState extends State<HomeElderly> {
                                                         fontSize: 20),
                                                     textAlign: TextAlign.center)))),
                                     Container(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 10, 35, 0),
-                                        height: 50,
+                                        padding:
+                                            const EdgeInsets.only(right: 35),
+                                        height: 40,
                                         width: 120,
                                         color: Colors.transparent,
                                         alignment: Alignment.centerLeft,
                                         child: InkWell(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(25)),
+                                            borderRadius: const BorderRadius.all(
+                                                Radius.circular(25)),
                                             onTap: () async {
                                               await Authentication.signOut(
                                                   context: context);
@@ -245,24 +245,20 @@ class _HomeElderlyState extends State<HomeElderly> {
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             fontSize: 20),
-                                                        textAlign: TextAlign.center)))))
+                                                        textAlign: TextAlign
+                                                            .center)))))
                                   ]),
                               Padding(
-                                  // TODO: change colour and content based on actual health status
-                                  padding: EdgeInsets.fromLTRB(
-                                      15, size.height * 0.01, 15, 5),
+                                  padding: EdgeInsets.symmetric(horizontal: 15),
                                   child: Padding(
                                       padding: EdgeInsets.all(15),
                                       child: Container(
-                                          height: 140,
+                                          height: 185,
                                           decoration: BoxDecoration(
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(20)),
-                                              color: Color.fromRGBO(
-                                                  203, 246, 202, 1),
-                                              border: Border.all(
-                                                  color: Color.fromRGBO(
-                                                      203, 246, 202, 1))),
+                                              color: Color.fromARGB(
+                                                  255, 14, 27, 54)),
                                           child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
@@ -270,14 +266,27 @@ class _HomeElderlyState extends State<HomeElderly> {
                                                 Padding(
                                                     padding: EdgeInsets.all(15),
                                                     child: const Text(
-                                                        "Health Status",
+                                                        "Your Health Status",
                                                         style: TextStyle(
-                                                            color: Colors.black,
+                                                            color: Colors.white,
                                                             fontWeight:
                                                                 FontWeight
                                                                     .bold))),
-                                                // TODO: get health status
-                                                Container()
+                                                Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: <Widget>[
+                                                      SizedBox(width: 10),
+                                                      StepsProgress(
+                                                          userId: userId),
+                                                      SizedBox(width: 20),
+                                                      HeartBeat(userId: userId),
+                                                      SizedBox(width: 10)
+                                                    ]),
+                                                Padding(
+                                                    padding: EdgeInsets.only(
+                                                        bottom: 15))
                                               ])))),
                               Padding(
                                   padding: EdgeInsets.fromLTRB(

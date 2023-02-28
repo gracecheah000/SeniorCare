@@ -49,8 +49,10 @@ class Constants {
     'High Blood Cholesterol'
   ];
 
-  static const int badNoOfSteps = 5500;
-  static const int avgNoOfSteps = 7000;
+  static const int badNoOfSteps = 3000;
+  static const int avgNoOfSteps = 7500;
+  static const int lowHeartRate = 60;
+  static const int highHeartRate = 100;
 
   static const String googleFitDownloadTitle = "Download Google Fit";
   static const String googleFitDownloadContent =

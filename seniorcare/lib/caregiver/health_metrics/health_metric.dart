@@ -139,7 +139,7 @@ class _HealthMetricState extends State<HealthMetric> {
                                     elevation: 5,
                                     child: HeartRateCard(
                                         elderlyId: selectedElderly!.id!))),
-                            SizedBox(height: size.height * 0.03),
+                            SizedBox(height: size.height * 0.03)
                           ])
                     ]));
               }

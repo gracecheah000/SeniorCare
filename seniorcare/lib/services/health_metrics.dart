@@ -19,7 +19,7 @@ class HealthServices {
 
     int length = heartRateMap.length;
     HealthDataPoint h = heartRate[length - 1];
-    heartRateMap[h.dateFrom.add(Duration(minutes: 1)).toString()] = 0;
+    heartRateMap[h.dateFrom.add(const Duration(minutes: 1)).toString()] = 0;
 
     await FirebaseFirestore.instance.collection('healthData').doc(userId).set(
         {'heart rate': heartRateMap}, SetOptions(merge: true)).catchError((e) {

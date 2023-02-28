@@ -93,4 +93,22 @@ class ServerApi {
 
     return;
   }
+
+  static Future<String> getDailySteps(String userId, String currentDate) async {
+    final response = await http.get(
+      Uri.parse(
+          '${Constants.deployedURL}/health_metrics/step?id=$userId&date=$currentDate'),
+    );
+
+    return response.body;
+  }
+
+  static Future<String> getAverageDailyHeartRate(
+      String userId, String currentDate) async {
+    final response = await http.get(
+      Uri.parse(
+          '${Constants.deployedURL}/health_metrics/heart_rate?id=$userId&date=$currentDate'),
+    );
+    return response.body;
+  }
 }

@@ -809,10 +809,18 @@ packages:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
-      sha256: "33141f9073c607bd113898d241aa6a03ccc1856a314bd061015180c35d47012f"
+      sha256: "5f7dae40707df507325ee045d1a172aea9f449ac4244d7c52391dd97208eeef8"
       url: "https://pub.dev"
     source: hosted
-    version: "20.4.50"
+    version: "20.4.51"
+  syncfusion_flutter_gauges:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_gauges
+      sha256: e11893a8680f65dcdcb00937f0ddb3e41e4186292d580757a47c08b76ad688ec
+      url: "https://pub.dev"
+    source: hosted
+    version: "20.4.51"
   table_calendar:
     dependency: "direct main"
     description:

@@ -1,9 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, prefer_conditional_assignment
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorcare/models/medication.dart';
-import 'package:seniorcare/models/user.dart';
 import 'package:seniorcare/services/medication.dart';
 import 'package:seniorcare/services/user_details.dart';
 import 'package:seniorcare/widgets/appbar.dart';
