@@ -12,6 +12,6 @@ Features include:
 5.	Mobile App for data processing and visualization.
 
 ## Technology Stack
-Frontend - Flutter
-Backend - Python Flask
-Database - Firebase
+Frontend - Flutter<br />
+Backend - Python Flask<br />
+Database - Firebase<br />
