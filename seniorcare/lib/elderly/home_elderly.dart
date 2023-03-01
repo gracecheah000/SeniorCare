@@ -86,6 +86,7 @@ class _HomeElderlyState extends State<HomeElderly> {
 
   void handleMessage(RemoteMessage message) {
     if (message.data['action'] == 'add') {
+      print('add');
       if (message.data['type'] == 'Medication') {
         for (String timing in widget.user.mealTimings!) {
           DateTime dateTime = DateFormat("hh:mma").parse(timing);
@@ -106,9 +107,11 @@ class _HomeElderlyState extends State<HomeElderly> {
             title: Constants.apptNotificationTitle,
             body: Constants.apptNotificationBody,
             payload: 'Appointment',
-            scheduledDate: DateTime.parse(message.data['scheduledDateTime']));
+            scheduledDate:
+                DateTime.parse(message.data['scheduledReminderTime']));
       }
     } else if (message.data['action'] == 'delete') {
+      print('delete');
       if (message.data['type'] == 'Medication') {
         NotificationServices.cancelMedicationNotification(
             widget.user.id!, message.data['frequency']);

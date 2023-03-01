@@ -13,6 +13,9 @@ class HealthServices {
 
   static saveHeartRate(List<HealthDataPoint> heartRate, String userId) async {
     Map heartRateMap = {};
+    if (heartRate.isEmpty) {
+      return;
+    }
     for (HealthDataPoint h in heartRate) {
       heartRateMap[h.dateFrom.toString()] = double.parse(h.value.toString());
     }

@@ -17,13 +17,17 @@ class ServerApi {
       'action': 'add',
       "frequency": medication.medicationFrequency
     };
-    final headers = {'Content-Type': 'application/json'};
+
+    Map<String, String> headers = {'Content-Type': 'application/json'};
 
     final response = await http.post(
         Uri.parse(
             '${Constants.deployedURL}/notification/medication/$registrationToken'),
         headers: headers,
         body: json.encode(request));
+
+    print(response.body);
+
     return;
   }
 
@@ -39,13 +43,16 @@ class ServerApi {
       'frequency': medication.medicationFrequency
     };
 
-    final headers = {'Content-Type': 'application/json'};
+    Map<String, String> headers = {'Content-Type': 'application/json'};
 
     final response = await http.post(
         Uri.parse(
             '${Constants.deployedURL}/notification/medication/delete/$registrationToken'),
         headers: headers,
         body: json.encode(request));
+
+    print(response.body);
+
     return;
   }
 
@@ -58,16 +65,19 @@ class ServerApi {
     Map<String, dynamic> request = {
       "type": "Appointment",
       'action': 'add',
-      'scheduledDateTime': appointment.eventDateTime.toString(),
+      'scheduledReminderTime': appointment.reminderTime!.toString(),
       'appointmentId': appointmentId
     };
-    final headers = {'Content-Type': 'application/json'};
+
+    Map<String, String> headers = {'Content-Type': 'application/json'};
 
     final response = await http.post(
         Uri.parse(
             '${Constants.deployedURL}/notification/appointment/$registrationToken'),
         headers: headers,
         body: json.encode(request));
+
+    print(response.body);
     return;
   }
 
@@ -83,13 +93,15 @@ class ServerApi {
       'notificationId': appointment.notificationId.toString()
     };
 
-    final headers = {'Content-Type': 'application/json'};
+    Map<String, String> headers = {'Content-Type': 'application/json'};
 
     final response = await http.post(
         Uri.parse(
             '${Constants.deployedURL}/notification/appointment/delete/$registrationToken'),
         headers: headers,
         body: json.encode(request));
+
+    print(response.body);
 
     return;
   }

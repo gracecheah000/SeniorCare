@@ -8,8 +8,7 @@ class Constants {
       "You have medications to take! Click to view.";
 
   static const String apptNotificationTitle = "You have an appointment soon";
-  static const String apptNotificationBody =
-      "You have an appointment in 15 minutes";
+  static const String apptNotificationBody = "You have an appointment soon!";
 
   static const int morningNotificationId = 0;
   static const int afternoonNotificationId = 1;

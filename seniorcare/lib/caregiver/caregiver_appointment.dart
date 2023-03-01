@@ -32,6 +32,7 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
 
   final titleController = TextEditingController();
   final timeController = TextEditingController();
+  final reminderTimeController = TextEditingController();
   final locationController = TextEditingController();
   final descriptionController = TextEditingController();
   bool requireFasting = false;
@@ -50,6 +51,7 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
     _selectedDay = _focusedCalendarDate;
     titleController.text = '';
     timeController.text = '';
+    reminderTimeController.text = '';
     locationController.text = '';
     descriptionController.text = '';
     requireFasting = false;
@@ -62,6 +64,7 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
     timeController.dispose();
     locationController.dispose();
     descriptionController.dispose();
+    reminderTimeController.dispose();
     super.dispose();
   }
 
@@ -227,6 +230,9 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                                                         focusedDay;
                                                   });
                                                 }
+                                              },
+                                              onPageChanged: (date) {
+                                                _focusedCalendarDate = date;
                                               },
                                               eventLoader: _listOfDayEvents)),
                                       Padding(
@@ -424,6 +430,7 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
 
   _showAddAppointmentDialog(String userId) async {
     DateTime parsedDateTime = DateTime.now();
+    DateTime reminderDateTime = DateTime.now();
 
     await showDialog(
         context: context,
@@ -497,6 +504,43 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                           }
                         }),
                     Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
+                    TextField(
+                        controller: reminderTimeController,
+                        decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Color.fromRGBO(108, 99, 255, 1)),
+                                borderRadius: BorderRadius.circular(20)),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Color.fromRGBO(108, 99, 255, 1)),
+                                borderRadius: BorderRadius.circular(20)),
+                            labelText: 'Reminder Time',
+                            labelStyle: TextStyle(
+                                color: Color.fromRGBO(108, 99, 255, 1))),
+                        readOnly: true,
+                        onTap: () async {
+                          TimeOfDay? pickedTime = await showTimePicker(
+                              initialTime: TimeOfDay.now(),
+                              context: context,
+                              initialEntryMode: TimePickerEntryMode.inputOnly);
+
+                          if (pickedTime != null) {
+                            reminderDateTime = DateTime(
+                                _selectedDay.year,
+                                _selectedDay.month,
+                                _selectedDay.day,
+                                pickedTime.hour,
+                                pickedTime.minute);
+                            String formattedTime =
+                                DateFormat("h:mma").format(reminderDateTime);
+
+                            setState(() {
+                              reminderTimeController.text = formattedTime;
+                            });
+                          }
+                        }),
+                    Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
                     customTextField(
                         hint: 'Location', controller: locationController),
                     Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
@@ -533,6 +577,7 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                               eventTitle: titleController.text,
                               eventDateTime: parsedDateTime,
                               eventTime: timeController.text,
+                              reminderTime: reminderDateTime,
                               eventLocation: locationController.text,
                               eventRequireFasting:
                                   requireFasting ? "Require Fasting" : null,
@@ -553,10 +598,11 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                               title: Constants.apptNotificationTitle,
                               body: Constants.apptNotificationBody,
                               payload: 'Appointment',
-                              scheduledDate: newAppointment.eventDateTime);
+                              scheduledDate: reminderDateTime);
 
                           titleController.clear();
                           timeController.clear();
+                          reminderTimeController.clear();
                           locationController.clear();
                           requireFasting = false;
                           descriptionController.clear();

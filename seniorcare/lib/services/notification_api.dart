@@ -75,8 +75,7 @@ class NotificationServices {
         id,
         title,
         body,
-        tz.TZDateTime.from(
-            scheduledDate.subtract(const Duration(minutes: 15)), tz.local),
+        tz.TZDateTime.from(scheduledDate, tz.local),
         await _notificationDetails(),
         payload: payload,
         androidAllowWhileIdle: true,

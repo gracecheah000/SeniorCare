@@ -33,7 +33,6 @@ Future fetchHeartRateData(HealthFactory healthFactory) async {
 
   try {
     DateTime yest = DateTime(now.year, now.month, now.day);
-    // fetch heart rate from google fit
     healthData = await healthFactory
         .getHealthDataFromTypes(yest, now, [HealthDataType.HEART_RATE]);
 
