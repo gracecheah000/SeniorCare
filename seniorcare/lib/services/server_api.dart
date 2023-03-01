@@ -4,6 +4,7 @@ import 'package:seniorcare/const.dart';
 import 'package:seniorcare/models/appointment.dart';
 import 'package:seniorcare/models/medication.dart';
 import 'package:http/http.dart' as http;
+import 'package:seniorcare/models/user.dart';
 
 class ServerApi {
   static void sendAddMedicationPush(
@@ -122,5 +123,22 @@ class ServerApi {
           '${Constants.deployedURL}/health_metrics/heart_rate?id=$userId&date=$currentDate'),
     );
     return response.body;
+  }
+
+  static void sendSOSPush(List caregiverDetails, String name) async {
+    Map<String, dynamic> request = {'type': 'SOS', 'name': name.toUpperCase()};
+
+    Map<String, String> headers = {'Content-Type': 'application/json'};
+
+    for (var caregiver in caregiverDetails) {
+      final response = await http.post(
+          Uri.parse(
+              '${Constants.deployedURL}/notification/sos/${caregiver.registrationToken}'),
+          headers: headers,
+          body: json.encode(request));
+
+      print(response.body);
+    }
+    return;
   }
 }

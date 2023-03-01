@@ -47,11 +47,24 @@ def sendNotificationPush(registrationToken):
 @messageBlueprint.route('/appointment/delete/<registrationToken>', methods = ['POST'])
 def deleteAppointmentNotification(registrationToken):
     message = messaging.Message(
-        notification = messaging.Notification(
-        title = 'Appointment Deleted', body = 'An appointment has been deleted. Click to view.'
-        ),
+        notification = messaging.AndroidNotification(
+        title = 'Appointment Deleted', body = 'An appointment has been deleted. Click to view.', click_action= "FLUTTER_NOTIFICATION_CLICK", priority="max"
+        ),  
         data = request.json, 
         token = registrationToken
     )
+    response = messaging.send(message)
+    return response
+
+@messageBlueprint.route('/sos/<registrationToken>', methods = ['POST'])
+def sendSOSPush(registrationToken):
+    request_data = request.json
+    message = messaging.Message(
+        android= messaging.AndroidConfig(priority="high"),
+        notification = messaging.Notification(
+            title = 'SOS Request', body = 'You have a SOS call from ' + request_data['name']), # type: ignore
+            data = request_data,
+            token = registrationToken
+        )
     response = messaging.send(message)
     return response

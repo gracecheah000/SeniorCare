@@ -100,131 +100,6 @@ class _ElderlyAppointmentState extends State<ElderlyAppointment> {
 
                   return Column(children: <Widget>[
                     FutureBuilder(
-                        future: nextAppointment,
-                        builder: ((context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return Container();
-                          } else {
-                            return Container(
-                                height: size.height * 0.17,
-                                width: size.width * 0.95,
-                                margin: EdgeInsets.fromLTRB(size.width * 0.02,
-                                    size.height * 0.03, size.width * 0.02, 0),
-                                decoration: BoxDecoration(
-                                    color: Color.fromARGB(255, 235, 244, 255),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                    border: Border.all(
-                                        color:
-                                            Color.fromRGBO(108, 99, 255, 1))),
-                                child: SingleChildScrollView(
-                                    child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                      Padding(
-                                          padding: EdgeInsets.only(
-                                            top: size.height * 0.007,
-                                            left: size.width * 0.03,
-                                          ),
-                                          child: Text('Upcoming Appointment',
-                                              style: TextStyle(
-                                                  color: Color.fromRGBO(
-                                                      108, 99, 255, 1),
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 17))),
-                                      Divider(
-                                          color:
-                                              Color.fromRGBO(108, 99, 255, 1),
-                                          indent: size.width * 0.03,
-                                          endIndent: size.width * 0.4),
-                                      ListTile(
-                                          contentPadding: EdgeInsets.only(
-                                              left: size.width * 0.08),
-                                          leading: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                Column(children: [
-                                                  Text(
-                                                      DateFormat("d MMMM y'")
-                                                          .format(snapshot
-                                                              .data['date']
-                                                              .toDate()),
-                                                      style: TextStyle(
-                                                          color: const Color
-                                                                  .fromARGB(
-                                                              255, 29, 77, 145),
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 15)),
-                                                  Text(snapshot.data['time'],
-                                                      style: TextStyle(
-                                                          color: const Color
-                                                                  .fromARGB(
-                                                              255, 29, 77, 145),
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 15))
-                                                ]),
-                                                VerticalDivider(
-                                                    endIndent:
-                                                        size.height * 0.02,
-                                                    thickness: 2,
-                                                    color: Color.fromARGB(
-                                                        255, 29, 77, 145))
-                                              ]),
-                                          title: Padding(
-                                              padding:
-                                                  EdgeInsets
-                                                      .only(
-                                                          top: size
-                                                                  .height *
-                                                              0.013),
-                                              child: Text(
-                                                  snapshot.data['name'],
-                                                  style: TextStyle(
-                                                      color:
-                                                          const Color.fromARGB(
-                                                              255, 29, 77, 145),
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 15))),
-                                          subtitle:
-                                              Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                                            Text(
-                                                'Location: ${snapshot.data['location']}',
-                                                style: TextStyle(
-                                                    color: Color.fromARGB(
-                                                        255, 104, 114, 158),
-                                                    fontSize: 14)),
-                                            snapshot.data['require fasting'] ==
-                                                    null
-                                                ? Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 0))
-                                                : Text(
-                                                    '${snapshot.data['require fasting']}',
-                                                    style: TextStyle(
-                                                        color: Color.fromARGB(
-                                                            255, 104, 114, 158),
-                                                        fontSize: 14)),
-                                            (snapshot.data['description'] == "")
-                                                ? Text('Other Details: -',
-                                                    style: TextStyle(
-                                                        color: Color.fromARGB(
-                                                            255, 104, 114, 158),
-                                                        fontSize: 14))
-                                                : Text(
-                                                    'Other Details: ${snapshot.data['description']}',
-                                                    style: TextStyle(
-                                                        color: Color.fromARGB(
-                                                            255, 104, 114, 158),
-                                                        fontSize: 14))
-                                          ]))
-                                    ])));
-                          }
-                        })),
-                    FutureBuilder(
                         future: appointments,
                         builder: ((context, snapshot) {
                           if (!snapshot.hasData) {
@@ -310,6 +185,155 @@ class _ElderlyAppointmentState extends State<ElderlyAppointment> {
                                       }
                                     },
                                     eventLoader: _listOfDayEvents)),
+                            FutureBuilder(
+                                future: nextAppointment,
+                                builder: ((context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return Container();
+                                  } else {
+                                    return Container(
+                                        height: size.height * 0.17,
+                                        width: size.width * 0.95,
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: size.width * 0.02),
+                                        decoration: BoxDecoration(
+                                            color: Color.fromARGB(
+                                                255, 235, 244, 255),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10)),
+                                            border: Border.all(
+                                                color: Color.fromRGBO(
+                                                    108, 99, 255, 1))),
+                                        child: SingleChildScrollView(
+                                            child:
+                                                Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+                                                    Widget>[
+                                          Padding(
+                                              padding: EdgeInsets.only(
+                                                  top: size.height * 0.007,
+                                                  left: size.width * 0.03),
+                                              child: Text(
+                                                  'Upcoming Appointment',
+                                                  style: TextStyle(
+                                                      color: Color.fromRGBO(
+                                                          108, 99, 255, 1),
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 17))),
+                                          Divider(
+                                              color: Color.fromRGBO(
+                                                  108, 99, 255, 1),
+                                              indent: size.width * 0.03,
+                                              endIndent: size.width * 0.4,
+                                              height: 0),
+                                          ListTile(
+                                              contentPadding: EdgeInsets.only(
+                                                  left: size.width * 0.05),
+                                              leading: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: <Widget>[
+                                                    Column(children: [
+                                                      Text(
+                                                          DateFormat(
+                                                                  "d MMMM y'")
+                                                              .format(snapshot
+                                                                  .data['date']
+                                                                  .toDate()),
+                                                          style: TextStyle(
+                                                              color: const Color
+                                                                      .fromARGB(
+                                                                  255,
+                                                                  29,
+                                                                  77,
+                                                                  145),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 15)),
+                                                      Text(
+                                                          snapshot.data['time'],
+                                                          style: TextStyle(
+                                                              color: const Color
+                                                                      .fromARGB(
+                                                                  255,
+                                                                  29,
+                                                                  77,
+                                                                  145),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 15))
+                                                    ]),
+                                                    VerticalDivider(
+                                                        endIndent:
+                                                            size.height * 0.02,
+                                                        thickness: 2,
+                                                        color: Color.fromARGB(
+                                                            255, 29, 77, 145))
+                                                  ]),
+                                              title: Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: size.height * 0.013),
+                                                  child: Text(
+                                                      snapshot.data['name'],
+                                                      style: TextStyle(
+                                                          color: const Color.fromARGB(
+                                                              255, 29, 77, 145),
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 15))),
+                                              subtitle:
+                                                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                                                Text(
+                                                    'Location: ${snapshot.data['location']}',
+                                                    style: TextStyle(
+                                                        color: Color.fromARGB(
+                                                            255, 104, 114, 158),
+                                                        fontSize: 14)),
+                                                snapshot.data[
+                                                            'require fasting'] ==
+                                                        null
+                                                    ? Padding(
+                                                        padding:
+                                                            EdgeInsets
+                                                                .only(left: 0))
+                                                    : Text(
+                                                        '${snapshot.data['require fasting']}',
+                                                        style:
+                                                            TextStyle(
+                                                                color: Color
+                                                                    .fromARGB(
+                                                                        255,
+                                                                        104,
+                                                                        114,
+                                                                        158),
+                                                                fontSize: 14)),
+                                                (snapshot.data['description'] ==
+                                                        "")
+                                                    ? Text('Other Details: -',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    104,
+                                                                    114,
+                                                                    158),
+                                                            fontSize: 14))
+                                                    : Text(
+                                                        'Other Details: ${snapshot.data['description']}',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    104,
+                                                                    114,
+                                                                    158),
+                                                            fontSize: 14))
+                                              ]))
+                                        ])));
+                                  }
+                                })),
                             Padding(
                                 padding: EdgeInsets.only(
                                     left: size.width * 0.04,

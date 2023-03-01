@@ -17,6 +17,7 @@ import 'package:seniorcare/services/authentication.dart';
 import 'package:seniorcare/services/firebase_messaging.dart';
 import 'package:seniorcare/services/location.dart';
 import 'package:seniorcare/services/notification_api.dart';
+import 'package:seniorcare/services/server_api.dart';
 import 'package:seniorcare/services/user_details.dart';
 import 'package:seniorcare/start_screen.dart';
 import 'package:location/location.dart';
@@ -62,7 +63,7 @@ class _HomeElderlyState extends State<HomeElderly> {
     location.enableBackgroundMode(enable: true);
   }
 
-  // to pull in workmaanger
+  // to pull in workmanager
   void setUpSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('userId', widget.user.id!);
@@ -476,8 +477,21 @@ class _HomeElderlyState extends State<HomeElderly> {
                                   child: InkWell(
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(25)),
-                                      onTap: () {
-                                        _showCallCaregiverDialog();
+                                      onTap: () async {
+                                        List details = await UserDetails
+                                            .getUserDetailsWithEmail(
+                                                widget.user.email!);
+                                        List<dynamic> caregiver =
+                                            details[1]['caregiver'];
+
+                                        List<dynamic> caregiverDetails =
+                                            await getCaregiverDetails(
+                                                caregiver);
+
+                                        ServerApi.sendSOSPush(caregiverDetails,
+                                            details[1]['name']);
+
+                                        //TODO: Iterate and call caregiver
                                       },
                                       child: Ink(
                                           decoration: BoxDecoration(
@@ -502,93 +516,6 @@ class _HomeElderlyState extends State<HomeElderly> {
         }));
   }
 
-  _showCallCaregiverDialog() async {
-    List details =
-        await UserDetails.getUserDetailsWithEmail(widget.user.email!);
-    List<dynamic> caregiver = details[1]['caregiver'];
-
-    List<dynamic> caregiverDetails = await getCaregiverDetails(caregiver);
-
-    await showDialog<String>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              scrollable: true,
-              backgroundColor: Color.fromARGB(255, 245, 235, 234),
-              content: StatefulBuilder(
-                  builder: (BuildContext context, StateSetter setState) {
-                return Column(children: <Widget>[
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('SOS',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold)),
-                        IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: Image.asset('assets/images/close.png',
-                                color: Colors.black),
-                            iconSize: 35,
-                            splashRadius: 10)
-                      ]),
-                  Divider(color: Colors.black),
-                  Padding(padding: EdgeInsets.only(top: 5)),
-                  SizedBox(
-                      width: double.maxFinite,
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: caregiverDetails.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 7),
-                                child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                          caregiverDetails[index]
-                                              .name
-                                              .toString(),
-                                          style: TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 29, 77, 145),
-                                              fontSize: 19,
-                                              fontWeight: FontWeight.bold)),
-                                      TextButton(
-                                          onPressed: () async {
-                                            await FlutterPhoneDirectCaller
-                                                .callNumber(
-                                                    caregiverDetails[index]
-                                                        .emergencyContact
-                                                        .toString());
-                                          },
-                                          child: Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 10, horizontal: 20),
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  border: Border.all(
-                                                      color: Color.fromARGB(
-                                                          255, 29, 77, 145))),
-                                              child: Text('Call',
-                                                  style: TextStyle(
-                                                      color: Color.fromARGB(
-                                                          255, 29, 77, 145),
-                                                      fontSize: 17))))
-                                    ]));
-                          }))
-                ]);
-              }));
-        });
-  }
-
   getCaregiverDetails(List<dynamic> elderlyCaregiverList) async {
     var caregiverDetails = [];
 
@@ -598,7 +525,8 @@ class _HomeElderlyState extends State<HomeElderly> {
         Caregiver caregiver = Caregiver(
             email: details['email'],
             name: details['name'],
-            emergencyContact: details['emergency contact']);
+            emergencyContact: details['emergency contact'],
+            registrationToken: details['deviceToken']);
         caregiverDetails.add(caregiver);
       }
     }

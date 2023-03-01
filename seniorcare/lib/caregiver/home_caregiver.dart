@@ -39,6 +39,30 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
     FirebaseMessaging.instance.onTokenRefresh.listen((token) {
       UserDetails.updateMessagingToken(token, widget.userEmail);
     });
+
+    setUpInteractedMessage();
+  }
+
+  Future<void> setUpInteractedMessage() async {
+    // get any messages which caused the application to open from a terminated state
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+
+    if (initialMessage != null) {
+      handleMessage(initialMessage);
+    }
+
+    FirebaseMessaging.onMessageOpenedApp
+        .listen(handleMessage); // listens to messages when in background
+
+    FirebaseMessaging.onMessage
+        .listen(handleMessage); // listens to messages when in foreground
+  }
+
+  void handleMessage(RemoteMessage message) {
+    // TODO: add dialog to show message
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => LocationTracking(userEmail: widget.userEmail)));
   }
 
   void onClickedAppointmentNotifications(String? payload) =>

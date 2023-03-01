@@ -58,6 +58,7 @@ dependencies:
   google_maps_flutter: ^2.2.2
   location: ^4.4.0
   permission_handler: ^8.2.4
+  connectivity_plus: ^3.0.3
 
   flutter_phone_direct_caller: ^2.1.1
   health: ^4.5.0
