@@ -90,7 +90,7 @@ class ServerApi {
     Map<String, dynamic> request = {
       'type': 'Appointment',
       'action': 'delete',
-      'notificationId': appointment.notificationId.toString()
+      'notificationId': appointment.elderlyNotificationId.toString()
     };
 
     Map<String, String> headers = {'Content-Type': 'application/json'};

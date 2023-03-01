@@ -75,14 +75,21 @@ class AppointmentServices {
   }
 
   static updateAppointmentNotificationId(
-      String appointmentId, int notificationId) async {
+      String appointmentId, int notificationId, bool? caregiver) async {
     DocumentReference ref =
         FirebaseFirestore.instance.collection('appointment').doc(appointmentId);
 
-    await ref.update({'notification Id': notificationId}).catchError((e) {
-      return e;
-    });
+    if (caregiver == true) {
+      await ref.update({'notification Id': notificationId}).catchError((e) {
+        return e;
+      });
+    } else {
+      await ref
+          .update({'elderly notification Id': notificationId}).catchError((e) {
+        return e;
+      });
 
-    return true;
+      return true;
+    }
   }
 }

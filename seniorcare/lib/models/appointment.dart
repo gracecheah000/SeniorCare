@@ -1,6 +1,7 @@
 class Appointment {
   String? eventId;
   int? notificationId;
+  int? elderlyNotificationId;
   String eventTitle;
   DateTime eventDateTime;
   String eventTime;
@@ -12,6 +13,7 @@ class Appointment {
   Appointment({
     this.eventId,
     this.notificationId,
+    this.elderlyNotificationId,
     required this.eventTitle,
     required this.eventDateTime,
     this.reminderTime,

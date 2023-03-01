@@ -67,6 +67,7 @@ class NotificationServices {
       {String? title,
       String? body,
       String? payload,
+      required bool caregiver,
       required String userId,
       required String appointmentId,
       required DateTime scheduledDate}) async {
@@ -82,7 +83,8 @@ class NotificationServices {
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime);
 
-    AppointmentServices.updateAppointmentNotificationId(appointmentId, id);
+    AppointmentServices.updateAppointmentNotificationId(
+        appointmentId, id, caregiver);
   }
 
   // for daily medication
@@ -253,7 +255,8 @@ class NotificationServices {
   }
 
   static Future<void> cancelAppointmentNotifications(int id) async {
-    _notifications.cancel(id);
+    print(id);
+    await _notifications.cancel(id);
   }
 
   static Future<void> cancelAll() => _notifications.cancelAll();

@@ -598,7 +598,8 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
                               title: Constants.apptNotificationTitle,
                               body: Constants.apptNotificationBody,
                               payload: 'Appointment',
-                              scheduledDate: reminderDateTime);
+                              scheduledDate: reminderDateTime,
+                              caregiver: true);
 
                           titleController.clear();
                           timeController.clear();
@@ -648,6 +649,8 @@ class _CaregiverAppointmentState extends State<CaregiverAppointment> {
         Appointment newAppointment = Appointment(
             eventId: id,
             notificationId: appointmentDetails['notification Id'],
+            elderlyNotificationId:
+                appointmentDetails['elderly notification Id'],
             eventTitle: appointmentDetails['name'],
             eventDateTime: DateTime.parse(
                 DateFormat("yyyy-MM-dd' 'HH:mm:ss.SSS'Z'").format(
