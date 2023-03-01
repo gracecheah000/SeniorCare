@@ -24,7 +24,6 @@ def getDailyStep():
 @healthBlueprint.route('/heart_rate', methods = ['GET']) #type: ignore
 def getAverageDailyHeartRate():
     try:
-        # need user id + date in parameters
         user_id = request.args.get('id')
         date = request.args.get('date')
         if user_id: 

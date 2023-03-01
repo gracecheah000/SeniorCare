@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:seniorcare/caregiver/home_caregiver.dart';
@@ -181,5 +182,18 @@ class Authentication {
     await FirebaseFirestore.instance
         .collection("user")
         .add({'email': user.email!.toLowerCase()});
+  }
+
+  static Future<AuthorizationStatus> resetPassword(
+      {required String email}) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    AuthorizationStatus status = AuthorizationStatus.notDetermined;
+
+    await auth
+        .sendPasswordResetEmail(email: email)
+        .then((value) => status = AuthorizationStatus.authorized)
+        .catchError((error) => status = AuthorizationStatus.denied);
+
+    return status;
   }
 }
