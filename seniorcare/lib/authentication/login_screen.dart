@@ -122,8 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   user.email!);
                           Elderly elderlyUser = Elderly(
                               id: elderlyDetails[0],
-                              email: elderlyDetails[1]['email'],
-                              mealTimings: elderlyDetails[1]['meal timings']);
+                              email: elderlyDetails[1]['email']);
                           Navigator.pushAndRemoveUntil(context,
                               MaterialPageRoute(
                                   builder: (BuildContext context) {

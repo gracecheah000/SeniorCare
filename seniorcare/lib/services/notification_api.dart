@@ -113,7 +113,7 @@ class NotificationServices {
                 matchDateTimeComponents: DateTimeComponents.time);
           }
 
-          await UserDetails.addNumberOfNotifications(userId, [1, 0, 0, 0]);
+          await UserDetails.addNumberOfNotifications(userId, [1, 0, 0]);
         }
         break;
       case 'Every night':
@@ -202,60 +202,49 @@ class NotificationServices {
     switch (frequency) {
       case 'Every morning':
         {
-          if (notification[0] >= 1) {
-            await UserDetails.deleteNumberOfNotifications(userId, [1, 0, 0]);
-          } else if (notification[0] == 1) {
-            await UserDetails.deleteNumberOfNotifications(userId, [1, 0, 0]);
+          if (notification[0] == 1) {
             await _notifications.cancel(Constants.morningNotificationId);
           }
+
+          await UserDetails.deleteNumberOfNotifications(userId, [1, 0, 0]);
         }
         break;
       case 'Every night':
         {
-          if (notification[2] >= 1) {
-            await UserDetails.deleteNumberOfNotifications(userId, [0, 0, 1]);
-          } else if (notification[2] == 1) {
-            await UserDetails.deleteNumberOfNotifications(userId, [0, 0, 1]);
+          if (notification[2] == 1) {
             await _notifications.cancel(Constants.nightNotificationId);
           }
+
+          await UserDetails.deleteNumberOfNotifications(userId, [0, 0, 1]);
         }
         break;
       case 'Twice a day':
         {
-          if (notification[0] >= 1 && notification[2] >= 1) {
-            await UserDetails.deleteNumberOfNotifications(userId, [1, 0, 1]);
-          } else if (notification[0] == 1) {
-            await UserDetails.deleteNumberOfNotifications(userId, [1, 0, 1]);
+          if (notification[0] == 1) {
             await _notifications.cancel(Constants.morningNotificationId);
           } else if (notification[2] == 1) {
-            await UserDetails.deleteNumberOfNotifications(userId, [1, 0, 1]);
             await _notifications.cancel(Constants.nightNotificationId);
           }
+
+          await UserDetails.deleteNumberOfNotifications(userId, [1, 0, 1]);
         }
         break;
       case '3 times a day':
         {
-          if (notification[0] >= 1 &&
-              notification[1] >= 1 &&
-              notification[2] >= 1) {
-            await UserDetails.deleteNumberOfNotifications(userId, [1, 1, 1]);
-          } else if (notification[0] == 1) {
-            await UserDetails.deleteNumberOfNotifications(userId, [1, 1, 1]);
+          if (notification[0] == 1) {
             await _notifications.cancel(Constants.morningNotificationId);
           } else if (notification[1] == 1) {
-            await UserDetails.deleteNumberOfNotifications(userId, [1, 1, 1]);
             await _notifications.cancel(Constants.afternoonNotificationId);
           } else if (notification[2] == 1) {
-            await UserDetails.deleteNumberOfNotifications(userId, [1, 1, 1]);
             await _notifications.cancel(Constants.nightNotificationId);
           }
+          await UserDetails.deleteNumberOfNotifications(userId, [1, 1, 1]);
         }
         break;
     }
   }
 
   static Future<void> cancelAppointmentNotifications(int id) async {
-    print(id);
     await _notifications.cancel(id);
   }
 

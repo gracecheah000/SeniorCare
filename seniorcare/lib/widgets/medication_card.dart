@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:seniorcare/models/medication.dart';
 import 'package:seniorcare/services/medication.dart';
+import 'package:seniorcare/services/notification_api.dart';
 import 'package:seniorcare/services/server_api.dart';
 
 class MedicationCard extends StatefulWidget {
@@ -205,7 +206,7 @@ class _MedicationCardState extends State<MedicationCard> {
         builder: (context) => AlertDialog(
                 title: Text("Removing medication"),
                 content: Text(
-                    "Would you like to delete it completely, or move to medication history?"),
+                    "Would you like to delete it completely, or move it to medication history?"),
                 actions: [
                   TextButton(
                       child: Text("Delete"),

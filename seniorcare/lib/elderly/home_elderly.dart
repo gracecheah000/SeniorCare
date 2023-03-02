@@ -47,9 +47,9 @@ class _HomeElderlyState extends State<HomeElderly> {
 
   Future<void> updateLocation() async {
     await Permission.phone.request();
-
     await Permission.location.request();
     await Permission.locationAlways.request();
+
     _locationSubscription = location.onLocationChanged.handleError((onError) {
       _locationSubscription!.cancel();
       setState(() {
@@ -85,10 +85,15 @@ class _HomeElderlyState extends State<HomeElderly> {
         .listen(handleMessage); // listens to messages when in foreground
   }
 
-  void handleMessage(RemoteMessage message) {
+  void handleMessage(RemoteMessage message) async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('userId');
+
+    Map userDetails = await UserDetails.getUserDetailsWithId(userId!);
+
     if (message.data['action'] == 'add') {
       if (message.data['type'] == 'Medication') {
-        for (String timing in widget.user.mealTimings!) {
+        for (String timing in userDetails['meal timings']) {
           DateTime dateTime = DateFormat("hh:mma").parse(timing);
           elderlyMealTimings.add(DateFormat("HH:mm").format(dateTime));
         }
@@ -148,9 +153,8 @@ class _HomeElderlyState extends State<HomeElderly> {
       UserDetails.updateMessagingToken(token, widget.user.email!);
     });
 
-    setUpInteractedMessage();
-
     setUpSharedPreferences();
+    setUpInteractedMessage();
   }
 
   @override
