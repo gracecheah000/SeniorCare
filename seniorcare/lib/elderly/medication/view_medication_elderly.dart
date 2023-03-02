@@ -120,7 +120,8 @@ class _ViewMedicationElderlyState extends State<ViewMedicationElderly> {
                                                                       _currentMedicationIndex]
                                                                   .medicationId!,
                                                           elderlyId:
-                                                              widget.userId)));
+                                                              widget.userId,
+                                                          payload: true)));
                                             }).toList(),
                                             options: CarouselOptions(
                                                 enableInfiniteScroll: false,

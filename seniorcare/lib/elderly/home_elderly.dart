@@ -502,7 +502,6 @@ class _HomeElderlyState extends State<HomeElderly> {
                                         ServerApi.sendSOSPush(caregiverDetails,
                                             details[1]['name']);
 
-                                        //TODO: Iterate and call caregiver
                                         _callCaregivers(caregiverDetails);
                                       },
                                       child: Ink(
@@ -531,7 +530,7 @@ class _HomeElderlyState extends State<HomeElderly> {
   _callCaregivers(List<dynamic> caregiverDetails) async {
     int i = 0;
     while (i < caregiverDetails.length) {
-      bool? result = await FlutterPhoneDirectCaller.callNumber(
+      await FlutterPhoneDirectCaller.callNumber(
           caregiverDetails[i].emergencyContact);
 
       i++;

@@ -9,11 +9,13 @@ class ElderlyMedicationCard extends StatefulWidget {
   final Medication medication;
   final String medicationId;
   final String elderlyId;
+  final bool payload;
 
   const ElderlyMedicationCard(
       {required this.medication,
       required this.medicationId,
       required this.elderlyId,
+      this.payload = false,
       super.key});
 
   @override
@@ -173,7 +175,9 @@ class _ElderlyMedicationCardState extends State<ElderlyMedicationCard> {
                                   style: TextStyle(
                                       color: Color.fromARGB(255, 29, 77, 145),
                                       fontSize: 18)))))),
-          enableButton(widget.medication.medicationName),
+          widget.payload == false
+              ? Container()
+              : enableButton(widget.medication.medicationName),
           Padding(padding: EdgeInsets.only(bottom: 10))
         ])));
   }

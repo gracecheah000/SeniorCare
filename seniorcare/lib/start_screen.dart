@@ -2,7 +2,6 @@
 
 import 'dart:async';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorcare/authentication/login_screen.dart';
 import 'package:seniorcare/authentication/register_screen.dart';

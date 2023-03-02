@@ -101,7 +101,6 @@ class NotificationServices {
       switch (frequency) {
         case 'Every morning':
           {
-            print('every morning add');
             if (notification[0] == 0) {
               int hour = DateFormat("HH:mm").parse(mealTimings[0]).hour;
               int min = DateFormat("HH:mm").parse(mealTimings[0]).minute;
@@ -175,8 +174,6 @@ class NotificationServices {
           break;
         case '3 times a day':
           {
-            print('3 times a day add');
-
             List payloadList = [
               'Every morning, Twice a day, 3 times a day',
               '3 times a day',
@@ -217,7 +214,6 @@ class NotificationServices {
       for (int i = 0; i < pendingFrequency.length; i++) {
         switch (pendingFrequency[i]) {
           case 'Every morning, Twice a day, 3 times a day':
-            print('Every morning, Twice a day, 3 times a day');
             int hour = DateFormat("HH:mm").parse(mealTimings[0]).hour;
             int min = DateFormat("HH:mm").parse(mealTimings[0]).minute;
 

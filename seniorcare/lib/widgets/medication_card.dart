@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:seniorcare/models/medication.dart';
 import 'package:seniorcare/services/medication.dart';
-import 'package:seniorcare/services/notification_api.dart';
 import 'package:seniorcare/services/server_api.dart';
 
 class MedicationCard extends StatefulWidget {
