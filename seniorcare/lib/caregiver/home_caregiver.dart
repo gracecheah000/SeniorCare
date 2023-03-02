@@ -65,19 +65,29 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
   }
 
   handleInForegroundMessage(RemoteMessage message) {
-    return AlertDialog(
-        title: const Text("SOS ALERT"),
-        content: Text(
-            "You have an SOS alert from your elderly ${message.data["name"]}. Please check your location tracking page."),
-        actions: [
-          TextButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        LocationTracking(userEmail: widget.userEmail)));
-              },
-              child: const Text("LOCATE"))
-        ]);
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+                backgroundColor: const Color.fromARGB(255, 241, 205, 205),
+                title: const Text("SOS ALERT!",
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.bold)),
+                content: Text(
+                    "You have an SOS alert from ${(message.data["name"])}. Please check your location tracking page."),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                LocationTracking(userEmail: widget.userEmail)));
+                      },
+                      child: const Text("LOCATE",
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17)))
+                ]));
   }
 
   void onClickedAppointmentNotifications(String? payload) =>
