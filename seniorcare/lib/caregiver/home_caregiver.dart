@@ -55,14 +55,29 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
     FirebaseMessaging.onMessageOpenedApp
         .listen(handleMessage); // listens to messages when in background
 
-    FirebaseMessaging.onMessage
-        .listen(handleMessage); // listens to messages when in foreground
+    FirebaseMessaging.onMessage.listen(
+        handleInForegroundMessage); // listens to messages when in foreground
   }
 
   void handleMessage(RemoteMessage message) {
-    // TODO: add dialog to show message
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => LocationTracking(userEmail: widget.userEmail)));
+  }
+
+  handleInForegroundMessage(RemoteMessage message) {
+    return AlertDialog(
+        title: const Text("SOS ALERT"),
+        content: Text(
+            "You have an SOS alert from your elderly ${message.data["name"]}. Please check your location tracking page."),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        LocationTracking(userEmail: widget.userEmail)));
+              },
+              child: const Text("LOCATE"))
+        ]);
   }
 
   void onClickedAppointmentNotifications(String? payload) =>
