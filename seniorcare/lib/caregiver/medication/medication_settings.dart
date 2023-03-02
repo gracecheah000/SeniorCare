@@ -2,12 +2,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:seniorcare/services/server_api.dart';
 import 'package:seniorcare/services/user_details.dart';
 import 'package:seniorcare/widgets/appbar.dart';
 
 class MedicationSettings extends StatefulWidget {
   final String elderlyId;
-  const MedicationSettings({super.key, required this.elderlyId});
+  final String registrationToken;
+  const MedicationSettings(
+      {super.key, required this.elderlyId, required this.registrationToken});
 
   @override
   State<MedicationSettings> createState() => _MedicationSettingsState();
@@ -63,15 +66,13 @@ class _MedicationSettingsState extends State<MedicationSettings> {
                                         borderRadius: const BorderRadius.all(
                                             Radius.circular(25))),
                                     child: const Center(
-                                        child: Text(
-                                      "Medication Settings",
-                                      style: TextStyle(
-                                          color:
-                                              Color.fromRGBO(108, 99, 255, 1),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20),
-                                      textAlign: TextAlign.center,
-                                    )))),
+                                        child: Text("Medication Settings",
+                                            style: TextStyle(
+                                                color: Color.fromRGBO(
+                                                    108, 99, 255, 1),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20),
+                                            textAlign: TextAlign.center)))),
                             Padding(
                                 padding: EdgeInsets.only(
                                     left: size.width * 0.1,
@@ -292,6 +293,15 @@ class _MedicationSettingsState extends State<MedicationSettings> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                           content: Text('Please try again'),
+                                          duration: Duration(seconds: 2)));
+                                } else {
+                                  ServerApi.updateMedicationNotificationPush(
+                                      widget.registrationToken);
+                                  print('updated');
+                                  Navigator.pop(context);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text('Update successful'),
                                           duration: Duration(seconds: 2)));
                                 }
                               },

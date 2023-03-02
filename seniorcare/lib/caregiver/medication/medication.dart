@@ -146,7 +146,10 @@ class _ViewMedicationState extends State<ViewMedication> {
                                                             elderlyId:
                                                                 selectedElderly!
                                                                     .id
-                                                                    .toString()))));
+                                                                    .toString(),
+                                                            registrationToken:
+                                                                selectedElderly!
+                                                                    .registrationToken!))));
                                           },
                                           icon: Image.asset(
                                               'assets/images/settings.png'),

@@ -41,19 +41,19 @@ class NotificationServices {
     // for when app is closed
     final details = await _notifications.getNotificationAppLaunchDetails();
     if (details != null && details.didNotificationLaunchApp) {
-      if (details.notificationResponse!.payload!.contains('Medication')) {
-        onMedicationNotifications.add(details.notificationResponse!.payload);
-      } else {
+      if (details.notificationResponse!.payload!.contains('Appointment')) {
         onAppointmentNotifications.add(details.notificationResponse!.payload);
+      } else {
+        onMedicationNotifications.add(details.notificationResponse!.payload);
       }
     }
 
     await _notifications.initialize(settings,
         onDidReceiveNotificationResponse: (payload) async {
-      if (payload.payload!.contains('Medication')) {
-        onMedicationNotifications.add(payload.payload);
-      } else {
+      if (payload.payload!.contains('Appointment')) {
         onAppointmentNotifications.add(payload.payload);
+      } else {
+        onMedicationNotifications.add(payload.payload);
       }
     });
 
@@ -91,97 +91,174 @@ class NotificationServices {
   static Future createRepeatedNotification(
       {int id = 0,
       required String userId,
-      required String frequency,
+      String? frequency,
       required String title,
       required String body,
-      required payload,
+      String payload = '',
       required List<String> mealTimings}) async {
     List notification = await UserDetails.getNotifications(userId);
-    switch (frequency) {
-      case 'Every morning':
-        {
-          if (notification[0] == 0) {
-            int hour = DateFormat("HH:mm").parse(mealTimings[0]).hour;
-            int min = DateFormat("HH:mm").parse(mealTimings[0]).minute;
+    if (payload.isNotEmpty) {
+      switch (frequency) {
+        case 'Every morning':
+          {
+            print('every morning add');
+            if (notification[0] == 0) {
+              int hour = DateFormat("HH:mm").parse(mealTimings[0]).hour;
+              int min = DateFormat("HH:mm").parse(mealTimings[0]).minute;
 
-            _notifications.zonedSchedule(Constants.morningNotificationId, title,
-                body, _scheduleDaily(hour, min), await _notificationDetails(),
-                payload: payload,
-                androidAllowWhileIdle: true,
-                uiLocalNotificationDateInterpretation:
-                    UILocalNotificationDateInterpretation.absoluteTime,
-                matchDateTimeComponents: DateTimeComponents.time);
-          }
-
-          await UserDetails.addNumberOfNotifications(userId, [1, 0, 0]);
-        }
-        break;
-      case 'Every night':
-        {
-          if (notification[2] == 0) {
-            int hour = DateFormat("HH:mm").parse(mealTimings[2]).hour;
-            int min = DateFormat("HH:mm").parse(mealTimings[2]).minute;
-
-            _notifications.zonedSchedule(Constants.nightNotificationId, title,
-                body, _scheduleDaily(hour, min), await _notificationDetails(),
-                payload: payload,
-                androidAllowWhileIdle: true,
-                uiLocalNotificationDateInterpretation:
-                    UILocalNotificationDateInterpretation.absoluteTime,
-                matchDateTimeComponents: DateTimeComponents.time);
-          }
-          await UserDetails.addNumberOfNotifications(userId, [0, 0, 1]);
-        }
-        break;
-      case 'Twice a day':
-        {
-          if (notification[0] == 0) {
-            int hour = DateFormat("HH:mm").parse(mealTimings[0]).hour;
-            int min = DateFormat("HH:mm").parse(mealTimings[0]).minute;
-
-            _notifications.zonedSchedule(Constants.morningNotificationId, title,
-                body, _scheduleDaily(hour, min), await _notificationDetails(),
-                payload: payload,
-                androidAllowWhileIdle: true,
-                uiLocalNotificationDateInterpretation:
-                    UILocalNotificationDateInterpretation.absoluteTime,
-                matchDateTimeComponents: DateTimeComponents.time);
-          }
-
-          if (notification[2] == 0) {
-            int hour = DateFormat("HH:mm").parse(mealTimings[2]).hour;
-            int min = DateFormat("HH:mm").parse(mealTimings[2]).minute;
-
-            _notifications.zonedSchedule(Constants.nightNotificationId, title,
-                body, _scheduleDaily(hour, min), await _notificationDetails(),
-                payload: payload,
-                androidAllowWhileIdle: true,
-                uiLocalNotificationDateInterpretation:
-                    UILocalNotificationDateInterpretation.absoluteTime,
-                matchDateTimeComponents: DateTimeComponents.time);
-          }
-          await UserDetails.addNumberOfNotifications(userId, [1, 0, 1]);
-        }
-        break;
-      case '3 times a day':
-        {
-          for (int i = 0; i < 3; i++) {
-            if (notification[i] == 0) {
-              int hour = DateFormat("HH:mm").parse(mealTimings[i]).hour;
-              int min = DateFormat("HH:mm").parse(mealTimings[i]).minute;
-
-              _notifications.zonedSchedule(i, title, body,
-                  _scheduleDaily(hour, min), await _notificationDetails(),
-                  payload: payload,
+              _notifications.zonedSchedule(
+                  Constants.morningNotificationId,
+                  title,
+                  body,
+                  _scheduleDaily(hour, min),
+                  await _notificationDetails(),
+                  payload: 'Every morning, Twice a day, 3 times a day',
                   androidAllowWhileIdle: true,
                   uiLocalNotificationDateInterpretation:
                       UILocalNotificationDateInterpretation.absoluteTime,
                   matchDateTimeComponents: DateTimeComponents.time);
             }
+
+            await UserDetails.addNumberOfNotifications(userId, [1, 0, 0]);
           }
-          await UserDetails.addNumberOfNotifications(userId, [1, 1, 1]);
+          break;
+        case 'Every night':
+          {
+            if (notification[2] == 0) {
+              int hour = DateFormat("HH:mm").parse(mealTimings[2]).hour;
+              int min = DateFormat("HH:mm").parse(mealTimings[2]).minute;
+
+              _notifications.zonedSchedule(Constants.nightNotificationId, title,
+                  body, _scheduleDaily(hour, min), await _notificationDetails(),
+                  payload: 'Every night, Twice a day, 3 times a day',
+                  androidAllowWhileIdle: true,
+                  uiLocalNotificationDateInterpretation:
+                      UILocalNotificationDateInterpretation.absoluteTime,
+                  matchDateTimeComponents: DateTimeComponents.time);
+            }
+            await UserDetails.addNumberOfNotifications(userId, [0, 0, 1]);
+          }
+          break;
+        case 'Twice a day':
+          {
+            if (notification[0] == 0) {
+              int hour = DateFormat("HH:mm").parse(mealTimings[0]).hour;
+              int min = DateFormat("HH:mm").parse(mealTimings[0]).minute;
+
+              _notifications.zonedSchedule(
+                  Constants.morningNotificationId,
+                  title,
+                  body,
+                  _scheduleDaily(hour, min),
+                  await _notificationDetails(),
+                  payload: 'Every morning, Twice a day, 3 times a day',
+                  androidAllowWhileIdle: true,
+                  uiLocalNotificationDateInterpretation:
+                      UILocalNotificationDateInterpretation.absoluteTime,
+                  matchDateTimeComponents: DateTimeComponents.time);
+            }
+
+            if (notification[2] == 0) {
+              int hour = DateFormat("HH:mm").parse(mealTimings[2]).hour;
+              int min = DateFormat("HH:mm").parse(mealTimings[2]).minute;
+
+              _notifications.zonedSchedule(Constants.nightNotificationId, title,
+                  body, _scheduleDaily(hour, min), await _notificationDetails(),
+                  payload: 'Every night, Twice a day, 3 times a day',
+                  androidAllowWhileIdle: true,
+                  uiLocalNotificationDateInterpretation:
+                      UILocalNotificationDateInterpretation.absoluteTime,
+                  matchDateTimeComponents: DateTimeComponents.time);
+            }
+            await UserDetails.addNumberOfNotifications(userId, [1, 0, 1]);
+          }
+          break;
+        case '3 times a day':
+          {
+            print('3 times a day add');
+
+            List payloadList = [
+              'Every morning, Twice a day, 3 times a day',
+              '3 times a day',
+              'Every night, Twice a day, 3 times a day'
+            ];
+
+            for (int i = 0; i < 3; i++) {
+              if (notification[i] == 0) {
+                int hour = DateFormat("HH:mm").parse(mealTimings[i]).hour;
+                int min = DateFormat("HH:mm").parse(mealTimings[i]).minute;
+
+                _notifications.zonedSchedule(i, title, body,
+                    _scheduleDaily(hour, min), await _notificationDetails(),
+                    payload: payloadList[i],
+                    androidAllowWhileIdle: true,
+                    uiLocalNotificationDateInterpretation:
+                        UILocalNotificationDateInterpretation.absoluteTime,
+                    matchDateTimeComponents: DateTimeComponents.time);
+              }
+            }
+            await UserDetails.addNumberOfNotifications(userId, [1, 1, 1]);
+          }
+          break;
+      }
+    } else {
+      List pendingNotifications =
+          await _notifications.pendingNotificationRequests();
+      pendingNotifications = pendingNotifications
+          .where((element) => !element.payload.contains('Appointment'))
+          .toList();
+      List pendingFrequency = [];
+
+      for (int i = 0; i < pendingNotifications.length; i++) {
+        pendingFrequency.add(pendingNotifications[i].payload);
+      }
+      pendingFrequency = pendingFrequency.toSet().toList();
+
+      for (int i = 0; i < pendingFrequency.length; i++) {
+        switch (pendingFrequency[i]) {
+          case 'Every morning, Twice a day, 3 times a day':
+            print('Every morning, Twice a day, 3 times a day');
+            int hour = DateFormat("HH:mm").parse(mealTimings[0]).hour;
+            int min = DateFormat("HH:mm").parse(mealTimings[0]).minute;
+
+            _notifications.zonedSchedule(Constants.morningNotificationId, title,
+                body, _scheduleDaily(hour, min), await _notificationDetails(),
+                payload: pendingFrequency[i],
+                androidAllowWhileIdle: true,
+                uiLocalNotificationDateInterpretation:
+                    UILocalNotificationDateInterpretation.absoluteTime,
+                matchDateTimeComponents: DateTimeComponents.time);
+            break;
+          case '3 times a day':
+            int hour = DateFormat("HH:mm").parse(mealTimings[1]).hour;
+            int min = DateFormat("HH:mm").parse(mealTimings[1]).minute;
+
+            _notifications.zonedSchedule(
+                Constants.afternoonNotificationId,
+                title,
+                body,
+                _scheduleDaily(hour, min),
+                await _notificationDetails(),
+                payload: pendingFrequency[i],
+                androidAllowWhileIdle: true,
+                uiLocalNotificationDateInterpretation:
+                    UILocalNotificationDateInterpretation.absoluteTime,
+                matchDateTimeComponents: DateTimeComponents.time);
+            break;
+          case 'Every night, Twice a day, 3 times a day':
+            int hour = DateFormat("HH:mm").parse(mealTimings[2]).hour;
+            int min = DateFormat("HH:mm").parse(mealTimings[2]).minute;
+
+            _notifications.zonedSchedule(Constants.nightNotificationId, title,
+                body, _scheduleDaily(hour, min), await _notificationDetails(),
+                payload: pendingFrequency[i],
+                androidAllowWhileIdle: true,
+                uiLocalNotificationDateInterpretation:
+                    UILocalNotificationDateInterpretation.absoluteTime,
+                matchDateTimeComponents: DateTimeComponents.time);
+            break;
         }
-        break;
+      }
     }
   }
 

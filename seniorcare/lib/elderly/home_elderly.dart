@@ -39,7 +39,6 @@ class HomeElderly extends StatefulWidget {
 
 class _HomeElderlyState extends State<HomeElderly> {
   Future<String?>? registrationToken;
-  List<String> elderlyMealTimings = <String>[];
 
   // for live tracking of location
   final Location location = Location();
@@ -88,22 +87,22 @@ class _HomeElderlyState extends State<HomeElderly> {
   void handleMessage(RemoteMessage message) async {
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('userId');
+    List<String> elderlyMealTimings = <String>[];
 
     Map userDetails = await UserDetails.getUserDetailsWithId(userId!);
+    for (String timing in userDetails['meal timings']) {
+      DateTime dateTime = DateFormat("hh:mma").parse(timing);
+      elderlyMealTimings.add(DateFormat("HH:mm").format(dateTime));
+    }
 
     if (message.data['action'] == 'add') {
       if (message.data['type'] == 'Medication') {
-        for (String timing in userDetails['meal timings']) {
-          DateTime dateTime = DateFormat("hh:mma").parse(timing);
-          elderlyMealTimings.add(DateFormat("HH:mm").format(dateTime));
-        }
-
         NotificationServices.createRepeatedNotification(
             userId: widget.user.id!,
             frequency: message.data['frequency'],
             title: Constants.medNotificationTitle,
             body: Constants.medNotificationBody,
-            payload: 'Medication ${message.data['frequency']}',
+            payload: 'Medication',
             mealTimings: elderlyMealTimings);
       } else if (message.data['type'] == 'Appointment') {
         NotificationServices.createScheduledNotification(
@@ -123,6 +122,14 @@ class _HomeElderlyState extends State<HomeElderly> {
       } else if (message.data['type'] == 'Appointment') {
         NotificationServices.cancelAppointmentNotifications(
             int.parse(message.data['notificationId']));
+      }
+    } else if (message.data['action'] == 'update') {
+      if (message.data['type'] == 'Medication') {
+        NotificationServices.createRepeatedNotification(
+            userId: widget.user.id!,
+            title: Constants.medNotificationTitle,
+            body: Constants.medNotificationBody,
+            mealTimings: elderlyMealTimings);
       }
     }
   }

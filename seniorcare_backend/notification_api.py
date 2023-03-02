@@ -19,14 +19,22 @@ def sendMedicationPush(registrationToken):
     response = messaging.send(message)
     return response
 
+@messageBlueprint.route('/medication/update/<registrationToken>', methods = ['POST'])
+def updateNotification(registrationToken):
+     message = messaging.Message(notification=messaging.Notification(
+         title='Medication Timings Updated', body = "Click to update medication reminders"),
+         data = request.json, token = registrationToken
+     )
+
+     response = messaging.send(message)
+     return response
+
 @messageBlueprint.route('/medication/delete/<registrationToken>', methods = ['POST'])
 def deleteNotification(registrationToken):
     message = messaging.Message(
         notification = messaging.Notification(
-        title = 'Medication Deleted', body = 'A medication has been deleted. Click to view.'
-        ),
-        data = request.json, 
-        token = registrationToken
+        title = 'Medication Deleted', body = 'A medication has been deleted. Click to view.'),
+        data = request.json, token = registrationToken
     )
     response = messaging.send(message)
     return response

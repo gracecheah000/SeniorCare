@@ -4,7 +4,6 @@ import 'package:seniorcare/const.dart';
 import 'package:seniorcare/models/appointment.dart';
 import 'package:seniorcare/models/medication.dart';
 import 'package:http/http.dart' as http;
-import 'package:seniorcare/models/user.dart';
 
 class ServerApi {
   static void sendAddMedicationPush(
@@ -49,6 +48,22 @@ class ServerApi {
     final response = await http.post(
         Uri.parse(
             '${Constants.deployedURL}/notification/medication/delete/$registrationToken'),
+        headers: headers,
+        body: json.encode(request));
+
+    print(response.body);
+
+    return;
+  }
+
+  static void updateMedicationNotificationPush(String registrationToken) async {
+    Map<String, dynamic> request = {'type': 'Medication', 'action': 'update'};
+
+    Map<String, String> headers = {'Content-Type': 'application/json'};
+
+    final response = await http.post(
+        Uri.parse(
+            '${Constants.deployedURL}/notification/medication/update/$registrationToken'),
         headers: headers,
         body: json.encode(request));
 
