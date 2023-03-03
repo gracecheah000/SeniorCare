@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:seniorcare/caregiver/health_metrics/health_metric.dart';
 import 'package:seniorcare/services/authentication.dart';
 import 'package:seniorcare/caregiver/caregiver_appointment.dart';
@@ -44,6 +45,7 @@ class _HomeCaregiverState extends State<HomeCaregiver> {
   }
 
   Future<void> setUpInteractedMessage() async {
+    await Permission.phone.request();
     // get any messages which caused the application to open from a terminated state
     RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();

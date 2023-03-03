@@ -156,4 +156,23 @@ class ServerApi {
     }
     return;
   }
+
+  static void sendGeofencingNotification(
+      String caregiverToken, String name) async {
+    Map<String, dynamic> request = {
+      'type': 'Geofencing',
+      'name': name.toUpperCase()
+    };
+
+    Map<String, String> headers = {'Content-Type': 'application/json'};
+
+    final response = await http.post(
+        Uri.parse(
+            '${Constants.deployedURL}/notification/geofence/$caregiverToken'),
+        headers: headers,
+        body: json.encode(request));
+
+    print(response.body);
+    return;
+  }
 }

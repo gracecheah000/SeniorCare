@@ -76,3 +76,16 @@ def sendSOSPush(registrationToken):
         )
     response = messaging.send(message)
     return response
+
+@messageBlueprint.route('/geofence/<registrationToken>', methods = ['POST'])
+def sendGeofencingPush(registrationToken):
+    request_data = request.json
+    message = messaging.Message(
+        android= messaging.AndroidConfig(priority="high"),
+        notification = messaging.Notification(
+            title = 'Outside 1km from Home', body = request_data['name'] + ' is more than 1km from home. Click to view current location.'), # type: ignore
+            data = request_data,
+            token = registrationToken
+        )
+    response = messaging.send(message)
+    return response

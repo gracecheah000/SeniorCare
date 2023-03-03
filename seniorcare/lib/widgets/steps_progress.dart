@@ -37,7 +37,13 @@ class _StepsProgressState extends State<StepsProgress> {
                           thicknessUnit: GaugeSizeUnit.factor))
                 ]);
               } else {
-                double steps = double.parse(snapshot.data!);
+                double steps;
+                if (snapshot.data != null) {
+                  steps = double.parse(snapshot.data!);
+                } else {
+                  steps = 0;
+                }
+
                 Color color;
                 if (steps < Constants.badNoOfSteps) {
                   color = const Color.fromARGB(255, 192, 49, 38);

@@ -33,6 +33,7 @@ class _FirstTimeUserInfoState extends State<FirstTimeUserInfo> {
   final age = TextEditingController();
   final address = TextEditingController();
   final additionalDetails = TextEditingController();
+  final contact = TextEditingController();
 
   List? healthRisks = [];
 
@@ -103,7 +104,8 @@ class _FirstTimeUserInfoState extends State<FirstTimeUserInfo> {
                             sex: sex,
                             address: address.text,
                             additionalDetails: additionalDetails.text,
-                            healthRisks: healthRisks);
+                            healthRisks: healthRisks,
+                            contact: contact.text);
                         UserDetails.saveElderlyDetails(elderly, widget.user);
                         List elderlyDetails =
                             await UserDetails.getUserDetailsWithEmail(
@@ -150,6 +152,7 @@ class _FirstTimeUserInfoState extends State<FirstTimeUserInfo> {
           age: age,
           address: address,
           additionalDetails: additionalDetails,
+          contact: contact,
           sex: sex,
           notifyParentSex: updateSex,
           notifyParentHealthRisks: updateHealthRisks);

@@ -145,7 +145,7 @@ class _GoogleFitSetUpState extends State<GoogleFitSetUp> {
                                         "health metrics update",
                                         existingWorkPolicy:
                                             ExistingWorkPolicy.replace,
-                                        frequency: const Duration(minutes: 60),
+                                        frequency: const Duration(minutes: 30),
                                         backoffPolicy: BackoffPolicy.linear,
                                         backoffPolicyDelay:
                                             const Duration(seconds: 5));

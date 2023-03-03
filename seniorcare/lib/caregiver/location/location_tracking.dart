@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:location/location.dart';
 import 'package:seniorcare/models/user.dart';
 import 'package:seniorcare/services/user_details.dart';
@@ -129,7 +130,16 @@ class _LocationTrackingState extends State<LocationTracking> {
                                   color: Color.fromRGBO(108, 99, 255, 1)))))
                 ]);
               }
-            })));
+            })),
+        floatingActionButton: FloatingActionButton.extended(
+            label: const Text('CALL',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            onPressed: () async {
+              await FlutterPhoneDirectCaller.callNumber(
+                  selectedElderly!.contact!);
+            },
+            backgroundColor: Color.fromRGBO(108, 99, 255, 1)),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat);
   }
 
   getElderlyList() async {
@@ -144,7 +154,8 @@ class _LocationTrackingState extends State<LocationTracking> {
           email: details['email'],
           name: details['name'],
           id: element,
-          registrationToken: details['deviceToken']);
+          registrationToken: details['deviceToken'],
+          contact: details['contact']);
       elderlyDetails.add(elderly);
     }
 

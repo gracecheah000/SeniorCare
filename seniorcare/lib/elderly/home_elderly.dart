@@ -49,6 +49,8 @@ class _HomeElderlyState extends State<HomeElderly> {
     await Permission.location.request();
     await Permission.locationAlways.request();
 
+    location.changeSettings(interval: 100000);
+
     _locationSubscription = location.onLocationChanged.handleError((onError) {
       _locationSubscription!.cancel();
       setState(() {

@@ -27,7 +27,8 @@ class UserDetails {
       'notes': [],
       'pin': Random().nextInt(999999),
       'meal timings': ['7:00AM', '12:00PM', '7:00PM'],
-      'notification': [0, 0, 0]
+      'notification': [0, 0, 0],
+      'contact': user.contact
     });
   }
 

@@ -15,14 +15,17 @@ class ElderlyUserInfo extends StatefulWidget {
       required this.additionalDetails,
       required this.sex,
       required this.notifyParentSex,
-      required this.notifyParentHealthRisks});
+      required this.notifyParentHealthRisks,
+      required this.contact});
 
   final TextEditingController name;
   final TextEditingController age;
   final TextEditingController address;
   final TextEditingController additionalDetails;
+  final TextEditingController contact;
   final Function notifyParentSex;
   final Function notifyParentHealthRisks;
+
   String? sex;
 
   @override
@@ -48,6 +51,10 @@ class _ElderlyUserInfoState extends State<ElderlyUserInfo> {
           padding: EdgeInsets.symmetric(
               horizontal: size.width * 0.07, vertical: size.height * 0.01),
           child: customTextField(controller: widget.age, hint: 'Age')),
+      Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: size.width * 0.07, vertical: size.height * 0.01),
+          child: customTextField(controller: widget.contact, hint: 'Contact')),
       Padding(padding: EdgeInsets.only(top: size.height * 0.015)),
       Container(
           width: size.width * 0.86,

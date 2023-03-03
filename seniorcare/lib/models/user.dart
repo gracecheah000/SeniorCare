@@ -27,6 +27,7 @@ class Elderly {
   String? additionalDetails;
   String? registrationToken;
   List? mealTimings;
+  String? contact;
 
   Elderly(
       {this.id,
@@ -40,7 +41,8 @@ class Elderly {
       this.additionalDetails,
       this.registrationToken,
       this.mealTimings,
-      this.pin});
+      this.pin,
+      this.contact});
 
   @override
   bool operator ==(Object other) {
