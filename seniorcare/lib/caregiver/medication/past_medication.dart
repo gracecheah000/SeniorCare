@@ -6,7 +6,7 @@ import 'package:seniorcare/services/medication.dart';
 import 'package:seniorcare/services/user_details.dart';
 import 'package:seniorcare/widgets/appbar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:seniorcare/widgets/medication_card.dart';
+import 'package:seniorcare/caregiver/medication/medication_card.dart';
 
 class PastMedication extends StatefulWidget {
   const PastMedication({super.key, required this.elderlyId});

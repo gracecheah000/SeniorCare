@@ -11,7 +11,7 @@ import 'package:seniorcare/caregiver/medication/add_medication.dart';
 import 'package:seniorcare/caregiver/medication/medication_settings.dart';
 import 'package:seniorcare/widgets/appbar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:seniorcare/widgets/medication_card.dart';
+import 'package:seniorcare/caregiver/medication/medication_card.dart';
 
 class ViewMedication extends StatefulWidget {
   const ViewMedication({super.key, required this.userEmail});

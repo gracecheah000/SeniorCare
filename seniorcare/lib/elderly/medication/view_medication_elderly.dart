@@ -7,7 +7,7 @@ import 'package:seniorcare/services/medication.dart';
 import 'package:seniorcare/services/user_details.dart';
 import 'package:seniorcare/widgets/appbar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:seniorcare/widgets/medication_card_elderly.dart';
+import 'package:seniorcare/elderly/medication/medication_card_elderly.dart';
 
 class ViewMedicationElderly extends StatefulWidget {
   const ViewMedicationElderly({super.key, required this.userId, this.payload});
