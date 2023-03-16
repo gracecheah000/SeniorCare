@@ -162,6 +162,7 @@ class Authentication {
     return true;
   }
 
+  // check if user is logging in for the first time
   static Future<String> checkFirstTimeLogIn(User user) async {
     QuerySnapshot query = await FirebaseFirestore.instance
         .collection('user')

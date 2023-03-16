@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:seniorcare/models/user.dart';
 import 'package:seniorcare/services/user_details.dart';
 import 'package:seniorcare/widgets/appbar.dart';
-import 'package:seniorcare/widgets/heart_rate_card.dart';
-import 'package:seniorcare/widgets/steps_card.dart';
+import 'package:seniorcare/caregiver/health_metrics/heart_rate_card.dart';
+import 'package:seniorcare/caregiver/health_metrics/steps_card.dart';
 
 class HealthMetric extends StatefulWidget {
   const HealthMetric({super.key, required this.userEmail});

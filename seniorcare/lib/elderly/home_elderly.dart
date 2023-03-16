@@ -21,8 +21,8 @@ import 'package:seniorcare/services/server_api.dart';
 import 'package:seniorcare/services/user_details.dart';
 import 'package:seniorcare/start_screen.dart';
 import 'package:location/location.dart';
-import 'package:seniorcare/widgets/heart_beat.dart';
-import 'package:seniorcare/widgets/steps_progress.dart';
+import 'package:seniorcare/elderly/health_metrics/heart_beat.dart';
+import 'package:seniorcare/elderly/health_metrics/steps_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/appbar.dart';
@@ -49,7 +49,7 @@ class _HomeElderlyState extends State<HomeElderly> {
     await Permission.location.request();
     await Permission.locationAlways.request();
 
-    location.changeSettings(interval: 100000);
+    location.changeSettings(interval: 300000);
 
     _locationSubscription = location.onLocationChanged.handleError((onError) {
       _locationSubscription!.cancel();
