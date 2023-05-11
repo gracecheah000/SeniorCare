@@ -137,6 +137,9 @@ class ServerApi {
       Uri.parse(
           '${Constants.deployedURL}/health_metrics/heart_rate?id=$userId&date=$currentDate'),
     );
+    if (response.body == 'An Error Occured: \'heart rate\'') {
+      return '0';
+    }
     return response.body;
   }
 
@@ -160,7 +163,7 @@ class ServerApi {
   static void sendGeofencingNotification(
       String caregiverToken, String name) async {
     Map<String, dynamic> request = {
-      'type': 'Geofencing',
+      'type': "Geofencing",
       'name': name.toUpperCase()
     };
 

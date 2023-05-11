@@ -34,8 +34,6 @@ class NoteServices {
     return details.data();
   }
 
-  static deleteNote() {}
-
   static updateNote(Note newNote) async {
     DocumentReference ref =
         FirebaseFirestore.instance.collection('note').doc(newNote.id);

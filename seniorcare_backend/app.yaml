@@ -3,5 +3,3 @@ entrypoint: gunicorn -b :8080 main:app
 
 env_variables:
   IS_APP_ENGINE: 1
-  FITBIT_CLIENT_ID: "23959H"
-  FITBIT_CLIENT_SECRET: "62778a9cb04a1007e316b57d42d09235"

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Constants {
-  static const String deployedURL =
-      "https://seniorcare-377202.as.r.appspot.com";
+  static const String deployedURL = "https://seniorcare-af8a8.as.r.appspot.com";
   static const String medNotificationTitle = "Time to eat your medication!";
   static const String medNotificationBody =
       "You have medications to take! Click to view.";

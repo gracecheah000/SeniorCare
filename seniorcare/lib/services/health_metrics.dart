@@ -11,11 +11,20 @@ class HealthServices {
     });
   }
 
-  static saveHeartRate(List<HealthDataPoint> heartRate, String userId) async {
+  static saveHeartRate(
+      List<HealthDataPoint> heartRate, String userId, bool newUser) async {
     Map heartRateMap = {};
-    if (heartRate.isEmpty) {
+    if (heartRate.isEmpty && newUser == true) {
+      await FirebaseFirestore.instance.collection('healthData').doc(userId).set(
+          {'heart rate': heartRateMap},
+          SetOptions(merge: true)).catchError((e) {
+        return e;
+      });
+      return;
+    } else if (heartRate.isEmpty) {
       return;
     }
+
     for (HealthDataPoint h in heartRate) {
       heartRateMap[h.dateFrom.toString()] = double.parse(h.value.toString());
     }

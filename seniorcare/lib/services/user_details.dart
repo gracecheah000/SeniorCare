@@ -2,7 +2,10 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:seniorcare/models/health_metrics.dart';
 import 'package:seniorcare/models/user.dart';
+
+import 'health_metrics.dart';
 
 class UserDetails {
   static void saveElderlyDetails(Elderly user, User? newUser) async {
@@ -12,6 +15,9 @@ class UserDetails {
     userId = await getUserId(newUser!.email!.toLowerCase());
 
     ref = FirebaseFirestore.instance.collection('user').doc(userId);
+    DateTime now = DateTime.now();
+    Steps newUserSteps =
+        Steps(dateFrom: DateTime(now.year, now.month, now.day), value: 0);
 
     await ref.update({
       'name': user.name,
@@ -30,6 +36,9 @@ class UserDetails {
       'notification': [0, 0, 0],
       'contact': user.contact
     });
+
+    HealthServices.saveSteps(newUserSteps, userId);
+    HealthServices.saveHeartRate([], userId, true);
   }
 
   static void editElderlyDetails(Elderly user) async {

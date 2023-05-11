@@ -103,7 +103,7 @@ void callbackDispatcher() async {
       }
 
       await HealthServices.saveSteps(steps, userId);
-      await HealthServices.saveHeartRate(heartRateData, userId);
+      await HealthServices.saveHeartRate(heartRateData, userId, false);
 
       return true;
     } catch (err) {

@@ -138,25 +138,28 @@ class _MedicationCardState extends State<MedicationCard> {
                               color: Color.fromARGB(255, 29, 77, 145)))))),
           (widget.medication.otherDescription == '')
               ? Container()
-              : Container(
-                  padding: EdgeInsets.fromLTRB(0, size.height * 0.02, 0, 0),
-                  width: size.width * 0.55,
-                  height: size.height * 0.1,
-                  decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      border: Border.all(
-                          color: const Color.fromARGB(255, 29, 77, 145)),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(25))),
-                  child: SingleChildScrollView(
-                      child: Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                          child: Center(
-                              child: Text(
-                                  widget.medication.otherDescription as String,
-                                  style: TextStyle(
-                                      color: Color.fromARGB(
-                                          255, 29, 77, 145))))))),
+              : Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: Container(
+                      padding: EdgeInsets.fromLTRB(0, size.height * 0.02, 0, 0),
+                      width: size.width * 0.55,
+                      height: size.height * 0.1,
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(
+                              color: const Color.fromARGB(255, 29, 77, 145)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(25))),
+                      child: SingleChildScrollView(
+                          child: Padding(
+                              padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                              child: Center(
+                                  child: Text(
+                                      widget.medication.otherDescription
+                                          as String,
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 29, 77, 145)))))))),
           (widget.medication.startDate == null)
               ? Container()
               : Container(
